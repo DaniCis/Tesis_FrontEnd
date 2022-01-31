@@ -24928,6 +24928,11 @@ pre[class*="language-"] {
   }
 }
 /**************/
+@media (min-width: 1200px){
+  .media-left{
+  margin-left: 17.125rem;
+  }
+}
 .vh-completa{
   height: 100vh;
 }

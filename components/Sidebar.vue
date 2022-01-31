@@ -11,7 +11,7 @@
         <div class="collapse navbar-collapse  w-auto  max-height-vh-100 h-100" id="sidenav-collapse-main">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/dashboard">
+                    <a class="nav-link active" href="/dashboard" id='memnuDash'>
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='house' style="color:#fff"></b-icon>
                         </div>
@@ -138,14 +138,15 @@
 
 <script>
     export default{
+
+        
         methods:{
             chevron_up_down(submenu, up, down) {
                 var menu = document.getElementById(submenu);
                 var show_up = document.getElementById(up);
                 var show_down = document.getElementById(down);
-                var className = "not-collapsed";
                 show_up.classList.remove("d-none");
-                if (menu.classList.contains(className)){
+                if (menu.classList.contains("not-collapsed")){
                     show_up.style.display = 'none';
                     show_down.style.display = 'block';
                 }else {

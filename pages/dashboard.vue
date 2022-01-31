@@ -2,7 +2,7 @@
     <div class="g-sidenav-show bg-gray-100 vh-completa" id='mainDashboard'>
         <Sidebar />
         <Navbar :Modulo='"Inicio"' :Tabla='"Dashboard"'/>
-        <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg">
+        <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
                     <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
@@ -155,20 +155,6 @@
         return {
             autorizaciones: []
         };
-    },
-    //async mounted(){
-    //  await axios.get('/roles')
-    //.then(response => {
-    //  this.autorizaciones = response.data;
-    //});
-    //},
+    }
 }
 </script>
-
-<style>
-    @media (min-width: 1200px){
-        .main-content {
-        margin-left: 17.125rem;
-        }
-    }
-</style>
