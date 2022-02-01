@@ -11,7 +11,7 @@
         <div class="collapse navbar-collapse  w-auto  max-height-vh-100 h-100" id="sidenav-collapse-main">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/dashboard" id='memnuDash'>
+                    <a class="nav-link active" href="/dashboard" id='menuDash'>
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='house' style="color:#fff"></b-icon>
                         </div>
@@ -25,8 +25,8 @@
                         </div>
                         <span class="nav-link-text ms-1">Administración</span>
                         <span class="ps-4" >
-                            <b-icon v-if='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon v-if='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-show='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-show='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-1"> 
@@ -53,17 +53,17 @@
                         </div>
                         <span class="nav-link-text ms-1">Compras</span>
                         <span class="ms-6">
-                            <b-icon v-if='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon v-if='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-show='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-show='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-2"> 
                         <b-card>
                             <b-card-text>
-                                <nuxt-link to="/roles">Proveedores</nuxt-link>
+                                <nuxt-link to="/proveedores">Proveedores</nuxt-link>
                             </b-card-text>
                             <b-card-text>
-                                <nuxt-link to="/roles">Compras</nuxt-link>
+                                <nuxt-link to="/compras">Compras</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>
@@ -75,17 +75,17 @@
                         </div>
                         <span class="nav-link-text ms-1">Ventas&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         <span class="ms-6" >
-                            <b-icon v-if='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon v-if='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-show='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-show='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-3"> 
                         <b-card>
                             <b-card-text>
-                                <nuxt-link to="/roles">Clientes</nuxt-link>
+                                <nuxt-link to="/clientes">Clientes</nuxt-link>
                             </b-card-text>
                             <b-card-text>
-                                <nuxt-link to="/roles">Ventas</nuxt-link>
+                                <nuxt-link to="/ventas">Ventas</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>
@@ -97,17 +97,17 @@
                         </div>
                         <span class="nav-link-text ms-1">Inventarios&nbsp;</span>
                         <span class="ms-5" >
-                            <b-icon v-if='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon v-if='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-show='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-show='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-4"> 
                         <b-card>
                             <b-card-text>
-                                <nuxt-link to="/roles">Items</nuxt-link>
+                                <nuxt-link to="/items">Items</nuxt-link>
                             </b-card-text>
                             <b-card-text>
-                                <nuxt-link to="/roles">Inventarios</nuxt-link>
+                                <nuxt-link to="/inventarios">Inventarios</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>
@@ -119,17 +119,17 @@
                         </div>
                         <span class="nav-link-text ms-1">Contabilidad&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         <span class="ms-4" >
-                            <b-icon v-if='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon v-if='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-show='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-show='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-5"> 
                         <b-card>
                             <b-card-text>
-                                <nuxt-link to="/roles">Movimientos</nuxt-link>
+                                <nuxt-link to="/movimientos">Movimientos</nuxt-link>
                             </b-card-text>
                             <b-card-text>
-                                <nuxt-link to="/roles">Tipos de Movimientos</nuxt-link>
+                                <nuxt-link to="/tiposmovimientos">Tipos de Movimientos</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>

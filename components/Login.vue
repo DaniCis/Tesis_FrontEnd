@@ -21,9 +21,9 @@
                                             <div class="input-group mb-3">
                                                 <b-form-input type="password" class="form-control" placeholder="Contraseña" id='password' v-model="form.password" required></b-form-input>
                                                 <div class="input-group-append ">
-                                                    <span class="input-group-text" v-on:click="password_show_hide();">
-                                                        <b-icon icon='eye' class='d-none' id="show_eye" style="width: 0.9em; height: 0.9em;"></b-icon>
-                                                        <b-icon icon='eye-slash'  id="hide_eye" style="width: 0.9em; height: 0.9em;"></b-icon>
+                                                    <span class="input-group-text" v-on:click="password_show_hide() ">
+                                                        <b-icon v-show='!show' icon='eye' style="width: 0.9em; height: 0.9em;"></b-icon>
+                                                        <b-icon v-show='show' icon='eye-slash' style="width: 0.9em; height: 0.9em;"></b-icon>
                                                     </span>
                                                 </div>
                                             </div>
@@ -61,6 +61,7 @@
                     user:'',
                     password:'',
                 },
+                show:true,
             };
         },
         methods:{
@@ -81,18 +82,12 @@
             },
 
             password_show_hide() {
+                this.show = !this.show;
                 var input = document.getElementById("password");
-                var show_eye = document.getElementById("show_eye");
-                var hide_eye = document.getElementById("hide_eye");
-                show_eye.classList.remove("d-none");
                 if (input.type === "password") {
                     input.type = "text";
-                    show_eye.style.display = "block";
-                    hide_eye.style.display = "none";
                 } else {
                     input.type = "password";
-                    show_eye.style.display = "none";
-                    hide_eye.style.display = "block";
                 }
             },
         }
