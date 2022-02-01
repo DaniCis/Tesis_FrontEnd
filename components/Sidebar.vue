@@ -19,14 +19,14 @@
                     </a>
                 </li>
                  <div class="nav-item">
-                    <a class="nav-link" id="submenuAdm" v-b-toggle.collapse-1 v-on:click="chevron_up_down('submenuAdm','show_upAdm','show_downAdm')" >
+                    <a class="nav-link" id="submenuAdm" v-b-toggle.collapse-1 v-on:click="active = !active" >
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='tools' style="color:#000"></b-icon>
                         </div>
                         <span class="nav-link-text ms-1">Administración</span>
                         <span class="ps-4" >
-                            <b-icon icon='chevron-down' id="show_downAdm" style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon icon='chevron-up' class='d-none' id="show_upAdm" style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-if='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-if='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-1"> 
@@ -47,14 +47,14 @@
                     <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Módulos</h6>
                 </li>
                 <div class="nav-item">
-                    <a class="nav-link" id="submenuCom" v-b-toggle.collapse-2 v-on:click="chevron_up_down('submenuCom','show_upCom','show_downCom')">
+                    <a class="nav-link" id="submenuCom" v-b-toggle.collapse-2 v-on:click="active = !active">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='cart' style="color:#000"></b-icon>
                         </div>
                         <span class="nav-link-text ms-1">Compras</span>
                         <span class="ms-6">
-                            <b-icon icon='chevron-down' id="show_downCom" style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon icon='chevron-up' class='d-none' id="show_upCom" style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-if='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-if='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-2"> 
@@ -69,14 +69,14 @@
                     </b-collapse>
                 </div>
                 <div class="nav-item">
-                    <a class="nav-link" id="submenuVen" v-b-toggle.collapse-3 v-on:click="chevron_up_down('submenuVen','show_upVen','show_downVen')">
+                    <a class="nav-link" id="submenuVen" v-b-toggle.collapse-3 v-on:click="active = !active">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='bag' style="color:#000"></b-icon>
                         </div>
                         <span class="nav-link-text ms-1">Ventas&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         <span class="ms-6" >
-                            <b-icon icon='chevron-down' id="show_downVen" style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon icon='chevron-up' class='d-none' id="show_upVen" style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-if='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-if='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-3"> 
@@ -91,14 +91,14 @@
                     </b-collapse>
                 </div>
                 <div class="nav-item">
-                    <a class="nav-link" id="submenuInv" v-b-toggle.collapse-4 v-on:click="chevron_up_down('submenuInv','show_upInv','show_downInv')">
+                    <a class="nav-link" id="submenuInv" v-b-toggle.collapse-4 v-on:click="active = !active">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='box-seam' style="color:#000"></b-icon>
                         </div>
                         <span class="nav-link-text ms-1">Inventarios&nbsp;</span>
                         <span class="ms-5" >
-                            <b-icon icon='chevron-down' id="show_downInv" style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon icon='chevron-up' class='d-none' id="show_upInv" style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-if='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-if='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-4"> 
@@ -113,20 +113,23 @@
                     </b-collapse>
                 </div>
                 <div class="nav-item">
-                    <a class="nav-link" id="submenuMov" v-b-toggle.collapse-5 v-on:click="chevron_up_down('submenuMov','show_upCon','show_downCon')">
+                    <a class="nav-link" id="submenuMov" v-b-toggle.collapse-5 v-on:click="active = !active">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='cash-stack' style="color:#000"></b-icon>
                         </div>
                         <span class="nav-link-text ms-1">Contabilidad&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         <span class="ms-4" >
-                            <b-icon icon='chevron-down' id="show_downCon" style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon icon='chevron-up' class='d-none' id="show_upCon" style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-if='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-if='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-5"> 
                         <b-card>
                             <b-card-text>
                                 <nuxt-link to="/roles">Movimientos</nuxt-link>
+                            </b-card-text>
+                            <b-card-text>
+                                <nuxt-link to="/roles">Tipos de Movimientos</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>
@@ -138,22 +141,12 @@
 
 <script>
     export default{
-
-        
+        data(){
+            return{
+                active:true,
+            }
+        },
         methods:{
-            chevron_up_down(submenu, up, down) {
-                var menu = document.getElementById(submenu);
-                var show_up = document.getElementById(up);
-                var show_down = document.getElementById(down);
-                show_up.classList.remove("d-none");
-                if (menu.classList.contains("not-collapsed")){
-                    show_up.style.display = 'none';
-                    show_down.style.display = 'block';
-                }else {
-                    show_up.style.display = "block";
-                    show_down.style.display = "none";
-                }
-            },
         }
     }
 </script>
