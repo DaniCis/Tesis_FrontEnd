@@ -19,14 +19,14 @@
                     </a>
                 </li>
                  <div class="nav-item">
-                    <a class="nav-link" id="submenuAdm" v-b-toggle.collapse-1 v-on:click="active = !active" >
+                    <a class="nav-link" id="submenuAdm" v-b-toggle.collapse-1 v-on:click="actAdm = !actAdm" >
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='tools' style="color:#000"></b-icon>
                         </div>
                         <span class="nav-link-text ms-1">Administración</span>
                         <span class="ps-4" >
-                            <b-icon v-show='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon v-show='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-show='actAdm' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-show='!actAdm' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-1"> 
@@ -47,14 +47,14 @@
                     <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Módulos</h6>
                 </li>
                 <div class="nav-item">
-                    <a class="nav-link" id="submenuCom" v-b-toggle.collapse-2 v-on:click="active = !active">
+                    <a class="nav-link" id="submenuCom" v-b-toggle.collapse-2 v-on:click="actComp = !actComp">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='cart' style="color:#000"></b-icon>
                         </div>
                         <span class="nav-link-text ms-1">Compras</span>
                         <span class="ms-6">
-                            <b-icon v-show='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon v-show='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-show='actComp' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-show='!actComp' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-2"> 
@@ -69,14 +69,14 @@
                     </b-collapse>
                 </div>
                 <div class="nav-item">
-                    <a class="nav-link" id="submenuVen" v-b-toggle.collapse-3 v-on:click="active = !active">
+                    <a class="nav-link" id="submenuVen" v-b-toggle.collapse-3 v-on:click="actVent = !actVent">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='bag' style="color:#000"></b-icon>
                         </div>
                         <span class="nav-link-text ms-1">Ventas&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         <span class="ms-6" >
-                            <b-icon v-show='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon v-show='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-show='actVent' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-show='!actVent' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-3"> 
@@ -91,14 +91,14 @@
                     </b-collapse>
                 </div>
                 <div class="nav-item">
-                    <a class="nav-link" id="submenuInv" v-b-toggle.collapse-4 v-on:click="active = !active">
+                    <a class="nav-link" id="submenuInv" v-b-toggle.collapse-4 v-on:click="actInv = !actInv">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='box-seam' style="color:#000"></b-icon>
                         </div>
                         <span class="nav-link-text ms-1">Inventarios&nbsp;</span>
                         <span class="ms-5" >
-                            <b-icon v-show='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon v-show='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-show='actInv' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-show='!actInv' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-4"> 
@@ -113,14 +113,14 @@
                     </b-collapse>
                 </div>
                 <div class="nav-item">
-                    <a class="nav-link" id="submenuMov" v-b-toggle.collapse-5 v-on:click="active = !active">
+                    <a class="nav-link" id="submenuMov" v-b-toggle.collapse-5 v-on:click="actMov= !actMov">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='cash-stack' style="color:#000"></b-icon>
                         </div>
                         <span class="nav-link-text ms-1">Contabilidad&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         <span class="ms-4" >
-                            <b-icon v-show='active' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon v-show='!active' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-show='actMov' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-show='!actMov' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-5"> 
@@ -143,7 +143,11 @@
     export default{
         data(){
             return{
-                active:true,
+                actMov:true,
+                actInv:true,
+                actVent:true,
+                actComp:true,
+                actAdm:true,
             }
         },
         methods:{

@@ -52,7 +52,8 @@
 <script>
     
     import axios from 'axios';
-    axios.defaults.baseURL ='http://10.147.17.173:5000';
+    import jwt_decode from 'jwt-decode';
+    axios.defaults.baseURL ='http://10.147.17.173:5001';
     
     export default{
         data(){
@@ -72,7 +73,8 @@
                     formData.append('password',this.form.password);
                     await axios.post('/login', formData, {
                     }).then((response) => {
-                        console.log(response)
+                        var token_decoded = jwt_decode(response.data.access_token);
+                        console.log(token_decoded);
                         //this.axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token;
                         this.$router.push('/dashboard');
                     })
