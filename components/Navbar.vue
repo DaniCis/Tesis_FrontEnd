@@ -86,9 +86,5 @@
 </script>
 
 <style>
-    @media (min-width: 1200px){
-        .navbar-main {
-        margin-left: 17.125rem!important;
-        }
-    }
+    
 </style>

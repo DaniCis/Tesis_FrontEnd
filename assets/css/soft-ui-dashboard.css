@@ -24927,10 +24927,16 @@ pre[class*="language-"] {
     overflow: auto !important;
   }
 }
+
 /**************/
 @media (min-width: 1200px){
   .media-left{
   margin-left: 17.125rem;
+  }
+}
+@media (min-width: 1200px){
+  .navbar-main {
+  margin-left: 17.125rem!important;
   }
 }
 .vh-completa{

@@ -73,9 +73,10 @@
                     formData.append('password',this.form.password);
                     await axios.post('/login', formData, {
                     }).then((response) => {
+                        axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token;
+                        sessionStorage.setItem('token',response.data.access_token);
                         var token_decoded = jwt_decode(response.data.access_token);
                         console.log(token_decoded);
-                        //this.axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token;
                         this.$router.push('/dashboard');
                     })
                 } catch (e) {
