@@ -18,7 +18,7 @@
                         <span class="nav-link-text ms-1">Inicio</span>
                     </a>
                 </li>
-                 <div class="nav-item">
+                 <div class="nav-item" v-if="'Administracion' in this.modulos">
                     <a class="nav-link" id="submenuAdm" v-b-toggle.collapse-1 v-on:click="actAdm = !actAdm" >
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='tools' style="color:#000"></b-icon>
@@ -46,7 +46,7 @@
                 <li class="nav-item mt-3">
                     <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Módulos</h6>
                 </li>
-                <div class="nav-item">
+                <div class="nav-item" v-if="'Compras' in this.modulos">
                     <a class="nav-link" id="submenuCom" v-b-toggle.collapse-2 v-on:click="actComp = !actComp">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='cart' style="color:#000"></b-icon>
@@ -59,16 +59,16 @@
                     </a>
                     <b-collapse id="collapse-2"> 
                         <b-card>
-                            <b-card-text>
+                            <b-card-text v-if="'Proveedores' in this.modulos.Compras">
                                 <nuxt-link to="/proveedores">Proveedores</nuxt-link>
                             </b-card-text>
-                            <b-card-text>
+                            <b-card-text v-if="'Compras' in this.modulos.Compras">
                                 <nuxt-link to="/compras">Compras</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item" v-if="'Ventas' in this.modulos">
                     <a class="nav-link" id="submenuVen" v-b-toggle.collapse-3 v-on:click="actVent = !actVent">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='bag' style="color:#000"></b-icon>
@@ -81,16 +81,16 @@
                     </a>
                     <b-collapse id="collapse-3"> 
                         <b-card>
-                            <b-card-text>
+                            <b-card-text v-if="'Clientes' in this.modulos.Ventas">
                                 <nuxt-link to="/clientes">Clientes</nuxt-link>
                             </b-card-text>
-                            <b-card-text>
+                            <b-card-text v-if="'Ventas' in this.modulos.Ventas">
                                 <nuxt-link to="/ventas">Ventas</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item" v-if="'Inventarios' in this.modulos">
                     <a class="nav-link" id="submenuInv" v-b-toggle.collapse-4 v-on:click="actInv = !actInv">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='box-seam' style="color:#000"></b-icon>
@@ -103,16 +103,16 @@
                     </a>
                     <b-collapse id="collapse-4"> 
                         <b-card>
-                            <b-card-text>
+                            <b-card-text v-if="'Items' in this.modulos.Inventarios">
                                 <nuxt-link to="/items">Items</nuxt-link>
                             </b-card-text>
-                            <b-card-text>
+                            <b-card-text v-if="'Inventarios' in this.modulos.Inventarios">
                                 <nuxt-link to="/inventarios">Inventarios</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item" v-if="'Movimientos' in this.modulos">
                     <a class="nav-link" id="submenuMov" v-b-toggle.collapse-5 v-on:click="actMov= !actMov">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='cash-stack' style="color:#000"></b-icon>
@@ -125,10 +125,10 @@
                     </a>
                     <b-collapse id="collapse-5"> 
                         <b-card>
-                            <b-card-text>
+                            <b-card-text v-if="'Movimientos' in this.modulos.Movimientos">
                                 <nuxt-link to="/movimientos">Movimientos</nuxt-link>
                             </b-card-text>
-                            <b-card-text>
+                            <b-card-text v-if="'TiposMovimientos' in this.modulos.Movimientos">
                                 <nuxt-link to="/tiposmovimientos">Tipos de Movimientos</nuxt-link>
                             </b-card-text>
                         </b-card>
@@ -140,6 +140,7 @@
 </template>
 
 <script>
+    import { getDecoded} from "@/utils/auth";
     export default{
         data(){
             return{
@@ -148,9 +149,16 @@
                 actVent:true,
                 actComp:true,
                 actAdm:true,
+                decoded_token:[],
+                modulos:[]
             }
         },
+        mounted(){
+           this.decoded_token = getDecoded();
+           this.modulos = this.decoded_token.autorizaciones.modulos;
+        },
         methods:{
+            
         }
     }
 </script>

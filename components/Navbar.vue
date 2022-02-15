@@ -26,7 +26,7 @@
                     <li class="nav-item d-flex align-items-center">
                         <a href="" class="nav-link text-body font-weight-bold px-0">
                             <b-icon icon='person' ></b-icon>
-                            <span class="d-sm-inline d-none">Sign In</span>
+                            <span class="d-sm-inline d-none">{{this.decoded_token.nombre_usuario}}</span>
                         </a>
                     </li> 
                     <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -50,29 +50,33 @@
 </template>
 
 <script>
+    import { getDecoded } from "~/utils/auth";
     export default{
         props:['Modulo','Tabla'],
         name:'Navbar',
         data(){
             return {
                 searchInput: '',
+                decoded_token:[]
             }
+        },
+        mounted(){
+            this.decoded_token = getDecoded();
         },
         methods: {
             toggleSidenav() {
                 var body = document.getElementById("mainDashboard");
                 var sidenav = document.getElementById("sidenav-main");
                 var iconSidenav = document.getElementById("iconSidenav");
-                var className2 = "g-sidenav-pinned";
-                if (body.classList.contains(className2)) {
-                    body.classList.remove(className2);
+                if (body.classList.contains("g-sidenav-pinned")) {
+                    body.classList.remove("g-sidenav-pinned");
                     setTimeout(function () {
                         sidenav.classList.remove("bg-white");
                     }, 100);
                     sidenav.classList.remove("bg-transparent");
                 }
                 else {
-                    body.classList.add(className2);
+                    body.classList.add("g-sidenav-pinned");
                     sidenav.classList.add("bg-white");
                     sidenav.classList.remove("bg-transparent");
                     iconSidenav.classList.remove("d-none");
@@ -84,7 +88,3 @@
         },
     }
 </script>
-
-<style>
-    
-</style>

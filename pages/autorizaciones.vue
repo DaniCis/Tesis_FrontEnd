@@ -54,14 +54,30 @@
 </template>
 
 <script>
+    import {getAccessToken} from "@/utils/auth";
+    import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue'; 
     import Navbar from '~/components/Navbar.vue';
+    axios.defaults.baseURL ='http://10.147.17.173:5000';
+
     export default{
         data(){
             return{
-                
+                autorizaciones:[]
             }
         },
+         async mounted(){
+            console.log(`Bearer ${getAccessToken()}`);
+            await axios.get('/autorizaciones',{
+                headers:{
+                    Authorization: `Bearer ${getAccessToken()}`
+                }
+            }).then(response => {
+                this.autorizaciones = response.data;
+                console.log(this.autorizaciones);
+            });
+        },
+        methods: {},
         components: { Sidebar, Navbar }
     }
 </script>

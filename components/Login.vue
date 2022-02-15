@@ -52,7 +52,6 @@
 <script>
     
     import axios from 'axios';
-    import jwt_decode from 'jwt-decode';
     axios.defaults.baseURL ='http://10.147.17.173:5001';
     
     export default{
@@ -73,17 +72,16 @@
                     formData.append('password',this.form.password);
                     await axios.post('/login', formData, {
                     }).then((response) => {
-                        axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token;
-                        sessionStorage.setItem('token',response.data.access_token);
-                        var token_decoded = jwt_decode(response.data.access_token);
-                        console.log(token_decoded);
-                        this.$router.push('/dashboard');
+                        if(process.client){
+                            axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token;
+                            sessionStorage.setItem('token',response.data.access_token);
+                            this.$router.push('/dashboard');
+                        }
                     })
                 } catch (e) {
                     console.log(e.message)
                 }   
             },
-
             password_show_hide() {
                 this.show = !this.show;
                 var input = document.getElementById("password");
