@@ -76,10 +76,3 @@
         components: { Sidebar, Navbar }
     }
 </script>
-
-<style>
-    .contenedorAcciones{
-        display: flex;
-        justify-content: space-evenly
-    }
-</style>

@@ -18,7 +18,7 @@
                         <span class="nav-link-text ms-1">Inicio</span>
                     </a>
                 </li>
-                 <div class="nav-item" v-if="'Administracion' in this.modulos">
+                 <div class="nav-item" v-if="'Administración' in this.modulos">
                     <a class="nav-link" id="submenuAdm" v-b-toggle.collapse-1 v-on:click="actAdm = !actAdm" >
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='tools' style="color:#000"></b-icon>
@@ -31,13 +31,13 @@
                     </a>
                     <b-collapse id="collapse-1"> 
                         <b-card>
-                            <b-card-text>
+                            <b-card-text v-if="'Usuarios' in this.modulos.Administración">
                                 <nuxt-link to="/usuarios">Usuarios</nuxt-link>
                             </b-card-text>
-                            <b-card-text>
+                            <b-card-text v-if="'Roles' in this.modulos.Administración">
                                 <nuxt-link to="/roles">Roles</nuxt-link>
                             </b-card-text>
-                            <b-card-text>
+                            <b-card-text v-if="'Autorizaciones' in this.modulos.Administración">
                                 <nuxt-link to="/autorizaciones">Autorizaciones</nuxt-link>
                             </b-card-text>
                         </b-card>

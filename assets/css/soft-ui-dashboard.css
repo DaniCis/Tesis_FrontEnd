@@ -24942,6 +24942,12 @@ pre[class*="language-"] {
 .vh-completa{
   height: 100vh;
 }
-
+.contenedorAcciones{
+  display: flex;
+  justify-content: center;
+}
+.contenedorAcciones span{
+  margin-left: 20px;
+}
 
 /*# sourceMappingURL=dashboard-free.css.map */

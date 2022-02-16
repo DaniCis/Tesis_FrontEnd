@@ -7,6 +7,7 @@ export function getAccessToken(){
 }
 export function getDecoded(){
     var token_decoded = jwt_decode(getAccessToken());
+    console.log(token_decoded);
     return token_decoded;
 }
   

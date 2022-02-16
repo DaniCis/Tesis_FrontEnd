@@ -16,28 +16,40 @@
                                     <thead>
                                         <tr>
                                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
-                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
-                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Rol</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Crear</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Leer</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Editar</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Eliminar</th>
                                         <th class="text-secondary opacity-7"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr >
+                                        <tr v-for="autorizacion in this.autorizaciones">
                                             <td>
-                                                <h6 class=" ms-3 mb-2 text-sm">{{}}</h6>
+                                                <h6 class=" ms-3 mb-2 text-sm">{{autorizacion.id_autorizacion}}</h6>
                                             </td>
                                             <td>
-                                                <p class="text-s font-weight-bold mb-0">{{}}</p>
+                                                <p class="text-s font-weight-bold mb-0">{{autorizacion.crearProceso_autorizacion}}</p>
                                             </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <span class="badge badge-sm bg-gradient-success">{{}}</span>
+                                            <td>
+                                                <p class="text-s font-weight-bold mb-0">{{autorizacion.leerProceso_autorizacion}}</p>
+                                            </td>
+                                            <td>
+                                                <p class="text-s font-weight-bold mb-0">{{autorizacion.editarProceso_autorizacion}}</p>
+                                            </td>
+                                            <td>
+                                                <p class="text-s font-weight-bold mb-0">{{autorizacion.eliminarProceso_autorizacion}}</p>
                                             </td>
                                             <td class="align-middle">
                                                 <div class="contenedorAcciones">
                                                     <NuxtLink class="text-secondary font-weight-bold text-xs" :to="{name:'usuario-usuarioId', params:{usuarioId: 1}}">
-                                                    <b-icon icon='pencil-square' style="width: 1.4em; height: 1.4em;"></b-icon>
+                                                    <span class="badge badge-sm bg-gradient-secondary" style="padding:6.6px 10px;">
+                                                        <b-icon icon='pencil-square' style="width: 20px; height: 20px;"></b-icon>
+                                                    </span>
                                                     </NuxtLink>
-                                                    <b-icon icon='trash' style="width: 1.1em; height: 1.1em;"></b-icon>
+                                                    <span class="badge badge-sm bg-gradient-danger">
+                                                        <b-icon icon='trash' style="width: 20px; height: 20px;"></b-icon>
+                                                    </span>
                                                 </div>
                                             </td>
                                         </tr>
@@ -67,7 +79,6 @@
             }
         },
          async mounted(){
-            console.log(`Bearer ${getAccessToken()}`);
             await axios.get('/autorizaciones',{
                 headers:{
                     Authorization: `Bearer ${getAccessToken()}`
