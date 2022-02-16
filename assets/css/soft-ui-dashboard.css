@@ -24928,7 +24928,9 @@ pre[class*="language-"] {
   }
 }
 
-/**************/
+
+/***************/
+/*******************************************************************************/
 @media (min-width: 1200px){
   .media-left{
   margin-left: 17.125rem;
@@ -24949,5 +24951,94 @@ pre[class*="language-"] {
 .contenedorAcciones span{
   margin-left: 20px;
 }
+
+ /******DATA TABLES************/
+.dataTable-wrapper .dataTable-top {
+  padding: 1.5rem;
+}
+.dataTable-top{
+  height:85px;
+}
+.dataTable-wrapper.no-footer .dataTable-container {
+  border-bottom: 1px solid #d9d9d9;
+}
+.dataTable-wrapper .dataTable-top .dataTable-dropdown {
+  float: left;
+}
+.dataTable-wrapper .dataTable-top .dataTable-dropdown label {
+  margin-bottom: 0;
+  margin-left: 0;
+  color: #8392ab;
+  font-weight: 400;
+}
+.dataTable-wrapper .dataTable-top .dataTable-dropdown label .dataTable-selector {
+  border-color: #e9ecef;
+  border-radius: 0.25rem;
+}
+.dataTable-selector {
+  padding: 6px;
+}
+.dataTable-container{
+  margin-bottom: 16px;
+}
+.dataTable-table {
+  max-width: 100%;
+  width: 100%;
+}
+.dataTable-wrapper .dataTable-bottom {
+  padding: 1.5rem;
+  padding-top: 0;
+}
+.dataTable-wrapper .dataTable-bottom .dataTable-info {
+  color: #8392ab;
+  font-size: .875rem;
+}
+.dataTable-bottom>div:first-child, .dataTable-bottom>nav:first-child, .dataTable-top>div:first-child, .dataTable-top>nav:first-child {
+  float: left;
+}
+.dataTable-info {
+  margin: 7px 0;
+}
+.dataTable-bottom>div:last-child, .dataTable-bottom>nav:last-child, .dataTable-top>div:last-child, .dataTable-top>nav:last-child {
+  float: right;
+}
+.dataTable-pagination ul {
+  margin: 0;
+  padding-left: 0;
+}
+.dataTable-pagination li {
+  list-style: none;
+  float: left;
+}
+.dataTable-pagination .pager a {
+  font-weight: 700;
+}
+.dataTable-pagination .active a, .dataTable-pagination .active a:focus, .dataTable-pagination .active a:hover {
+  background-color: #d9d9d9;
+  cursor: default;
+}
+.dataTable-wrapper .dataTable-bottom .dataTable-pagination .dataTable-pagination-list li a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8392ab;
+  padding: 0;
+  margin: 0 3px;
+  border: 1px solid #dee2e6;
+  border-radius: 50%!important;
+  width: 36px;
+  height: 36px;
+  font-size: .875rem;
+  margin-left: 0;
+}
+.dataTable-wrapper .dataTable-bottom .dataTable-pagination .dataTable-pagination-list .active a {
+  background: transparent;
+  background-image: linear-gradient(310deg,#7928ca,#ff0080);
+  box-shadow: 0 3px 5px -1px rgb(0 0 0 / 9%), 0 2px 3px -1px rgb(0 0 0 / 7%);
+  color: #fff;
+  border: none;
+  border-radius: 50%!important;
+}
+
 
 /*# sourceMappingURL=dashboard-free.css.map */

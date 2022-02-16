@@ -35,9 +35,13 @@
                                             <td class="align-middle">
                                                 <div class="contenedorAcciones">
                                                     <NuxtLink class="text-secondary font-weight-bold text-xs" :to="{name:'usuario-usuarioId', params:{usuarioId: user.id_usuario}}">
-                                                    <b-icon icon='pencil-square' style="width: 1.4em; height: 1.4em;"></b-icon>
+                                                        <span class="badge badge-sm bg-gradient-secondary" style="padding:6.6px 10px;">
+                                                            <b-icon icon='pencil-square' style="width: 20px; height: 20px;"></b-icon>
+                                                        </span>
                                                     </NuxtLink>
-                                                    <b-icon icon='trash' style="width: 1.1em; height: 1.1em;"></b-icon>
+                                                    <span class="badge badge-sm bg-gradient-danger">
+                                                        <b-icon icon='trash' style="width: 20px; height: 20px;"></b-icon>
+                                                    </span>
                                                 </div>
                                             </td>
                                         </tr>
