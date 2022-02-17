@@ -1,0 +1,69 @@
+<template>
+    <div class="g-sidenav-show bg-gray-10 vh-completa" id='mainDashboard'>
+        <Sidebar />
+        <Navbar :Modulo='"Administracion"' :Tabla='"Usuarios"'/>
+        <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
+            <div class="container-fluid py-4">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form mb-5">
+                            <div class="row">
+                                <div class="col-12 col-lg-6">
+                                    <form class=" mb-8" style="height: 408px;">
+                                        <div class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active">
+                                            <h4 class="font-weight-bolder mb-0">Nuevo usuario</h4>
+                                            <p class="mb-0 text-sm">Añadir</p>
+                                            <div>
+                                                <div class="row mt-3">
+                                                    <div class="col-12 col-sm-6">
+                                                        <label>Nombre</label>
+                                                        <input class="form-control" type="text" placeholder="Dani">
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class="col-12 col-sm-6">
+                                                        <label>Contraseña</label>
+                                                        <input class="form-control" type="text" placeholder="Dani">
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class="col-12 col-sm-6">
+                                                        <label>Rol</label>
+                                                        <input class="form-control" type="text" placeholder="Dani">
+                                                    </div>
+                                                </div>
+                                                <div class="button-row d-flex mt-4">
+                                                    <button class="btn bg-gradient-dark ms-auto mb-0 js-btn-next" type="button">
+                                                        Agregar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</template>
+
+<script>
+    import axios from 'axios';
+    import Sidebar from '~/components/Sidebar.vue';
+    import Navbar from '~/components/Navbar.vue';
+    axios.defaults.baseURL ='http://10.147.17.173:5000';
+    export default{
+        components: { Sidebar, Navbar },
+        data(){
+            return{
+
+            }
+        },
+        methods:{
+
+        }
+    }
+</script>
