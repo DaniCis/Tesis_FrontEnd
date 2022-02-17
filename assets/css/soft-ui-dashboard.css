@@ -24948,7 +24948,7 @@ pre[class*="language-"] {
   display: flex;
   justify-content: center;
 }
-.contenedorAcciones span{
+.contenedorAcciones .icon{
   margin-left: 20px;
 }
 

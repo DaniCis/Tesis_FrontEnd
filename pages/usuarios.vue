@@ -57,18 +57,14 @@
                                                             <p class="text-s font-weight-bold mb-0">{{user.roles_id_rol}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{user.estado_usuario}}</p>
+                                                            <span class="badge badge-sm bg-gradient-success">{{user.estado_usuario}}</span>
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones">
                                                                 <NuxtLink class="text-secondary font-weight-bold text-xs" :to="{name:'usuario-usuarioId', params:{usuarioId: user.id_usuario}}">
-                                                                    <span class="badge badge-sm bg-gradient-secondary" style="padding:6.6px 10px;">
-                                                                        <b-icon icon='pencil-square' style="width: 20px; height: 20px;"></b-icon>
-                                                                    </span>
+                                                                    <b-icon  class="icon" icon='pencil-square' style="width: 22px; height: 22px;"></b-icon>
                                                                 </NuxtLink>
-                                                                <span class="badge badge-sm bg-gradient-danger">
-                                                                    <b-icon icon='trash' style="width: 20px; height: 20px;"></b-icon>
-                                                                </span>
+                                                                    <b-icon class="icon" icon='trash' style="width: 22px; height: 22px;"></b-icon>
                                                             </div>
                                                         </td>
                                                     </tr>

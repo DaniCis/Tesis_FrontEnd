@@ -9,7 +9,7 @@
                         <div class="form mb-5">
                             <div class="row">
                                 <div class="col-12 col-lg-6">
-                                    <form class=" mb-8" style="height: 408px;">
+                                    <b-form class="mb-8" method="post" @submit.prevent="crearUsuario" style="height: 408px;">
                                         <div class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active">
                                             <h4 class="font-weight-bolder mb-0">Nuevo usuario</h4>
                                             <p class="mb-0 text-sm">Añadir</p>
@@ -17,19 +17,19 @@
                                                 <div class="row mt-3">
                                                     <div class="col-12 col-sm-6">
                                                         <label>Nombre</label>
-                                                        <input class="form-control" type="text" placeholder="Dani">
+                                                        <b-form-input class="form-control" type="text" placeholder="Nombre" v-model="form.nombre" required></b-form-input>
                                                     </div>
                                                 </div>
                                                 <div class="row mt-3">
                                                     <div class="col-12 col-sm-6">
                                                         <label>Contraseña</label>
-                                                        <input class="form-control" type="text" placeholder="Dani">
+                                                        <b-form-input class="form-control" type="text" placeholder="Contraseña" v-model='form.contrasena' required></b-form-input>
                                                     </div>
                                                 </div>
                                                 <div class="row mt-3">
                                                     <div class="col-12 col-sm-6">
                                                         <label>Rol</label>
-                                                        <input class="form-control" type="text" placeholder="Dani">
+                                                        <b-form-input class="form-control" type="text" placeholder="Rol"></b-form-input>
                                                     </div>
                                                 </div>
                                                 <div class="button-row d-flex mt-4">
@@ -39,7 +39,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    </b-form>
                                 </div>
                             </div>
                         </div>
@@ -59,11 +59,23 @@
         components: { Sidebar, Navbar },
         data(){
             return{
-
+                form:{
+                    nombre:'',
+                    contrasena:'',
+                }
             }
         },
         methods:{
-
+            async crearUsuario(){
+                try{
+                    const formData = new FormData();
+                    formData.append('nombre_usuario',this.form.nombre);
+                    formData.append('contrase;a_usuario',this.form.contrasena);
+                    await axios.post('/usuarios', formData)
+                }catch(e){
+                    console.log(e.message)
+                }
+            }
         }
     }
 </script>
