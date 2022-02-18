@@ -37,8 +37,8 @@
                             <b-card-text v-if="'Roles' in this.modulos.Administración">
                                 <nuxt-link to="/roles">Roles</nuxt-link>
                             </b-card-text>
-                            <b-card-text v-if="'Autorizaciones' in this.modulos.Administración">
-                                <nuxt-link to="/autorizaciones">Autorizaciones</nuxt-link>
+                            <b-card-text v-if="'Modulos' in this.modulos.Administración">
+                                <nuxt-link to="/modulos">Módulos</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>
