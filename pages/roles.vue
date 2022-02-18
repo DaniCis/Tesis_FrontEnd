@@ -1,7 +1,8 @@
 <template>
     <div class="g-sidenav-show  bg-gray-100 vh-completa" id='mainDashboard'> 
+        <!--   
         <Sidebar />
-        <Navbar :Modulo='"Administracion"' :Tabla='"Roles"'/>
+        <Navbar :Modulo='"Administración"' :Tabla='"Roles"'/> -->
         <main class="main-content position-relative max-height-vh-100  mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -20,39 +21,78 @@
                                 </div>
                             </div>
                             <div class="card-body px-0 pt-0 pb-2">
-                                <br>
                                 <div class="table-responsive p-0">
-                                    <table class="table align-items-center mb-0">
-                                    <thead>
-                                        <tr>
-                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
-                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
-                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Descripcion</th>
-                                        <th class="text-secondary opacity-7"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="rol in this.roles">
-                                            <td>
-                                            <h6 class=" ms-3 mb-2 text-sm">{{rol.id_rol}}</h6>
-                                            </td>
-                                            <td>
-                                                <p class="text-s font-weight-bold mb-0">{{rol.nombre_rol}}</p>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <p class="text-s font-weight-bold mb-0">{{rol.descripcion_rol}}</p>
-                                            </td>
-                                            <td class="align-middle">
-                                                <div class="contenedorAcciones">
-                                                    <NuxtLink class="text-secondary font-weight-bold text-xs" :to="{name:'rol-rolId', params:{rolId: rol.id_rol}}">
-                                                        <b-icon class='icon' icon='pencil-square' style="width: 1.4em; height: 1.4em;"></b-icon>
-                                                    </NuxtLink>
-                                                        <b-icon class='icon' icon='trash' style="width: 1.1em; height: 1.1em;"></b-icon>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    </table>
+                                    <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns"> 
+                                        <div class="dataTable-top">
+                                            <div class="dataTable-dropdown">
+                                                <label>
+                                                    <select class="dataTable-selector">
+                                                        <option value="5">5</option>
+                                                        <option value="10">10</option>
+                                                        <option value="15">15</option>
+                                                    </select>
+                                                    Entradas por pagina
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="dataTable-container">
+                                              <table class="table table-flush dataTable-table">
+                                                <thead>
+                                                    <tr>
+                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Id</th>
+                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
+                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Descripción</th>
+                                                    <th class="text-secondary opacity-7"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="rol in this.roles">
+                                                        <td>
+                                                        <h6 class=" ms-3 mb-2 text-sm">{{rol.id_rol}}</h6>
+                                                        </td>
+                                                        <td>
+                                                            <p class="text-s font-weight-bold mb-0">{{rol.nombre_rol}}</p>
+                                                        </td>
+                                                        <td class="align-middle text-center text-sm">
+                                                            <p class="text-s font-weight-bold mb-0">{{rol.descripcion_rol}}</p>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <div class="contenedorAcciones">
+                                                                <NuxtLink  :to="{name:'rol-rolId', params:{rolId: rol.id_rol}}">
+                                                                    <b-icon class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em;"></b-icon>
+                                                                </NuxtLink>
+                                                                <a class="trash">
+                                                                    <b-icon icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="dataTable-bottom">
+                                            <div class="dataTable-info">1 de 7 </div>
+                                            <nav class="dataTable-pagination">
+                                                <ul class="dataTable-pagination-list">
+                                                    <li class="pager">
+                                                        <a>‹</a>
+                                                    </li>
+                                                    <li class="active">
+                                                        <a>1</a>
+                                                    </li>
+                                                    <li class="pager">
+                                                        <a>2</a>
+                                                    </li>
+                                                    <li class="pager">
+                                                        <a>3</a>
+                                                    </li>
+                                                    <li class="pager">
+                                                        <a>›</a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -79,7 +119,6 @@
         await axios.get('/roles')
         .then(response => {
             this.roles = response.data;
-            console.log(this.roles);
         });
     },
     methods: {},

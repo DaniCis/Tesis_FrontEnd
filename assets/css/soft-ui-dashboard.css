@@ -24948,9 +24948,10 @@ pre[class*="language-"] {
   display: flex;
   justify-content: center;
 }
-.contenedorAcciones .icon{
-  margin-left: 20px;
+.contenedorAcciones a:hover{
+  color: #f71ac3;
 }
+
 
  /******DATA TABLES************/
 .dataTable-wrapper .dataTable-top {

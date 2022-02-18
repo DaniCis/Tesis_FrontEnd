@@ -33,9 +33,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="button-row d-flex mt-4">
-                                                    <button class="btn bg-gradient-dark ms-auto mb-0 js-btn-next" type="button">
+                                                    <b-button class="btn bg-gradient-dark ms-auto mb-0 js-btn-next" type="button">
                                                         Agregar
-                                                    </button>
+                                                    </b-button>
                                                 </div>
                                             </div>
                                         </div>
