@@ -61,7 +61,7 @@
                                                                 <NuxtLink  :to="{name:'rol-rolId', params:{rolId: rol.id_rol}}">
                                                                     <b-icon class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em;"></b-icon>
                                                                 </NuxtLink>
-                                                                <a class="trash">
+                                                                <a class="trash" v-on:click='eliminarRol(rol.id_rol)'>
                                                                     <b-icon icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
                                                                 </a>
                                                             </div>
@@ -121,7 +121,15 @@
             this.roles = response.data;
         });
     },
-    methods: {},
+    methods: {
+        async eliminarRol(rolId){
+            try{
+                await axios.delete(`/roles/${rolId}`)
+            }catch(e){
+                console.log(e.message)
+            }
+        }
+    },
     components: { Sidebar, Navbar }
 }
 </script>

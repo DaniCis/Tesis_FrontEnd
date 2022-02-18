@@ -9,7 +9,7 @@
                         <div class="form mb-5">
                             <div class="row">
                                 <div class="col-12 col-lg-6">
-                                    <b-form class="mb-8" method="post" @submit.prevent="crearUsuario" style="height: 408px;">
+                                    <b-form class="mb-8" method="post" @submit.prevent="editarUsuario" style="height: 408px;">
                                         <div class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active">
                                             <h4 class="font-weight-bolder mb-0">{{this.user.nombre_usuario}}</h4>
                                             <p class="mb-0 text-sm">Añadir</p>
