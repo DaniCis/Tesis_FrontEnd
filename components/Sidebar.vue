@@ -63,7 +63,7 @@
                                 <nuxt-link to="/proveedores">Proveedores</nuxt-link>
                             </b-card-text>
                             <b-card-text v-if="'Compras' in this.modulos.Compras">
-                                <nuxt-link to="/compras">Compras</nuxt-link>
+                                <nuxt-link to="/compras">Adquisiciones</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>
@@ -85,7 +85,7 @@
                                 <nuxt-link to="/clientes">Clientes</nuxt-link>
                             </b-card-text>
                             <b-card-text v-if="'Ventas' in this.modulos.Ventas">
-                                <nuxt-link to="/ventas">Ventas</nuxt-link>
+                                <nuxt-link to="/ventas">Facturas</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>
@@ -104,10 +104,10 @@
                     <b-collapse id="collapse-4"> 
                         <b-card>
                             <b-card-text v-if="'Items' in this.modulos.Inventarios">
-                                <nuxt-link to="/items">Items</nuxt-link>
+                                <nuxt-link to="/items">Productos</nuxt-link>
                             </b-card-text>
                             <b-card-text v-if="'Inventarios' in this.modulos.Inventarios">
-                                <nuxt-link to="/inventarios">Inventarios</nuxt-link>
+                                <nuxt-link to="/inventarios">Bodegas</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>

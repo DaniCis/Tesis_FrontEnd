@@ -8,7 +8,16 @@
                     <div class="col-12">
                         <div class="card mb-4">
                             <div class="card-header pb-0">
-                                <h6>Roles</h6>
+                                <div class="d-lg-flex">
+                                    <div>
+                                        <h5>Roles</h5>
+                                    </div>
+                                    <div class="ms-auto my-auto mt-lg-0 mt-4">
+                                        <div class="ms-auto my-auto">
+                                            <a href='./rol/nuevo' class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo rol</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body px-0 pt-0 pb-2">
                                 <br>
@@ -16,9 +25,9 @@
                                     <table class="table align-items-center mb-0">
                                     <thead>
                                         <tr>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nombre</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Descripcion</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
+                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Descripcion</th>
                                         <th class="text-secondary opacity-7"></th>
                                         </tr>
                                     </thead>
@@ -36,9 +45,9 @@
                                             <td class="align-middle">
                                                 <div class="contenedorAcciones">
                                                     <NuxtLink class="text-secondary font-weight-bold text-xs" :to="{name:'rol-rolId', params:{rolId: rol.id_rol}}">
-                                                    <b-icon icon='pencil-square' style="width: 1.4em; height: 1.4em;"></b-icon>
+                                                        <b-icon class='icon' icon='pencil-square' style="width: 1.4em; height: 1.4em;"></b-icon>
                                                     </NuxtLink>
-                                                    <b-icon icon='trash' style="width: 1.1em; height: 1.1em;"></b-icon>
+                                                        <b-icon class='icon' icon='trash' style="width: 1.1em; height: 1.1em;"></b-icon>
                                                 </div>
                                             </td>
                                         </tr>
@@ -77,10 +86,3 @@
     components: { Sidebar, Navbar }
 }
 </script>
-
-<style>
-    .contenedorAcciones{
-        display: flex;
-        justify-content: space-evenly
-    }
-</style>

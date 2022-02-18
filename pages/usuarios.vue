@@ -61,7 +61,7 @@
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones">
-                                                                <NuxtLink class="text-secondary font-weight-bold text-xs" :to="{name:'usuario-usuarioId', params:{usuarioId: user.id_usuario}}">
+                                                                <NuxtLink :to="{name:'usuario-usuarioId', params:{usuarioId: user.id_usuario}}">
                                                                     <b-icon  class="icon" icon='pencil-square' style="width: 22px; height: 22px;"></b-icon>
                                                                 </NuxtLink>
                                                                     <b-icon class="icon" icon='trash' style="width: 22px; height: 22px;"></b-icon>

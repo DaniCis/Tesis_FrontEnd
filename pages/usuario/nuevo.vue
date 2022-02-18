@@ -23,7 +23,7 @@
                                                 <div class="row mt-3">
                                                     <div class="col-12 col-sm-6">
                                                         <label>Contraseña</label>
-                                                        <b-form-input class="form-control" type="text" placeholder="Contraseña" v-model='form.contrasena' required></b-form-input>
+                                                        <b-form-input class="form-control" type="text" placeholder="Contraseña" v-model='form.password' required></b-form-input>
                                                     </div>
                                                 </div>
                                                 <div class="row mt-3">
@@ -61,7 +61,7 @@
             return{
                 form:{
                     nombre:'',
-                    contrasena:'',
+                    password:'',
                 }
             }
         },
@@ -70,7 +70,7 @@
                 try{
                     const formData = new FormData();
                     formData.append('nombre_usuario',this.form.nombre);
-                    formData.append('contrase;a_usuario',this.form.contrasena);
+                    formData.append('contrase;a_usuario',this.form.password);
                     await axios.post('/usuarios', formData)
                 }catch(e){
                     console.log(e.message)

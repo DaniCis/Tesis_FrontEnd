@@ -70,7 +70,12 @@
                 const data = axios.get(`/usuario/${this.$route.params.usuarioId}`)
                 const result = await data
                 this.user = result.data
-            }
+            },
+            async crearUsuario(){
+                await axios.put(`/usuario/${this.$route.params.usuarioId}`)
+                
+            },
+            
         },
         components: { Sidebar, Navbar }
 
