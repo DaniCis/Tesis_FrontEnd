@@ -1,7 +1,7 @@
 <template>
     <div class="g-sidenav-show bg-gray-10 vh-completa" id='mainDashboard'> 
-        <Sidebar />
-        <Navbar :Modulo='"Administracion"' :Tabla='"Usuarios"'/>
+        <!--<Sidebar />
+        <Navbar :Modulo='"Administracion"' :Tabla='"Usuarios"'/>-->
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -30,7 +30,7 @@
                                                         <option value="10">10</option>
                                                         <option value="15">15</option>
                                                     </select>
-                                                    Entradas por pagina
+                                                    Entradas por página
                                                 </label>
                                             </div>
                                         </div>
@@ -62,9 +62,11 @@
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones">
                                                                 <NuxtLink :to="{name:'usuario-usuarioId', params:{usuarioId: user.id_usuario}}">
-                                                                    <b-icon  class="icon" icon='pencil-square' style="width: 22px; height: 22px;"></b-icon>
+                                                                    <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                 </NuxtLink>
-                                                                    <b-icon class="icon" icon='trash' style="width: 22px; height: 22px;"></b-icon>
+                                                                <a class="trash" v-on:click='eliminarUsuario(user.id_usuario)'>
+                                                                    <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                                </a>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -123,7 +125,15 @@
                 console.log(this.usuarios);
             });
         },
-        methods: {},
+        methods: {
+            async eliminarUsuario(usuarioId){
+            try{
+                await axios.delete(`/roles/${usuarioId}`)
+            }catch(e){
+                console.log(e.message)
+            }
+        }
+        },
         components: { Sidebar, Navbar }
     }
 </script>

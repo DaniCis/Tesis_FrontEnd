@@ -1,8 +1,7 @@
 <template>
     <div class="g-sidenav-show  bg-gray-100 vh-completa" id='mainDashboard'> 
-        <!--   
         <Sidebar />
-        <Navbar :Modulo='"Administración"' :Tabla='"Roles"'/> -->
+        <Navbar :Modulo='"Administración"' :Tabla='"Roles"'/>
         <main class="main-content position-relative max-height-vh-100  mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -31,7 +30,7 @@
                                                         <option value="10">10</option>
                                                         <option value="15">15</option>
                                                     </select>
-                                                    Entradas por pagina
+                                                    Entradas por página
                                                 </label>
                                             </div>
                                         </div>
