@@ -1,7 +1,7 @@
 <template>
     <div class="g-sidenav-show bg-gray-10 vh-completa" id='mainDashboard'> 
-        <!--<Sidebar />
-        <Navbar :Modulo='"Administracion"' :Tabla='"Usuarios"'/>-->
+        <Sidebar />
+        <Navbar :Modulo='"Administracion"' :Tabla='"Usuarios"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -14,7 +14,7 @@
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4">
                                         <div class="ms-auto my-auto">
-                                            <a href='./usuario/nuevo' class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo usuario</a>
+                                            <a href='./usuario/nuevoUsuario' class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo usuario</a>
                                         </div>
                                     </div>
                                 </div>
@@ -127,12 +127,12 @@
         },
         methods: {
             async eliminarUsuario(usuarioId){
-            try{
-                await axios.delete(`/roles/${usuarioId}`)
-            }catch(e){
-                console.log(e.message)
+                try{
+                    await axios.delete(`/roles/${usuarioId}`)
+                }catch(e){
+                    console.log(e.message)
+                }
             }
-        }
         },
         components: { Sidebar, Navbar }
     }

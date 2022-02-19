@@ -1,27 +1,27 @@
 <template>
-    <div class="g-sidenav-show  bg-gray-100 vh-completa" id='mainDashboard'> 
+    <div class="g-sidenav-show  bg-gray-100 vh-completa" id='mainDashboard'>
         <Sidebar />
-        <Navbar :Modulo='"Administración"' :Tabla='"Roles"'/>
+        <Navbar :Modulo='"Administracion"' :Tabla='"Modulos"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
                     <div class="col-12">
                         <div class="card mb-4">
                             <div class="card-header pb-0">
-                                <div class="d-lg-flex">
+                                 <div class="d-lg-flex">
                                     <div>
-                                        <h5>Roles</h5>
+                                        <h5>Modulos</h5>
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4">
                                         <div class="ms-auto my-auto">
-                                            <a href='./rol/nuevoRol' class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo rol</a>
+                                            <a href='./modulo/nuevoModulo' class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo usuario</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body px-0 pt-0 pb-2">
                                 <div class="table-responsive p-0">
-                                    <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns"> 
+                                    <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                                         <div class="dataTable-top">
                                             <div class="dataTable-dropdown">
                                                 <label>
@@ -35,33 +35,33 @@
                                             </div>
                                         </div>
                                         <div class="dataTable-container">
-                                              <table class="table table-flush dataTable-table">
+                                            <table class="table table-flush dataTable-table">
                                                 <thead>
                                                     <tr>
-                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Id</th>
+                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Descripción</th>
+                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Rol</th>
                                                     <th class="text-secondary opacity-7"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="rol in this.roles">
+                                                    <tr v-for="modulo in this.modulos">
                                                         <td>
-                                                        <h6 class=" ms-3 mb-2 text-sm">{{rol.id_rol}}</h6>
+                                                            <h6 class=" ms-3 mb-2 text-sm">{{modulo.id_modulo}}</h6>
                                                         </td>
                                                         <td>
-                                                            <p class="text-s font-weight-bold mb-0">{{rol.nombre_rol}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{modulo.nombre_modulo}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{rol.descripcion_rol}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{user.roles_id_rol}}</p>
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones">
-                                                                <NuxtLink  :to="{name:'rol-rolId', params:{rolId: rol.id_rol}}">
-                                                                    <b-icon class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em;"></b-icon>
+                                                                <NuxtLink :to="{name:'modulo-moduloId', params:{usuarioId: modulo.id_modulo}}">
+                                                                    <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                 </NuxtLink>
-                                                                <a class="trash" v-on:click='eliminarRol(rol.id_rol)'>
-                                                                    <b-icon icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                                <a class="trash" v-on:click='eliminarModulo(modulo.id_modulo)'>
+                                                                    <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
                                                                 </a>
                                                             </div>
                                                         </td>
@@ -109,26 +109,27 @@
     axios.defaults.baseURL ='http://10.147.17.173:5000';
     
     export default{
-    data() {
-        return {
-            roles: []
-        };
-    },
-    async mounted(){
-        await axios.get('/roles')
-        .then(response => {
-            this.roles = response.data;
-        });
-    },
-    methods: {
-        async eliminarRol(rolId){
-            try{
-                await axios.delete(`/roles/${rolId}`)
-            }catch(e){
-                console.log(e.message)
-            }
-        }
-    },
-    components: { Sidebar, Navbar }
-}
+        data() {
+            return {
+                modulos:[]
+            };
+        },
+        async mounted(){
+            await axios.get('/modulos')
+            .then(response => {
+                this.modulos = response.data;
+                console.log(this.modulos);
+            });
+        },
+        methods: {
+            async eliminarModulo(moduloId){
+                try{
+                    await axios.delete(`/modulos/${moduloId}`)
+                }catch(e){
+                    console.log(e.message)
+                }
+            }   
+        },
+        components: { Sidebar, Navbar }
+    }
 </script>

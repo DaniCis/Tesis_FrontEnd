@@ -20710,6 +20710,8 @@ hr.horizontal.gray-light {
 
 .navbar .sidenav-toggler-inner {
   width: 18px;
+  margin-left: 0px;
+  margin-right: 25px;
 }
 
 .navbar .sidenav-toggler-inner .sidenav-toggler-line {
