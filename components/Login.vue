@@ -27,6 +27,7 @@
                                                     </span>
                                                 </div>
                                             </div>
+                                            <Notification :message="error" v-if="error"/>
                                             <div class="text-center">
                                                 <b-button type="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">Iniciar</b-button>
                                             </div>
@@ -52,6 +53,7 @@
 <script>
     
     import axios from 'axios';
+    import Notification from '@/components/Notification'
     axios.defaults.baseURL ='http://10.147.17.173:5001';
     
     export default{
@@ -62,25 +64,31 @@
                     password:'',
                 },
                 show:true,
+                error:null,
             };
         },
+        components:{Notification},
         methods:{
             async login() {
-                try {
-                    const formData = new FormData();
-                    formData.append('username',this.form.user);
-                    formData.append('password',this.form.password);
-                    await axios.post('/login', formData, {
-                    }).then((response) => {
+                this.error=''
+                const formData = new FormData();
+                formData.append('username',this.form.user);
+                formData.append('password',this.form.password);
+                await axios.post('/login', formData, {
+                }).then((response) => {
+                    if(response != null && response != undefined){
+                        console.log(response)
                         if(process.client){
                             axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token;
-                            sessionStorage.setItem('token',response.data.access_token);
+                            sessionStorage.setItem('token', response.data.access_token);
+                            //this.$toast.success('yei')
                             this.$router.push('/dashboard');
                         }
-                    })
-                } catch (e) {
+                    }
+                }).catch (e=> {
+                    this.error = e.message
                     console.log(e.message)
-                }   
+                })
             },
             password_show_hide() {
                 this.show = !this.show;
