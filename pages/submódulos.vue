@@ -61,7 +61,7 @@
                                                                     <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                 </NuxtLink>
                                                                 <a class="trash" v-on:click='eliminarSubmodulo(submodulo.id_submodulo)'>
-                                                                    <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; cursor:pointer; color: #ff0c0c;"></b-icon>
+                                                                    <b-icon class="icon cursor-pointer" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
                                                                 </a>
                                                             </div>
                                                         </td>
@@ -70,7 +70,7 @@
                                             </table>
                                         </div>
                                         <div class="dataTable-bottom">
-                                            <div class="dataTable-info">1 de 7 </div>
+                                            <div class="dataTable-info">1 de {{this.submodulos.length}}</div>
                                             <nav class="dataTable-pagination">
                                                 <ul class="dataTable-pagination-list">
                                                     <li class="pager">
