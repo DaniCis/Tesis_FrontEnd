@@ -1,7 +1,7 @@
 <template>
-    <div class="g-sidenav-show bg-gray-10 vh-completa" id='mainDashboard'> 
+    <div class="g-sidenav-show  bg-gray-100 vh-completa" id='mainDashboard'>
         <Sidebar />
-        <Navbar :Modulo='"Administración"' :Tabla='"Usuarios"'/>
+        <Navbar :Modulo='"Administración"' :Tabla='"Módulos"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -10,11 +10,11 @@
                             <div class="card-header pb-0">
                                  <div class="d-lg-flex">
                                     <div>
-                                        <h5>Usuarios</h5>
+                                        <h5>Módulos</h5>
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4">
                                         <div class="ms-auto my-auto">
-                                            <a href='./usuario/nuevoUsuario' class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo usuario</a>
+                                            <a href='./modulo/nuevoModulo' class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo módulo</a>
                                         </div>
                                     </div>
                                 </div>
@@ -41,30 +41,26 @@
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
                                                     <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Rol</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Estado</th>
                                                     <th class="text-secondary opacity-7"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="user in this.usuarios">
+                                                    <tr v-for="modulo in this.modulos">
                                                         <td>
-                                                            <h6 class=" ms-3 mb-2 text-sm">{{user.id_usuario}}</h6>
+                                                            <h6 class=" ms-3 mb-2 text-sm">{{modulo.id_modulo}}</h6>
                                                         </td>
                                                         <td>
-                                                            <p class="text-s font-weight-bold mb-0">{{user.nombre_usuario}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{modulo.nombre_modulo}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <p class="text-s font-weight-bold mb-0">{{user.roles_id_rol}}</p>
                                                         </td>
-                                                        <td class="align-middle text-center text-sm">
-                                                            <span class="badge badge-sm bg-gradient-success">{{user.estado_usuario}}</span>
-                                                        </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones">
-                                                                <NuxtLink :to="{name:'usuario-usuarioId', params:{usuarioId: user.id_usuario}}">
+                                                                <NuxtLink :to="{name:'modulo-moduloId', params:{moduloId: modulo.id_modulo}}">
                                                                     <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                 </NuxtLink>
-                                                                <a class="trash" v-on:click='eliminarUsuario(user.id_usuario)'>
+                                                                <a class="trash" v-on:click='eliminarModulo(modulo.id_modulo)'>
                                                                     <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; cursor:pointer; color: #ff0c0c;"></b-icon>
                                                                 </a>
                                                             </div>
@@ -115,24 +111,24 @@
     export default{
         data() {
             return {
-                usuarios:[]
+                modulos:[]
             };
         },
         async mounted(){
-            await axios.get('/usuarios')
+            await axios.get('/modulos')
             .then(response => {
-                this.usuarios = response.data;
-                console.log(this.usuarios);
+                this.modulos = response.data;
+                console.log(this.modulos);
             });
         },
         methods: {
-            async eliminarUsuario(usuarioId){
+            async eliminarModulo(moduloId){
                 try{
-                    await axios.delete(`/roles/${usuarioId}`)
+                    await axios.delete(`/modulos/${moduloId}`)
                 }catch(e){
                     console.log(e.message)
                 }
-            }
+            }   
         },
         components: { Sidebar, Navbar }
     }

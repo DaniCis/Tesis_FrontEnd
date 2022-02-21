@@ -1,7 +1,7 @@
 <template>
     <div class="g-sidenav-show  bg-gray-100 vh-completa" id='mainDashboard'>
         <Sidebar />
-        <Navbar :Modulo='"Administracion"' :Tabla='"Modulos"'/>
+        <Navbar :Modulo='"Administración"' :Tabla='"Submódulos"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -10,11 +10,11 @@
                             <div class="card-header pb-0">
                                  <div class="d-lg-flex">
                                     <div>
-                                        <h5>Modulos</h5>
+                                        <h5>Submódulos</h5>
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4">
                                         <div class="ms-auto my-auto">
-                                            <a href='./modulo/nuevoModulo' class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo usuario</a>
+                                            <a href='./submodulo/nuevosubModulo' class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo submódulo</a>
                                         </div>
                                     </div>
                                 </div>
@@ -40,28 +40,28 @@
                                                     <tr>
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Rol</th>
+                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Módulo</th>
                                                     <th class="text-secondary opacity-7"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="modulo in this.modulos">
+                                                    <tr v-for="submodulo in this.submodulos">
                                                         <td>
-                                                            <h6 class=" ms-3 mb-2 text-sm">{{modulo.id_modulo}}</h6>
+                                                            <h6 class=" ms-3 mb-2 text-sm">{{submodulo.id_modulo}}</h6>
                                                         </td>
                                                         <td>
-                                                            <p class="text-s font-weight-bold mb-0">{{modulo.nombre_modulo}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{submodulo.nombre_modulo}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{user.roles_id_rol}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{submodulo.modulos_id_modulo}}</p>
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones">
-                                                                <NuxtLink :to="{name:'modulo-moduloId', params:{usuarioId: modulo.id_modulo}}">
+                                                                <NuxtLink :to="{name:'submodulo-submoduloId', params:{submoduloId: submodulo.id_modulo}}">
                                                                     <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                 </NuxtLink>
-                                                                <a class="trash" v-on:click='eliminarModulo(modulo.id_modulo)'>
-                                                                    <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                                <a class="trash" v-on:click='eliminarSubmodulo(submodulo.id_submodulo)'>
+                                                                    <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; cursor:pointer; color: #ff0c0c;"></b-icon>
                                                                 </a>
                                                             </div>
                                                         </td>
@@ -111,20 +111,20 @@
     export default{
         data() {
             return {
-                modulos:[]
+                submodulos:[]
             };
         },
         async mounted(){
-            await axios.get('/modulos')
+            await axios.get('/submodulos')
             .then(response => {
-                this.modulos = response.data;
-                console.log(this.modulos);
+                this.submodulos = response.data;
+                console.log(this.submodulos);
             });
         },
         methods: {
-            async eliminarModulo(moduloId){
+            async eliminarSubmodulo(submoduloId){
                 try{
-                    await axios.delete(`/modulos/${moduloId}`)
+                    await axios.delete(`/submodulos/${submoduloId}`)
                 }catch(e){
                     console.log(e.message)
                 }

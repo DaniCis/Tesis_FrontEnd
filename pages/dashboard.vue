@@ -1,6 +1,6 @@
 <template>
     <div class="g-sidenav-show bg-gray-100 vh-completa" id='mainDashboard'>
-        <Sidebar />
+        <!--<Sidebar/>-->
         <Navbar :Modulo='"Inicio"' :Tabla='"Dashboard"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
@@ -11,7 +11,7 @@
                                 <div class="row">
                                     <div class="col-8">
                                         <div class="numbers">
-                                            <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Money</p>
+                                            <p class="text-sm mb-0 text-capitalize font-weight-bold">Compras</p>
                                             <h5 class="font-weight-bolder mb-0">
                                             $53,000
                                             <span class="text-success text-sm font-weight-bolder">+55%</span>
@@ -33,7 +33,7 @@
                                 <div class="row">
                                     <div class="col-8">
                                         <div class="numbers">
-                                            <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Users</p>
+                                            <p class="text-sm mb-0 text-capitalize font-weight-bold">Ventas</p>
                                             <h5 class="font-weight-bolder mb-0">
                                             2,300
                                             <span class="text-success text-sm font-weight-bolder">+3%</span>
@@ -112,9 +112,9 @@
                                     </div>
                                     <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
                                         <div class="bg-gradient-primary border-radius-lg h-100">
-                                            <img src="" class="position-absolute h-100 w-50 top-0 d-lg-block d-none" alt="waves">
+                                           
                                             <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                                                <img class="w-100 position-relative z-index-2 pt-4"  alt="rocket">
+                                                
                                             </div>
                                         </div>
                                     </div>

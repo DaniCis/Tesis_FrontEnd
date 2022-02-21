@@ -21,14 +21,11 @@
                 <div class="ms-md-auto pe-md-3"></div>
                 <ul class="navbar-nav  justify-content-end">
                     <li class="nav-item d-flex align-items-center">
-                        <a href="" class="nav-link text-body font-weight-bold px-0">
+                        <a class="nav-link font-weight-bold px-0" style="height: 50px">
                             <b-icon icon='person-fill' style="width: 1.3em; height: 1.3em"></b-icon>
-                            <span class="d-sm-inline d-none">this.decoded_token.nombre_usuario</span>
-                        </a>
-                    </li> 
-                    <li class="nav-item px-3 d-flex align-items-center">
-                        <a href="javascript:;" class="nav-link text-body p-0">
-                            <b-icon icon='gear-fill' style="width: 1.3em; height: 1.3em" class="fixed-plugin-button-nav cursor-pointer"></b-icon>
+                            <b-dropdown id="dropdown-right" right text="this.decoded_token.nombre_usuario">
+                                <b-dropdown-item href="#">Cerrar sesión</b-dropdown-item>
+                            </b-dropdown>
                         </a>
                     </li>
                 </ul>

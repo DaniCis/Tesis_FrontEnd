@@ -1,7 +1,7 @@
 <template>
     <div class="g-sidenav-show bg-gray-10 vh-completa" id='mainDashboard'>
         <Sidebar />
-        <Navbar :Modulo='"Administración"' :Tabla='"Módulos"'/>
+        <Navbar :Modulo='"Administración"' :Tabla='"Submódulos"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -9,9 +9,9 @@
                         <div class="form mb-5">
                             <div class="row">
                                 <div class="col-12 col-lg-6">
-                                    <b-form class="mb-8" method="post" @submit.prevent="crearModulo" style="height: 408px;">
+                                    <b-form class="mb-8" method="post" @submit.prevent="crearSubmodulo" style="height: 408px;">
                                         <div class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active">
-                                            <h4 class="font-weight-bolder mb-0">Nuevo módulo</h4>
+                                            <h4 class="font-weight-bolder mb-0">Nuevo submódulo</h4>
                                             <p class="mb-0 text-sm">Añadir</p>
                                             <div>
                                                 <div class="row mt-3">
@@ -22,8 +22,8 @@
                                                 </div>
                                                 <div class="row mt-3">
                                                     <div class="col-12 col-sm-6">
-                                                        <label>Descripción</label>
-                                                        <b-form-input class="form-control" type="text" placeholder="Descripción" v-model='form.descripcion' required></b-form-input>
+                                                        <label>Módulo al que pertenece</label>
+                                                        <b-form-input class="form-control" type="text" placeholder="Descripción" v-model='form.modulo' required></b-form-input>
                                                     </div>
                                                 </div>
                                                 <div class="button-row d-flex mt-4">
@@ -55,18 +55,18 @@
             return{
                 form:{
                     nombre:'',
-                    descripcion:'',
+                    modulo:'',
                 }
             }
         },
         methods:{
-            async crearModulo(){
+            async crearSubmodulo(){
                 try{
                     var params = {
-                        nombre_modulo: this.form.nombre,
-                        descripcion_modulo:this.form.descripcion
+                        nombre_submodulo: this.form.nombre,
+                        modulos_id_modulo:this.form.modulo
                     }
-                    await axios.post('/modulos', params);
+                    await axios.post('/submodulos', params);
                 }catch(e){
                     console.log(e.message)
                 }

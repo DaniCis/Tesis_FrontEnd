@@ -4979,7 +4979,7 @@ fieldset:disabled .btn {
   display: flex;
   flex-wrap: inherit;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .navbar-brand {
@@ -19563,7 +19563,7 @@ fieldset:disabled .btn {
     transition: visibility 0.25s, opacity 0.25s, transform 0.25s;
     cursor: pointer;
   }
-
+/*
   .dropdown .dropdown-toggle:after,
   .dropup .dropdown-toggle:after,
   .dropstart .dropdown-toggle:after,
@@ -19574,7 +19574,7 @@ fieldset:disabled .btn {
     vertical-align: middle;
     font-weight: 600;
   }
-
+*/
   .dropdown .dropdown-toggle.show:after,
   .dropup .dropdown-toggle.show:after,
   .dropstart .dropdown-toggle.show:after,
@@ -19624,9 +19624,9 @@ fieldset:disabled .btn {
     height: 100%;
   }
 
-  .dropdown:not(.dropdown-hover) .dropdown-menu {
+  /*.dropdown:not(.dropdown-hover) .dropdown-menu {
     margin-top: 8px !important;
-  }
+  }*/
 
   .dropdown .dropdown-menu:before {
     font-family: "FontAwesome";
@@ -19676,9 +19676,10 @@ fieldset:disabled .btn {
     transition: top 0.35s ease;
   }
 
+  /*
   .dropdown:not(.nav-item):not(.dropdown-hover) .dropdown-menu {
     margin-top: 8px !important;
-  }
+  }*/
 
   .dropdown:not(.nav-item) .dropdown-menu.show {
     opacity: 1;
@@ -24946,6 +24947,21 @@ pre[class*="language-"] {
 .vh-completa{
   height: 100vh;
 }
+/** DROPDOWN *****/
+.dropdown-menu{
+  min-width:7.5rem!important;
+}
+#dropdown-right{
+  display: inline;
+}
+#dropdown-right__BV_toggle_{
+  margin-bottom: 0;
+  padding-left: 5px;
+  box-shadow: none;
+  background-color: #f8f9fa;
+  color:#8392ab;
+}
+
 .contenedorAcciones{
   display: flex;
   justify-content: center;

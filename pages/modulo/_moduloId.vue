@@ -1,7 +1,7 @@
 <template>
     <div class="g-sidenav-show bg-gray-100 vh-completa" id='mainDashboard'>
         <Sidebar />
-        <Navbar :Modulo='"Roles"' :Tabla='"Modulo" + $route.params.moduloId'/>
+        <Navbar :Modulo='"Módulos"' :Tabla='"Módulo" + $route.params.moduloId'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
