@@ -77,11 +77,13 @@
                 await axios.post('/login', formData, {
                 }).then((response) => {
                     if(response != null && response != undefined){
-                        console.log(response)
                         if(process.client){
-                            axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token;
-                            sessionStorage.setItem('token', response.data.access_token);
-                            //this.$toast.success('yei')
+                            //axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token;
+                            //sessionStorage.setItem('token', response.data.access_token);
+                            this.$store.commit('saveToken', response.data.access_token)
+                            this.$store.commit('decodeToken', response.data.access_token)
+                            this.user=''
+                            this.password=''
                             this.$router.push('/dashboard');
                         }
                     }

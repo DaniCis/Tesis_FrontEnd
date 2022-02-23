@@ -151,10 +151,10 @@
 
     export default {
     components: { Sidebar, Navbar },
-    data() {
-        return {
-            
-        };
-    }
+    fetch ({ store, redirect }) {
+        if (!store.state.user) {
+            return redirect('/')
+        }
+    },
 }
 </script>

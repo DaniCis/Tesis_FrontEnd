@@ -2,7 +2,7 @@
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 border-radius-xl shadow-none" id="navbarBlur" navbar-scroll="false">
         <div class="container-fluid py-1 px-3">
             <div class="nav-item d-xl-none d-flex">
-                <i v-on:click='toggleSidenav();' class="nav-link text-body p-0" id="iconNavbarSidenav">
+                <i v-on:click='toggleSidenav' class="nav-link text-body p-0" id="iconNavbarSidenav">
                     <div class="sidenav-toggler-inner">
                         <b-icon icon='list' font-scale="2" ></b-icon>
                     </div>
@@ -23,8 +23,8 @@
                     <li class="nav-item d-flex align-items-center">
                         <a class="nav-link font-weight-bold px-0" style="height: 50px">
                             <b-icon icon='person-fill' style="width: 1.3em; height: 1.3em"></b-icon>
-                            <b-dropdown id="dropdown-right" right text="this.decoded_token.nombre_usuario">
-                                <b-dropdown-item href="#">Cerrar sesión</b-dropdown-item>
+                            <b-dropdown id="dropdown-right" right text="user">
+                                <b-dropdown-item v-on:click="logout" >Cerrar sesión</b-dropdown-item>
                             </b-dropdown>
                         </a>
                     </li>
@@ -35,18 +35,19 @@
 </template>
 
 <script>
-    import { getDecoded } from "~/utils/auth";
     export default{
         props:['Modulo','Tabla'],
         name:'Navbar',
         data(){
             return {
                 searchInput: '',
-                decoded_token:[]
+                decoded_token:[],
+                user:''
             }
         },
         mounted(){
-            //this.decoded_token = getDecoded();
+            this.decoded_token = this.$store.state.decoded_token
+            this.user = this.$store.state.user
         },
         methods: {
             toggleSidenav() {
@@ -67,9 +68,11 @@
                     iconSidenav.classList.remove("d-none");
                 }
             },
-            clearSearch(){  
-                this.searchInput = ''
-            },
+            logout(){
+                this.$store.commit('saveToken', null)
+                this.$store.commit('decodeToken', null)
+                this.$router.replace({ path: '/' })
+            }
         },
     }
 </script>

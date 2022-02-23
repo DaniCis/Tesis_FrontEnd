@@ -140,7 +140,6 @@
 </template>
 
 <script>
-    import { getDecoded} from "@/utils/auth";
     export default{
         data(){
             return{
@@ -154,8 +153,8 @@
             }
         },
         mounted(){
-           this.decoded_token = getDecoded();
-           this.modulos = this.decoded_token.autorizaciones.modulos;
+           this.decoded_token = this.$store.state.decoded_token
+           //this.modulos = this.decoded_token.autorizaciones.modulos;
         },
         methods:{
             
