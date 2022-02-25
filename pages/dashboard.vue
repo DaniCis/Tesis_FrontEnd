@@ -1,6 +1,6 @@
 <template>
     <div class="g-sidenav-show bg-gray-100 vh-completa" id='mainDashboard'>
-        <!--<Sidebar/>-->
+        <Sidebar/>
         <Navbar :Modulo='"Inicio"' :Tabla='"Dashboard"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
@@ -150,7 +150,10 @@
     axios.defaults.baseURL ='http://10.147.17.173:5001';
 
     export default {
-    components: { Sidebar, Navbar },
+    components: { Sidebar, Navbar }, 
+    mounted(){
+        console.log(this.$store.state.token)
+    },
     fetch ({ store, redirect }) {
         if (!store.state.user) {
             return redirect('/')

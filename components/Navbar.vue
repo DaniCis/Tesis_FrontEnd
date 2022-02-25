@@ -41,12 +41,10 @@
         data(){
             return {
                 searchInput: '',
-                decoded_token:[],
                 user:''
             }
         },
         mounted(){
-            this.decoded_token = this.$store.state.decoded_token
             this.user = this.$store.state.user
         },
         methods: {
@@ -71,6 +69,7 @@
             logout(){
                 this.$store.commit('saveToken', null)
                 this.$store.commit('decodeToken', null)
+                this.$store.commit('saveUser', null)
                 this.$router.replace({ path: '/' })
             }
         },

@@ -154,7 +154,7 @@
         },
         mounted(){
            this.decoded_token = this.$store.state.decoded_token
-           //this.modulos = this.decoded_token.autorizaciones.modulos;
+           this.modulos = this.decoded_token.autorizaciones.modulos
         },
         methods:{
             

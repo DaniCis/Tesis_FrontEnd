@@ -38,11 +38,11 @@
                                             <table class="table table-flush dataTable-table">
                                                 <thead>
                                                     <tr>
-                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
-                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Rol</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Estado</th>
-                                                    <th class="text-secondary opacity-7"></th>
+                                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
+                                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Rol</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Estado</th>
+                                                        <th class="text-secondary opacity-7"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -123,7 +123,10 @@
             .then(response => {
                 this.usuarios = response.data;
                 console.log(this.usuarios);
-            });
+            })
+            .catch(e => {
+                console.log(e.message)
+            })
         },
         methods: {
             async eliminarUsuario(usuarioId){
