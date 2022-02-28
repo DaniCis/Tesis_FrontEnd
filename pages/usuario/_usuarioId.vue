@@ -29,7 +29,7 @@
                                                 <div class="row mt-3">
                                                     <div class="col-12 col-sm-6">
                                                         <label>Rol</label>
-                                                        <b-form-input class="form-control" type="text" v-model="form.rol" v-bind:placeholder="(this.user.roles_id_rol)"></b-form-input>
+                                                        <b-form-input class="form-control" type="number" v-model="form.rol" v-bind:placeholder="(this.user.roles_id_rol)"></b-form-input>
                                                     </div>
                                                 </div>
                                                 <div class="button-row d-flex mt-4">

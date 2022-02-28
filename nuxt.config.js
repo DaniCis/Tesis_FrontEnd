@@ -16,7 +16,7 @@ export default {
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' },
     ]
   },
-
+  
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '@assets/css/soft-ui-dashboard.css',

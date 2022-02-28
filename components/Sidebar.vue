@@ -37,8 +37,11 @@
                             <b-card-text v-if="'Roles' in this.modulos.Administración">
                                 <nuxt-link to="/roles">Roles</nuxt-link>
                             </b-card-text>
-                            <b-card-text v-if="'Modulos' in this.modulos.Administración">
-                                <nuxt-link to="/modulos">Módulos</nuxt-link>
+                            <b-card-text v-if="'Módulos' in this.modulos.Administración">
+                                <nuxt-link to="/módulos">Módulos</nuxt-link>
+                            </b-card-text>
+                            <b-card-text v-if="'Submódulos' in this.modulos.Administración">
+                                <nuxt-link to="/submódulos">Submódulos</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>
@@ -153,8 +156,10 @@
             }
         },
         mounted(){
+           console.log(this.$store.state.token)
            this.decoded_token = this.$store.state.decoded_token
            this.modulos = this.decoded_token.autorizaciones.modulos
+           
         },
         methods:{
             

@@ -89,7 +89,6 @@
                     }
                 }).catch (e=> {
                     this.error = e.message
-                    console.log(e.message)
                 })
             },
             password_show_hide() {

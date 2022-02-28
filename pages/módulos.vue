@@ -52,9 +52,6 @@
                                                         <td>
                                                             <p class="text-s font-weight-bold mb-0">{{modulo.nombre_modulo}}</p>
                                                         </td>
-                                                        <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{user.roles_id_rol}}</p>
-                                                        </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones">
                                                                 <NuxtLink :to="{name:'modulo-moduloId', params:{moduloId: modulo.id_modulo}}">

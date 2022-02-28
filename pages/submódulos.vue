@@ -47,17 +47,17 @@
                                                 <tbody>
                                                     <tr v-for="submodulo in this.submodulos">
                                                         <td>
-                                                            <h6 class=" ms-3 mb-2 text-sm">{{submodulo.id_modulo}}</h6>
+                                                            <h6 class=" ms-3 mb-2 text-sm">{{submodulo.id_submodulo}}</h6>
                                                         </td>
                                                         <td>
-                                                            <p class="text-s font-weight-bold mb-0">{{submodulo.nombre_modulo}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{submodulo.nombre_submodulo}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <p class="text-s font-weight-bold mb-0">{{submodulo.modulos_id_modulo}}</p>
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones">
-                                                                <NuxtLink :to="{name:'submodulo-submoduloId', params:{submoduloId: submodulo.id_modulo}}">
+                                                                <NuxtLink :to="{name:'submodulo-submoduloId', params:{submoduloId: submodulo.id_submodulo}}">
                                                                     <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                 </NuxtLink>
                                                                 <a class="trash" v-on:click='eliminarSubmodulo(submodulo.id_submodulo)'>

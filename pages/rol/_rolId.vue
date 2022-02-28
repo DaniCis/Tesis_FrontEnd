@@ -1,7 +1,7 @@
 <template>
     <div class="g-sidenav-show bg-gray-100 vh-completa" id='mainDashboard'>
         <Sidebar />
-        <Navbar :Modulo='"Roles"' :Tabla='"Rol" + $route.params.rolId'/>
+        <Navbar :Modulo='"Roles"' :Tabla='"Rol " + $route.params.rolId'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -70,15 +70,16 @@
                 this.rol = result.data
             },
             async editarRol(){
-                try{
-                    var params = {
-                        nombre_rol: this.form.nombre,
-                        descripcion_rol:this.form.descripcion
-                    }
-                    await axios.put(`/roles/${this.$route.params.rolId}`, params);
-                }catch(e){
-                    console.log(e.message)
+                var params = {
+                    nombre_rol: this.form.nombre,
+                    descripcion_rol:this.form.descripcion
                 }
+                await axios.put(`/roles/${this.$route.params.rolId}`, params)
+                .then((response) => {
+                    console.log("editado correcto")
+                }).catch (e=> {
+                    console.log(e.message)
+                })
             }
         },
         components: { Sidebar, Navbar }

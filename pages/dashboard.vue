@@ -151,13 +151,10 @@
 
     export default {
     components: { Sidebar, Navbar }, 
-    mounted(){
-        console.log(this.$store.state.token)
-    },
-    fetch ({ store, redirect }) {
+    /*fetch ({ store, redirect }) {
         if (!store.state.user) {
             return redirect('/')
         }
-    },
+    },*/
 }
 </script>
