@@ -130,11 +130,12 @@
         },
         methods: {
             async eliminarUsuario(usuarioId){
-                try{
-                    await axios.delete(`/roles/${usuarioId}`)
-                }catch(e){
+                await axios.delete(`/usuario/${usuarioId}`)
+                .then((response) => {
+                console.log("correcto")
+                }).catch (e => {
                     console.log(e.message)
-                }
+                })
             }
         },
         components: { Sidebar, Navbar }

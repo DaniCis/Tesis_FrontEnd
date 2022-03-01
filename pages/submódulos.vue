@@ -119,15 +119,20 @@
             .then(response => {
                 this.submodulos = response.data;
                 console.log(this.submodulos);
-            });
+            })
+            .catch(e => {
+                console.log(e.message)
+            })
         },
         methods: {
             async eliminarSubmodulo(submoduloId){
-                try{
-                    await axios.delete(`/submodulos/${submoduloId}`)
-                }catch(e){
+                await axios.delete(`/submodulos/${submoduloId}`)
+                .then(response => {
+                    console.log("bien");
+                })
+                .catch(e => {
                     console.log(e.message)
-                }
+                })
             }   
         },
         components: { Sidebar, Navbar }

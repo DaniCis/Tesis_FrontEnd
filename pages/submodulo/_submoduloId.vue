@@ -27,7 +27,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="button-row d-flex mt-4">
-                                                    <b-button class="btn bg-gradient-dark ms-auto mb-0 js-btn-next" type="submit" >
+                                                    <b-button href="/submódulos" class="btn bg-gradient-secondary me-3 ms-auto mb-0">
+                                                        Regresar
+                                                    </b-button> 
+                                                    <b-button class="btn bg-gradient-primary ms-auto mb-0 js-btn-next" type="submit" >
                                                         Actualizar
                                                     </b-button>
                                                 </div>
@@ -65,20 +68,25 @@
         },
         methods:{
             async getSubmodulo(){
-                const data = axios.get(`/submodulos/${this.$route.params.submoduloId}`)
-                const result = await data
-                this.submodulo = result.data
+                await axios.get(`/submodulos/${this.$route.params.submoduloId}`)
+                .then(response => {
+                    this.submodulo= response.data;
+                })
+                .catch(e => {
+                    console.log(e.message)
+                })
             },
             async editarModulo(){
-                try{
-                    var params = {
-                        nombre_submodulo: this.form.nombre,
-                        modulos_id_modulo:this.form.modulo
-                    }
-                    await axios.put(`/submodulos/${this.$route.params.submoduloId}`, params);
-                }catch(e){
-                    console.log(e.message)
+                var params = {
+                    nombre_submodulo: this.form.nombre,
+                    modulos_id_modulo:this.form.modulo
                 }
+                await axios.put(`/submodulos/${this.$route.params.submoduloId}`, params)
+                .then((response) => {
+                console.log("correcto")
+                }).catch (e => {
+                    console.log(e.message)
+                })
             }
         },
         components: { Sidebar, Navbar }

@@ -40,7 +40,6 @@
                                                     <tr>
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Rol</th>
                                                     <th class="text-secondary opacity-7"></th>
                                                     </tr>
                                                 </thead>
@@ -116,15 +115,20 @@
             .then(response => {
                 this.modulos = response.data;
                 console.log(this.modulos);
-            });
+            })
+            .catch(e => {
+                console.log(e.message)
+            })
         },
         methods: {
             async eliminarModulo(moduloId){
-                try{
-                    await axios.delete(`/modulos/${moduloId}`)
-                }catch(e){
+                await axios.delete(`/modulos/${moduloId}`)
+                .then(response => {
+                    console.log("bien");
+                })
+                .catch(e => {
                     console.log(e.message)
-                }
+                })
             }   
         },
         components: { Sidebar, Navbar }

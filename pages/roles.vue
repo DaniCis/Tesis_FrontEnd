@@ -118,15 +118,18 @@
         await axios.get('/roles')
         .then(response => {
             this.roles = response.data;
-        });
+        }).catch (e=> {
+            console.log(e.message)
+        })
     },
     methods: {
         async eliminarRol(rolId){
-            try{
-                await axios.delete(`/roles/${rolId}`)
-            }catch(e){
+            await axios.delete(`/roles/${rolId}`)
+            .then((response) => {
+                console.log("correcto")
+            }).catch (e=> {
                 console.log(e.message)
-            }
+            })
         }
     },
     components: { Sidebar, Navbar }

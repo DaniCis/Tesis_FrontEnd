@@ -27,7 +27,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="button-row d-flex mt-4">
-                                                    <b-button class="btn bg-gradient-dark ms-auto mb-0 js-btn-next" type="submit" >
+                                                    <b-button href="/roles" class="btn bg-gradient-secondary me-3 ms-auto mb-0">
+                                                        Regresar
+                                                    </b-button> 
+                                                    <b-button class="btn bg-gradient-primary mb-0 js-btn-next" type="submit">
                                                         Agregar
                                                     </b-button>
                                                 </div>
@@ -61,15 +64,16 @@
         },
         methods:{
             async crearRol(){
-                try{
-                    var params = {
-                        nombre_rol: this.form.nombre,
-                        descripcion_rol:this.form.descripcion
-                    }
-                    await axios.post('/roles', params);
-                }catch(e){
-                    console.log(e.message)
+                var params = {
+                    nombre_rol: this.form.nombre,
+                    descripcion_rol:this.form.descripcion
                 }
+                await axios.post('/roles', params)
+                .then((response) => {
+                    console.log("correcto")
+                }).catch (e=> {
+                    console.log(e.message)
+                })
             }
         }
     }

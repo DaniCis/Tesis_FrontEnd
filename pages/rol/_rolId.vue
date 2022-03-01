@@ -27,7 +27,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="button-row d-flex mt-4">
-                                                    <b-button class="btn bg-gradient-dark ms-auto mb-0 js-btn-next" type="submit" >
+                                                    <b-button href="/roles" class="btn bg-gradient-secondary me-3 ms-auto mb-0 " >
+                                                        Regresar
+                                                    </b-button> 
+                                                    <b-button class="btn bg-gradient-primary mb-0 js-btn-next" type="submit" >
                                                         Actualizar
                                                     </b-button>
                                                 </div>
@@ -65,9 +68,14 @@
         },
         methods:{
             async getRol(){
-                const data = axios.get(`/roles/${this.$route.params.rolId}`)
-                const result = await data
-                this.rol = result.data
+                await axios.get(`/roles/${this.$route.params.rolId}`)
+                .then(response => {
+                    this.rol= response.data;
+                    console.log(this.rol);
+                })
+                .catch(e => {
+                    console.log(e.message)
+                })
             },
             async editarRol(){
                 var params = {
