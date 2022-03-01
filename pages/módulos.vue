@@ -110,25 +110,42 @@
                 modulos:[]
             };
         },
-        async mounted(){
-            await axios.get('/modulos')
-            .then(response => {
-                this.modulos = response.data;
-                console.log(this.modulos);
-            })
-            .catch(e => {
-                console.log(e.message)
-            })
+        fetch ({ store, redirect }) {
+            if (!store.state.user) {
+                return redirect('/')
+            }
         },
-        methods: {
-            async eliminarModulo(moduloId){
-                await axios.delete(`/modulos/${moduloId}`)
+        async mounted(){
+            if(this.$store.state.token){
+                await axios.get('/modulos',{
+                    headers: {
+                        'Authorization': `Bearer ${this.$store.state.token}`
+                    }
+                })
                 .then(response => {
-                    console.log("bien");
+                    this.modulos = response.data;
+                    console.log(this.modulos);
                 })
                 .catch(e => {
                     console.log(e.message)
                 })
+            }
+        },
+        methods: {
+            async eliminarModulo(moduloId){
+                if(this.$store.state.token){
+                    await axios.delete(`/modulos/${moduloId}`,{
+                        headers: {
+                            'Authorization': `Bearer ${this.$store.state.token}`
+                        }
+                    })
+                    .then(response => {
+                        console.log("bien");
+                    })
+                    .catch(e => {
+                        console.log(e.message)
+                    })
+                }
             }   
         },
         components: { Sidebar, Navbar }

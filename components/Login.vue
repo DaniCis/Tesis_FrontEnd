@@ -74,8 +74,8 @@
                 const formData = new FormData();
                 formData.append('username',this.form.user);
                 formData.append('password',this.form.password);
-                await axios.post('/login', formData, {
-                }).then((response) => {
+                await axios.post('/login', formData)
+                .then((response) => {
                     if(response != null && response != undefined){
                         if(process.client){
                             //axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token;

@@ -118,24 +118,41 @@
                 usuarios:[]
             };
         },
+        fetch ({ store, redirect }) {
+            if (!store.state.user) {
+                return redirect('/')
+            }
+        },
         async mounted(){
-            await axios.get('/usuarios')
-            .then(response => {
-                this.usuarios = response.data;
-                console.log(this.usuarios);
-            })
-            .catch(e => {
-                console.log(e.message)
-            })
+            if(this.$store.state.token){
+                await axios.get('/usuarios',{
+                    headers: {
+                        'Authorization': `Bearer ${this.$store.state.token}`
+                    }
+                })
+                .then(response => {
+                    this.usuarios = response.data;
+                    console.log(this.usuarios);
+                })
+                .catch(e => {
+                    console.log(e.message)
+                })
+            }  
         },
         methods: {
             async eliminarUsuario(usuarioId){
-                await axios.delete(`/usuario/${usuarioId}`)
-                .then((response) => {
-                console.log("correcto")
-                }).catch (e => {
-                    console.log(e.message)
-                })
+                if(this.$store.state.token){
+                    await axios.delete(`/usuario/${usuarioId}`,{
+                        headers: {
+                            'Authorization': `Bearer ${this.$store.state.token}`
+                        }
+                    })
+                    .then((response) => {
+                        console.log("correcto")
+                    }).catch (e => {
+                        console.log(e.message)
+                    })
+                }
             }
         },
         components: { Sidebar, Navbar }

@@ -63,30 +63,47 @@
                 }
             }
         },
-        async fetch(){
+        async mounted(){
             await this.getSubmodulo()
+        },
+        fetch ({ store, redirect }) {
+            if (!store.state.user) {
+                return redirect('/')
+            }
         },
         methods:{
             async getSubmodulo(){
-                await axios.get(`/submodulos/${this.$route.params.submoduloId}`)
-                .then(response => {
-                    this.submodulo= response.data;
-                })
-                .catch(e => {
-                    console.log(e.message)
-                })
+                if(this.$store.state.token){
+                    await axios.get(`/submodulos/${this.$route.params.submoduloId}`,{
+                        headers: {
+                            'Authorization': `Bearer ${this.$store.state.token}`
+                        }
+                    })
+                    .then(response => {
+                        this.submodulo = response.data;
+                    })
+                    .catch(e => {
+                        console.log(e.message)
+                    })
+                }
             },
             async editarModulo(){
-                var params = {
-                    nombre_submodulo: this.form.nombre,
-                    modulos_id_modulo:this.form.modulo
+                if(this.$store.state.token){
+                    var params = {
+                        nombre_submodulo: this.form.nombre,
+                        modulos_id_modulo:this.form.modulo
+                    }
+                    await axios.put(`/submodulos/${this.$route.params.submoduloId}`, params,{
+                        headers: {
+                            'Authorization': `Bearer ${this.$store.state.token}`
+                        }
+                    })
+                    .then((response) => {
+                    console.log("correcto")
+                    }).catch (e => {
+                        console.log(e.message)
+                    })
                 }
-                await axios.put(`/submodulos/${this.$route.params.submoduloId}`, params)
-                .then((response) => {
-                console.log("correcto")
-                }).catch (e => {
-                    console.log(e.message)
-                })
             }
         },
         components: { Sidebar, Navbar }

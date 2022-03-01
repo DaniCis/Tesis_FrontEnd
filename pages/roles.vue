@@ -114,22 +114,39 @@
             roles: []
         };
     },
-    async mounted(){
-        await axios.get('/roles')
-        .then(response => {
-            this.roles = response.data;
-        }).catch (e=> {
-            console.log(e.message)
-        })
+    fetch ({ store, redirect }) {
+        if (!store.state.user) {
+            return redirect('/')
+        }
     },
-    methods: {
-        async eliminarRol(rolId){
-            await axios.delete(`/roles/${rolId}`)
-            .then((response) => {
-                console.log("correcto")
+    async mounted(){
+        if(this.$store.state.token){
+            await axios.get('/roles',{
+                headers: {
+                    'Authorization': `Bearer ${this.$store.state.token}`
+                }
+            })
+            .then(response => {
+                this.roles = response.data;
             }).catch (e=> {
                 console.log(e.message)
             })
+        }
+    },
+    methods: {
+        async eliminarRol(rolId){
+            if(this.$store.state.token){
+                await axios.delete(`/roles/${rolId}`,{
+                    headers: {
+                        'Authorization': `Bearer ${this.$store.state.token}`
+                    }
+                })
+                .then((response) => {
+                    console.log("correcto")
+                }).catch (e=> {
+                    console.log(e.message)
+                })
+            }
         }
     },
     components: { Sidebar, Navbar }

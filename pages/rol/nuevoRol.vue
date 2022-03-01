@@ -62,18 +62,29 @@
                 }
             }
         },
+        fetch ({ store, redirect }) {
+            if (!store.state.user) {
+                return redirect('/')
+            }
+        },
         methods:{
             async crearRol(){
-                var params = {
-                    nombre_rol: this.form.nombre,
-                    descripcion_rol:this.form.descripcion
+                if(this.$store.state.token){
+                    var params = {
+                        nombre_rol: this.form.nombre,
+                        descripcion_rol:this.form.descripcion
+                    }
+                    await axios.post('/roles', params,{
+                        headers: {
+                            'Authorization': `Bearer ${this.$store.state.token}`
+                        }
+                    })
+                    .then((response) => {
+                        console.log("correcto")
+                    }).catch (e => {
+                        console.log(e.message)
+                    })   
                 }
-                await axios.post('/roles', params)
-                .then((response) => {
-                    console.log("correcto")
-                }).catch (e=> {
-                    console.log(e.message)
-                })
             }
         }
     }

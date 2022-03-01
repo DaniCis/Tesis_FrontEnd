@@ -62,18 +62,29 @@
                 }
             }
         },
+        fetch ({ store, redirect }) {
+            if (!store.state.user) {
+                return redirect('/')
+            }
+        },
         methods:{
             async crearSubmodulo(){
-                var params = {
-                    nombre_submodulo: this.form.nombre,
-                    modulos_id_modulo:this.form.modulo
+                if(this.$store.state.token){
+                    var params = {
+                        nombre_submodulo: this.form.nombre,
+                        modulos_id_modulo:this.form.modulo
+                    }
+                    await axios.post('/submodulos', params,{
+                        headers: {
+                            'Authorization': `Bearer ${this.$store.state.token}`
+                        }
+                    })
+                    .then((response) => {
+                        console.log("correcto")
+                    }).catch (e => {
+                        console.log(e.message)
+                    })
                 }
-                await axios.post('/submodulos', params)
-                .then((response) => {
-                    console.log("correcto")
-                }).catch (e => {
-                    console.log(e.message)
-                })
             }
         }
     }

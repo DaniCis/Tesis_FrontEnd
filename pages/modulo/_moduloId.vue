@@ -63,30 +63,48 @@
                 }
             }
         },
-        async fetch(){
+        async mounted(){
             await this.getModulo()
+        },
+        fetch ({ store, redirect }) {
+            if (!store.state.user) {
+                return redirect('/')
+            }
         },
         methods:{
             async getModulo(){
-                await axios.get(`/modulos/${this.$route.params.moduloId}`)
-                .then(response => {
-                    this.modulo= response.data;
-                })
-                .catch(e => {
-                    console.log(e.message)
-                })
+                if(this.$store.state.token){
+                    await axios.get(`/modulos/${this.$route.params.moduloId}`,{
+                        headers: {
+                            'Authorization': `Bearer ${this.$store.state.token}`
+                        }
+                    })
+                    .then(response => {
+                        this.modulo = response.data;
+                    })
+                    .catch(e => {
+                        console.log(e.message)
+                    })
+                }
             },
             async editarModulo(){
-                var params = {
+                if(this.$store.state.token){
+                    var params = {
                     nombre_modulo: this.form.nombre,
                     descripcion_modulo:this.form.descripcion
+                    }
+                    await axios.put(`/modulos/${this.$route.params.moduloId}`, params,{
+                        headers: {
+                            'Authorization': `Bearer ${this.$store.state.token}`
+                        }
+                    })
+                    .then((response) => {
+                        console.log("correcto")
+                    }).catch (e => {
+                        console.log(e.message)
+                    })
                 }
-                await axios.put(`/modulos/${this.$route.params.moduloId}`, params)
-                .then((response) => {
-                    console.log("correcto")
-                }).catch (e => {
-                    console.log(e.message)
-                })
+                
             }
         },
         components: { Sidebar, Navbar }

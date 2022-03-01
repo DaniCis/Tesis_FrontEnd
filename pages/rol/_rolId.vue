@@ -63,31 +63,48 @@
                 }
             }
         },
-        async fetch(){
+        async mounted(){
             await this.getRol()
+        },
+        fetch ({ store, redirect }) {
+            if (!store.state.user) {
+                return redirect('/')
+            }
         },
         methods:{
             async getRol(){
-                await axios.get(`/roles/${this.$route.params.rolId}`)
-                .then(response => {
-                    this.rol= response.data;
-                    console.log(this.rol);
-                })
-                .catch(e => {
-                    console.log(e.message)
-                })
+                if(this.$store.state.token){
+                    await axios.get(`/roles/${this.$route.params.rolId}`,{
+                        headers: {
+                            'Authorization': `Bearer ${this.$store.state.token}`
+                        }
+                    })
+                    .then(response => {
+                        this.rol = response.data;
+                        console.log(this.rol);
+                    })
+                    .catch(e => {
+                        console.log(e.message)
+                    })
+                }
             },
             async editarRol(){
-                var params = {
-                    nombre_rol: this.form.nombre,
-                    descripcion_rol:this.form.descripcion
-                }
-                await axios.put(`/roles/${this.$route.params.rolId}`, params)
-                .then((response) => {
-                    console.log("editado correcto")
-                }).catch (e=> {
-                    console.log(e.message)
+                if(this.$store.state.token){
+                    var params = {
+                        nombre_rol: this.form.nombre,
+                        descripcion_rol:this.form.descripcion
+                    }
+                    await axios.put(`/roles/${this.$route.params.rolId}`, params,{
+                        headers: {
+                            'Authorization': `Bearer ${this.$store.state.token}`
+                        }
+                    })
+                    .then((response) => {
+                        console.log("editado correcto")
+                    }).catch (e => {
+                        console.log(e.message)
                 })
+                }
             }
         },
         components: { Sidebar, Navbar }

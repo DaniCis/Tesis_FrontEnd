@@ -70,31 +70,48 @@
                 }
             };
         },
-        async fetch(){
+        async mounted(){
             await this.getUser()
+        },
+        fetch ({ store, redirect }) {
+            if (!store.state.user) {
+                return redirect('/')
+            }
         },
         methods:{
             async getUser(){
-                await axios.get(`/usuario/${this.$route.params.usuarioId}`)
-                .then(response => {
-                    this.user= response.data;
-                })
-                .catch(e => {
-                    console.log(e.message)
-                })
+                if(this.$store.state.token){
+                    await axios.get(`/usuario/${this.$route.params.usuarioId}`,{
+                        headers: {
+                            'Authorization': `Bearer ${this.$store.state.token}`
+                        }
+                    })
+                    .then(response => {
+                        this.user= response.data;
+                    })
+                    .catch(e => {
+                        console.log(e.message)
+                    })
+                }
             },
             async editarUsuario(){
-                var params ={
-                    nombre_usuario: this.form.nombre,
-                    password_usuario: this.form.password,
-                    roles_id_rol:this.form.rol
+                if(this.$store.state.token){
+                    var params ={
+                        nombre_usuario: this.form.nombre,
+                        password_usuario: this.form.password,
+                        roles_id_rol:this.form.rol
+                    }
+                    await axios.put(`/usuario/${this.$route.params.usuarioId}`, params,{
+                        headers: {
+                            'Authorization': `Bearer ${this.$store.state.token}`
+                        }
+                    })
+                    .then((response) => {
+                    console.log("correcto")
+                    }).catch (e => {
+                        console.log(e.message)
+                    })
                 }
-                await axios.put(`/usuario/${this.$route.params.usuarioId}`, params)
-                .then((response) => {
-                console.log("correcto")
-                }).catch (e => {
-                    console.log(e.message)
-                })
             },           
         },
         components: { Sidebar, Navbar }

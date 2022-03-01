@@ -114,25 +114,42 @@
                 submodulos:[]
             };
         },
-        async mounted(){
-            await axios.get('/submodulos')
-            .then(response => {
-                this.submodulos = response.data;
-                console.log(this.submodulos);
-            })
-            .catch(e => {
-                console.log(e.message)
-            })
+        fetch ({ store, redirect }) {
+            if (!store.state.user) {
+                return redirect('/')
+            }
         },
-        methods: {
-            async eliminarSubmodulo(submoduloId){
-                await axios.delete(`/submodulos/${submoduloId}`)
+        async mounted(){
+            if(this.$store.state.token){
+                await axios.get('/submodulos',{
+                    headers: {
+                        'Authorization': `Bearer ${this.$store.state.token}`
+                    }
+                })
                 .then(response => {
-                    console.log("bien");
+                    this.submodulos = response.data;
+                    console.log(this.submodulos);
                 })
                 .catch(e => {
                     console.log(e.message)
                 })
+            }
+        },
+        methods: {
+            async eliminarSubmodulo(submoduloId){
+                if(this.$store.state.token){
+                    await axios.delete(`/submodulos/${submoduloId}`,{
+                        headers: {
+                            'Authorization': `Bearer ${this.$store.state.token}`
+                        }
+                    })
+                    .then(response => {
+                        console.log("bien");
+                    })
+                    .catch(e => {
+                        console.log(e.message)
+                    })
+                }
             }   
         },
         components: { Sidebar, Navbar }
