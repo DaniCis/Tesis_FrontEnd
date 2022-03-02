@@ -121,11 +121,7 @@
         },
         async mounted(){
             if(this.$store.state.token){
-                await axios.get('/submodulos',{
-                    headers: {
-                        'Authorization': `Bearer ${this.$store.state.token}`
-                    }
-                })
+                await axios.get('/submodulos')
                 .then(response => {
                     this.submodulos = response.data;
                     console.log(this.submodulos);
@@ -138,11 +134,7 @@
         methods: {
             async eliminarSubmodulo(submoduloId){
                 if(this.$store.state.token){
-                    await axios.delete(`/submodulos/${submoduloId}`,{
-                        headers: {
-                            'Authorization': `Bearer ${this.$store.state.token}`
-                        }
-                    })
+                    await axios.delete(`/submodulos/${submoduloId}`)
                     .then(response => {
                         console.log("bien");
                     })

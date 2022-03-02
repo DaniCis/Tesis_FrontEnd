@@ -74,11 +74,7 @@
                         nombre_submodulo: this.form.nombre,
                         modulos_id_modulo:this.form.modulo
                     }
-                    await axios.post('/submodulos', params,{
-                        headers: {
-                            'Authorization': `Bearer ${this.$store.state.token}`
-                        }
-                    })
+                    await axios.post('/submodulos', params)
                     .then((response) => {
                         console.log("correcto")
                     }).catch (e => {

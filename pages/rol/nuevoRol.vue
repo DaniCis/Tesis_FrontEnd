@@ -74,11 +74,7 @@
                         nombre_rol: this.form.nombre,
                         descripcion_rol:this.form.descripcion
                     }
-                    await axios.post('/roles', params,{
-                        headers: {
-                            'Authorization': `Bearer ${this.$store.state.token}`
-                        }
-                    })
+                    await axios.post('/roles', params)
                     .then((response) => {
                         console.log("correcto")
                     }).catch (e => {

@@ -74,11 +74,7 @@
                         nombre_modulo: this.form.nombre,
                         descripcion_modulo:this.form.descripcion
                     }
-                    await axios.post('/modulos', params,{
-                        headers: {
-                            'Authorization': `Bearer ${this.$store.state.token}`
-                        }
-                    })
+                    await axios.post('/modulos', params)
                     .then((response) => {
                         console.log("correcto")
                     }).catch (e => {

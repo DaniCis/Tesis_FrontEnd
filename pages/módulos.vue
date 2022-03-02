@@ -117,11 +117,7 @@
         },
         async mounted(){
             if(this.$store.state.token){
-                await axios.get('/modulos',{
-                    headers: {
-                        'Authorization': `Bearer ${this.$store.state.token}`
-                    }
-                })
+                await axios.get('/modulos')
                 .then(response => {
                     this.modulos = response.data;
                     console.log(this.modulos);
@@ -134,11 +130,7 @@
         methods: {
             async eliminarModulo(moduloId){
                 if(this.$store.state.token){
-                    await axios.delete(`/modulos/${moduloId}`,{
-                        headers: {
-                            'Authorization': `Bearer ${this.$store.state.token}`
-                        }
-                    })
+                    await axios.delete(`/modulos/${moduloId}`)
                     .then(response => {
                         console.log("bien");
                     })

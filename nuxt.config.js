@@ -20,8 +20,6 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '@assets/css/soft-ui-dashboard.css',
-    //'@assets/css/nucleo-icons.css',
-    //'@assets/css/nucleo-svg.css',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins

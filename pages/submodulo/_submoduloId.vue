@@ -74,11 +74,7 @@
         methods:{
             async getSubmodulo(){
                 if(this.$store.state.token){
-                    await axios.get(`/submodulos/${this.$route.params.submoduloId}`,{
-                        headers: {
-                            'Authorization': `Bearer ${this.$store.state.token}`
-                        }
-                    })
+                    await axios.get(`/submodulos/${this.$route.params.submoduloId}`)
                     .then(response => {
                         this.submodulo = response.data;
                     })
@@ -93,11 +89,7 @@
                         nombre_submodulo: this.form.nombre,
                         modulos_id_modulo:this.form.modulo
                     }
-                    await axios.put(`/submodulos/${this.$route.params.submoduloId}`, params,{
-                        headers: {
-                            'Authorization': `Bearer ${this.$store.state.token}`
-                        }
-                    })
+                    await axios.put(`/submodulos/${this.$route.params.submoduloId}`, params)
                     .then((response) => {
                     console.log("correcto")
                     }).catch (e => {

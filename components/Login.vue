@@ -77,15 +77,13 @@
                 await axios.post('/login', formData)
                 .then((response) => {
                     if(response != null && response != undefined){
-                        if(process.client){
-                            //axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token;
-                            this.$store.commit('saveToken', response.data.access_token)
-                            this.$store.commit('decodeToken', response.data.access_token)
-                            this.$store.commit('saveUser', this.form.user)
-                            this.user=''
-                            this.password=''
-                            this.$router.push('/dashboard');
-                        }
+                        this.$store.commit('saveToken', response.data.access_token)
+                        this.$store.commit('decodeToken', response.data.access_token)
+                        this.$store.commit('saveUser', this.form.user)
+                        axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token;
+                        this.user=''
+                        this.password=''
+                        this.$router.push('/dashboard');
                     }
                 }).catch (e=> {
                     this.error = e.message

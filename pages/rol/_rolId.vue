@@ -94,11 +94,7 @@
                         nombre_rol: this.form.nombre,
                         descripcion_rol:this.form.descripcion
                     }
-                    await axios.put(`/roles/${this.$route.params.rolId}`, params,{
-                        headers: {
-                            'Authorization': `Bearer ${this.$store.state.token}`
-                        }
-                    })
+                    await axios.put(`/roles/${this.$route.params.rolId}`, params)
                     .then((response) => {
                         console.log("editado correcto")
                     }).catch (e => {

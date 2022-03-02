@@ -82,11 +82,7 @@
                         password_usuario: this.form.password,
                         roles_id_rol:this.form.rol
                     }
-                    await axios.post('/usuarios', params,{
-                        headers: {
-                            'Authorization': `Bearer ${this.$store.state.token}`
-                        }
-                    })
+                    await axios.post('/usuarios', params)
                     .then((response) => {
                         console.log("correcto")
                     }).catch (e => {

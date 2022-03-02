@@ -74,11 +74,7 @@
         methods:{
             async getModulo(){
                 if(this.$store.state.token){
-                    await axios.get(`/modulos/${this.$route.params.moduloId}`,{
-                        headers: {
-                            'Authorization': `Bearer ${this.$store.state.token}`
-                        }
-                    })
+                    await axios.get(`/modulos/${this.$route.params.moduloId}`)
                     .then(response => {
                         this.modulo = response.data;
                     })
@@ -93,11 +89,7 @@
                     nombre_modulo: this.form.nombre,
                     descripcion_modulo:this.form.descripcion
                     }
-                    await axios.put(`/modulos/${this.$route.params.moduloId}`, params,{
-                        headers: {
-                            'Authorization': `Bearer ${this.$store.state.token}`
-                        }
-                    })
+                    await axios.put(`/modulos/${this.$route.params.moduloId}`, params)
                     .then((response) => {
                         console.log("correcto")
                     }).catch (e => {

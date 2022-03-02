@@ -125,11 +125,7 @@
         },
         async mounted(){
             if(this.$store.state.token){
-                await axios.get('/usuarios',{
-                    headers: {
-                        'Authorization': `Bearer ${this.$store.state.token}`
-                    }
-                })
+                await axios.get('/usuarios')
                 .then(response => {
                     this.usuarios = response.data;
                     console.log(this.usuarios);
@@ -142,11 +138,7 @@
         methods: {
             async eliminarUsuario(usuarioId){
                 if(this.$store.state.token){
-                    await axios.delete(`/usuario/${usuarioId}`,{
-                        headers: {
-                            'Authorization': `Bearer ${this.$store.state.token}`
-                        }
-                    })
+                    await axios.delete(`/usuario/${usuarioId}`)
                     .then((response) => {
                         console.log("correcto")
                     }).catch (e => {

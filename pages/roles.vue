@@ -121,11 +121,7 @@
     },
     async mounted(){
         if(this.$store.state.token){
-            await axios.get('/roles',{
-                headers: {
-                    'Authorization': `Bearer ${this.$store.state.token}`
-                }
-            })
+            await axios.get('/roles')
             .then(response => {
                 this.roles = response.data;
             }).catch (e=> {
@@ -136,11 +132,7 @@
     methods: {
         async eliminarRol(rolId){
             if(this.$store.state.token){
-                await axios.delete(`/roles/${rolId}`,{
-                    headers: {
-                        'Authorization': `Bearer ${this.$store.state.token}`
-                    }
-                })
+                await axios.delete(`/roles/${rolId}`)
                 .then((response) => {
                     console.log("correcto")
                 }).catch (e=> {
