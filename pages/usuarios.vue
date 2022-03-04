@@ -54,7 +54,7 @@
                                                             <p class="text-s font-weight-bold mb-0">{{user.nombre_usuario}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{user.roles_id_rol}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{user.nombre_rol}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <span class="badge badge-sm bg-gradient-success">{{user.estado_usuario}}</span>
@@ -110,34 +110,39 @@
     import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
+    import { getAccessToken, getSubmodulos } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5000';
     
     export default{
         data() {
             return {
-                usuarios:[]
+                permisosCrud:[],
+                usuarios:[],
             };
         },
-        fetch ({ store, redirect }) {
-            if (!store.state.user) {
-                return redirect('/')
-            }
-        },
         async mounted(){
-            if(this.$store.state.token){
-                await axios.get('/usuarios')
+            this.permisosCrud = getSubmodulos('Administración','Usuarios')
+            if('leer' in this.permisosCrud){
+                await axios.get('/usuarios',{
+                    headers: {
+                        Authorization: 'Bearer ' + getAccessToken()
+                    }
+                })
                 .then(response => {
                     this.usuarios = response.data;
-                    console.log(this.usuarios);
+                    console.log(this.usuarios)
                 })
                 .catch(e => {
                     console.log(e.message)
                 })
-            }  
+            }else{
+                this.$router.push('/')
+            }
+              
         },
         methods: {
             async eliminarUsuario(usuarioId){
-                if(this.$store.state.token){
+                if('eliminar' in this.permisosCrud){
                     await axios.delete(`/usuario/${usuarioId}`)
                     .then((response) => {
                         console.log("correcto")

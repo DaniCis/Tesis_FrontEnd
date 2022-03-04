@@ -13,7 +13,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="/dashboard" id='menuDash'>
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                            <b-icon icon='house' style="color:#000"></b-icon>
+                            <b-icon icon='house' style="color:#fff"></b-icon>
                         </div>
                         <span class="nav-link-text ms-1">Inicio</span>
                     </a>
@@ -143,6 +143,7 @@
 </template>
 
 <script>
+    import { getMenuAuth } from "~/utils/auth"
     export default{
         data(){
             return{
@@ -151,14 +152,11 @@
                 actVent:true,
                 actComp:true,
                 actAdm:true,
-                decoded_token:[],
                 modulos:[]
             }
         },
         mounted(){
-           console.log(this.$store.state.token)
-           this.decoded_token = this.$store.state.decoded_token
-           this.modulos = this.decoded_token.autorizaciones.modulos      
+            this.modulos = getMenuAuth()
         },
         methods:{
             

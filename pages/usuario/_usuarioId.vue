@@ -73,11 +73,6 @@
         async mounted(){
             await this.getUser()
         },
-        fetch ({ store, redirect }) {
-            if (!store.state.user) {
-                return redirect('/')
-            }
-        },
         methods:{
             async getUser(){
                 if(this.$store.state.token){

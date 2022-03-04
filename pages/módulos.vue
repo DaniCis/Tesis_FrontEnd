@@ -102,6 +102,7 @@
     import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
+import { getAccessToken } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5000';
     
     export default{
@@ -110,13 +111,8 @@
                 modulos:[]
             };
         },
-        fetch ({ store, redirect }) {
-            if (!store.state.user) {
-                return redirect('/')
-            }
-        },
         async mounted(){
-            if(this.$store.state.token){
+            if(getAccessToken()){
                 await axios.get('/modulos')
                 .then(response => {
                     this.modulos = response.data;
@@ -129,7 +125,7 @@
         },
         methods: {
             async eliminarModulo(moduloId){
-                if(this.$store.state.token){
+                if(getAccessToken()){
                     await axios.delete(`/modulos/${moduloId}`)
                     .then(response => {
                         console.log("bien");

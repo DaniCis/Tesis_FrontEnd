@@ -24,8 +24,13 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    
   ],
-
+  server:{
+    port: 3000,
+    host:'10.147.17.71',
+    timing: false
+  },
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 

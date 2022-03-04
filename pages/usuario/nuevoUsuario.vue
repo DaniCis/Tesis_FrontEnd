@@ -57,7 +57,9 @@
     import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
+    import { getSubmodulos } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5000';
+    
     export default{
         components: { Sidebar, Navbar },
         data(){
@@ -66,29 +68,29 @@
                     nombre:'',
                     password:'',
                     rol:''
-                }
+                },
+                permisosCrud:[],
             }
         },
-        fetch ({ store, redirect }) {
-            if (!store.state.user) {
-                return redirect('/')
-            }
+        mounted(){
+            this.permisosCrud = getSubmodulos('Administración','Usuarios')
+            if(!('crear' in this.permisosCrud))
+                this.$router.push('/')
         },
         methods:{
             async crearUsuario(){
-                if(this.$store.state.token){
-                    var params = {
-                        nombre_usuario: this.form.nombre,
-                        password_usuario: this.form.password,
-                        roles_id_rol:this.form.rol
-                    }
-                    await axios.post('/usuarios', params)
-                    .then((response) => {
-                        console.log("correcto")
-                    }).catch (e => {
-                        console.log(e.message)
-                    })
+                var params = {
+                    nombre_usuario: this.form.nombre,
+                    password_usuario: this.form.password,
+                    roles_id_rol:this.form.rol
                 }
+                await axios.post('/usuarios', params)
+                .then((response) => {
+                    console.log("correcto")
+                }).catch (e => {
+                    console.log(e.message)
+                })
+                
             }
         }
     }

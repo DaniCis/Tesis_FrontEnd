@@ -23,9 +23,12 @@
                     <li class="nav-item d-flex align-items-center">
                         <a class="nav-link font-weight-bold px-0" style="height: 50px">
                             <b-icon icon='person-fill' style="width: 1.3em; height: 1.3em"></b-icon>
-                            <b-dropdown id="dropdown-right" right text="user">
-                                <b-dropdown-item v-on:click="logout" >Cerrar sesión</b-dropdown-item>
-                            </b-dropdown>
+                            <span class="d-sm-inline d-none">{{this.user}}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item px-3 d-flex align-items-center">
+                        <a class="nav-link font-weight-bold px-0" style="height: 50px">
+                            <b-icon icon='gear-fill' style="width: 1.3em; height: 1.3em"></b-icon>
                         </a>
                     </li>
                 </ul>
@@ -34,18 +37,19 @@
     </nav>
 </template>
 
-<script>
+<script>import { getUser, logout } from "~/utils/auth";
+
     export default{
         props:['Modulo','Tabla'],
         name:'Navbar',
         data(){
             return {
                 searchInput: '',
-                user:''
+                user:'',
             }
         },
         mounted(){
-            this.user = this.$store.state.user
+           this.user = getUser()
         },
         methods: {
             toggleSidenav() {
@@ -66,11 +70,8 @@
                     iconSidenav.classList.remove("d-none");
                 }
             },
-            logout(){
-                this.$store.commit('saveToken', null)
-                this.$store.commit('decodeToken', null)
-                this.$store.commit('saveUser', null)
-                this.$router.replace({ path: '/' })
+            async logout(){
+                logout()
             }
         },
     }
