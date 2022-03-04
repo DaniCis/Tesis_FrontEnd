@@ -143,7 +143,7 @@
 </template>
 
 <script>
-    import { getMenuAuth } from "~/utils/auth"
+    import { getMenuAuth, getModulo } from "~/utils/auth"
     export default{
         data(){
             return{
@@ -152,15 +152,14 @@
                 actVent:true,
                 actComp:true,
                 actAdm:true,
-                modulos:[]
+                modulos:[],
+                submodulos:[]
             }
         },
         mounted(){
             this.modulos = getMenuAuth()
+            this.submodulos = getModulo('Compras')
         },
-        methods:{
-            
-        }
     }
 </script>
 <style>

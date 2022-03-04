@@ -12,7 +12,7 @@
                                     <div>
                                         <h5>Usuarios</h5>
                                     </div>
-                                    <div class="ms-auto my-auto mt-lg-0 mt-4">
+                                    <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="'crear' in this.permisosCrud">
                                         <div class="ms-auto my-auto">
                                             <a href='./usuario/nuevoUsuario' class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo usuario</a>
                                         </div>
@@ -61,12 +61,16 @@
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones">
-                                                                <NuxtLink :to="{name:'usuario-usuarioId', params:{usuarioId: user.id_usuario}}">
-                                                                    <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
-                                                                </NuxtLink>
-                                                                <a class="trash cursor-pointer" v-on:click='eliminarUsuario(user.id_usuario)'>
-                                                                    <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
-                                                                </a>
+                                                                <div>
+                                                                    <NuxtLink :to="{name:'usuario-usuarioId', params:{usuarioId: user.id_usuario}}" >
+                                                                        <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
+                                                                    </NuxtLink>
+                                                                </div>
+                                                                <div >
+                                                                    <a class="trash cursor-pointer" v-on:click='eliminarUsuario(user.id_usuario)'>
+                                                                        <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                                    </a>
+                                                                </div>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -135,15 +139,16 @@
                 .catch(e => {
                     console.log(e.message)
                 })
-            }else{
-                this.$router.push('/')
-            }
-              
+            } 
         },
         methods: {
             async eliminarUsuario(usuarioId){
                 if('eliminar' in this.permisosCrud){
-                    await axios.delete(`/usuario/${usuarioId}`)
+                    await axios.delete(`/usuario/${usuarioId}`,{
+                        headers: {
+                            Authorization: 'Bearer ' + getAccessToken()
+                        }
+                    })
                     .then((response) => {
                         console.log("correcto")
                     }).catch (e => {

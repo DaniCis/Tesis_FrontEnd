@@ -1,8 +1,7 @@
 import jwt_decode from "jwt-decode";
 
 export function getAccessToken(){
-    return localStorage.getItem('token');
-        
+    return localStorage.getItem('token');     
 }
 export function getDecoded(){
     if(getAccessToken()){
@@ -58,6 +57,12 @@ export function getSubmodulos(modulo,submodulo){
             break;
         case 'Submódulos':
             submodulos = submodulos.Submódulos
+            break;
+        case 'Proveedores':
+            submodulos = submodulos.Proveedores
+            break;
+        case 'Clientes':
+            submodulos = submodulos.Clientes
             break;
     }
     return submodulos

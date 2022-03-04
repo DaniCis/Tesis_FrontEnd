@@ -152,9 +152,6 @@
 
     export default {
     components: { Sidebar, Navbar }, 
-    mounted(){
-        if(!getAccessToken())
-            this.$router.push('/')
-    }
+    
 }
 </script>

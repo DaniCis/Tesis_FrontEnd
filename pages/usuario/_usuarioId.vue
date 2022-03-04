@@ -67,16 +67,25 @@
                     nombre:'',
                     password:'',
                     rol:''
-                }
+                },
+                permisosCrud:[],
+                editar:false
             };
         },
         async mounted(){
             await this.getUser()
+            this.permisosCrud = getSubmodulos('Administración','Usuarios')
+            if('editar' in this.permisosCrud)
+                editar = true
         },
         methods:{
             async getUser(){
-                if(this.$store.state.token){
-                    await axios.get(`/usuario/${this.$route.params.usuarioId}`)
+                if(editar){
+                    await axios.get(`/usuario/${this.$route.params.usuarioId}`,{
+                        headers: {
+                            Authorization: 'Bearer ' + getAccessToken()
+                        }
+                    })
                     .then(response => {
                         this.user= response.data;
                     })
@@ -86,19 +95,21 @@
                 }
             },
             async editarUsuario(){
-                if(this.$store.state.token){
-                    var params ={
-                        nombre_usuario: this.form.nombre,
-                        password_usuario: this.form.password,
-                        roles_id_rol:this.form.rol
-                    }
-                    await axios.put(`/usuario/${this.$route.params.usuarioId}`, params)
-                    .then((response) => {
-                    console.log("correcto")
-                    }).catch (e => {
-                        console.log(e.message)
-                    })
+                var params ={
+                    nombre_usuario: this.form.nombre,
+                    password_usuario: this.form.password,
+                    roles_id_rol:this.form.rol
                 }
+                await axios.put(`/usuario/${this.$route.params.usuarioId}`, params,{
+                    headers: {
+                        Authorization: 'Bearer ' + getAccessToken()
+                    }
+                })
+                .then((response) => {
+                console.log("correcto")
+                }).catch (e => {
+                    console.log(e.message)
+                })
             },           
         },
         components: { Sidebar, Navbar }

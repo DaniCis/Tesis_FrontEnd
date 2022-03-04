@@ -59,7 +59,7 @@
     import Navbar from '~/components/Navbar.vue';
     import { getSubmodulos } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5000';
-    
+
     export default{
         components: { Sidebar, Navbar },
         data(){
@@ -74,8 +74,6 @@
         },
         mounted(){
             this.permisosCrud = getSubmodulos('Administración','Usuarios')
-            if(!('crear' in this.permisosCrud))
-                this.$router.push('/')
         },
         methods:{
             async crearUsuario(){
