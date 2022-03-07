@@ -24,7 +24,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    
+    '~/plugins/axios.client.js'
   ],
   server:{
     port: 3000,

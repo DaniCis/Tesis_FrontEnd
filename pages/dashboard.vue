@@ -147,11 +147,9 @@
     import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
-    import { getAccessToken } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5001';
 
     export default {
-    components: { Sidebar, Navbar }, 
-    
-}
+        components: { Sidebar, Navbar }, 
+    }
 </script>

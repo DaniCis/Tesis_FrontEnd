@@ -127,11 +127,7 @@
         async mounted(){
             this.permisosCrud = getSubmodulos('Administración','Usuarios')
             if('leer' in this.permisosCrud){
-                await axios.get('/usuarios',{
-                    headers: {
-                        Authorization: 'Bearer ' + getAccessToken()
-                    }
-                })
+                await axios.get('/usuarios')
                 .then(response => {
                     this.usuarios = response.data;
                     console.log(this.usuarios)
@@ -144,11 +140,7 @@
         methods: {
             async eliminarUsuario(usuarioId){
                 if('eliminar' in this.permisosCrud){
-                    await axios.delete(`/usuario/${usuarioId}`,{
-                        headers: {
-                            Authorization: 'Bearer ' + getAccessToken()
-                        }
-                    })
+                    await axios.delete(`/usuario/${usuarioId}`)
                     .then((response) => {
                         console.log("correcto")
                     }).catch (e => {

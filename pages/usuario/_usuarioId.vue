@@ -81,11 +81,7 @@
         methods:{
             async getUser(){
                 if(editar){
-                    await axios.get(`/usuario/${this.$route.params.usuarioId}`,{
-                        headers: {
-                            Authorization: 'Bearer ' + getAccessToken()
-                        }
-                    })
+                    await axios.get(`/usuario/${this.$route.params.usuarioId}`)
                     .then(response => {
                         this.user= response.data;
                     })
@@ -100,11 +96,7 @@
                     password_usuario: this.form.password,
                     roles_id_rol:this.form.rol
                 }
-                await axios.put(`/usuario/${this.$route.params.usuarioId}`, params,{
-                    headers: {
-                        Authorization: 'Bearer ' + getAccessToken()
-                    }
-                })
+                await axios.put(`/usuario/${this.$route.params.usuarioId}`, params)
                 .then((response) => {
                 console.log("correcto")
                 }).catch (e => {
