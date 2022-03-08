@@ -54,6 +54,8 @@
     axios.defaults.baseURL ='http://10.147.17.173:5000';
 
     export default{
+        components: { Sidebar, Navbar },
+        middleware: 'authenticated',
         data(){
             return{
                 modulo:[],
@@ -66,39 +68,28 @@
         async mounted(){
             await this.getModulo()
         },
-        fetch ({ store, redirect }) {
-            if (!store.state.user) {
-                return redirect('/')
-            }
-        },
         methods:{
             async getModulo(){
-                if(this.$store.state.token){
-                    await axios.get(`/modulos/${this.$route.params.moduloId}`)
-                    .then(response => {
-                        this.modulo = response.data;
-                    })
-                    .catch(e => {
-                        console.log(e.message)
-                    })
-                }
+                await axios.get(`/modulos/${this.$route.params.moduloId}`)
+                .then(response => {
+                    this.modulo = response.data;
+                })
+                .catch(e => {
+                    console.log(e.message)
+                })
             },
             async editarModulo(){
-                if(this.$store.state.token){
-                    var params = {
-                    nombre_modulo: this.form.nombre,
-                    descripcion_modulo:this.form.descripcion
-                    }
-                    await axios.put(`/modulos/${this.$route.params.moduloId}`, params)
-                    .then((response) => {
-                        console.log("correcto")
-                    }).catch (e => {
-                        console.log(e.message)
-                    })
+                var params = {
+                nombre_modulo: this.form.nombre,
+                descripcion_modulo:this.form.descripcion
                 }
-                
+                await axios.put(`/modulos/${this.$route.params.moduloId}`, params)
+                .then((response) => {
+                    console.log("correcto")
+                }).catch (e => {
+                    console.log(e.message)
+                })
             }
         },
-        components: { Sidebar, Navbar }
     }
 </script>

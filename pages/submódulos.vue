@@ -110,6 +110,8 @@ import { getAccessToken } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5000';
     
     export default{
+        components: { Sidebar, Navbar },
+        middleware: 'authenticated',
         data() {
             return {
                 submodulos:[]
@@ -140,6 +142,5 @@ import { getAccessToken } from '~/utils/auth';
                 }
             }   
         },
-        components: { Sidebar, Navbar }
     }
 </script>

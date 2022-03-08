@@ -110,33 +110,34 @@ import { getAccessToken } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5000';
     
     export default{
-    data() {
-        return {
-            roles: []
-        };
-    },
-    async mounted(){
-        if(getAccessToken()){
-            await axios.get('/roles')
-            .then(response => {
-                this.roles = response.data;
-            }).catch (e=> {
-                console.log(e.message)
-            })
-        }
-    },
-    methods: {
-        async eliminarRol(rolId){
+        components: { Sidebar, Navbar },
+        middleware: 'authenticated',
+        data() {
+            return {
+                roles: []
+            };
+        },
+        async mounted(){
             if(getAccessToken()){
-                await axios.delete(`/roles/${rolId}`)
-                .then((response) => {
-                    console.log("correcto")
+                await axios.get('/roles')
+                .then(response => {
+                    this.roles = response.data;
                 }).catch (e=> {
                     console.log(e.message)
                 })
             }
-        }
-    },
-    components: { Sidebar, Navbar }
-}
+        },
+        methods: {
+            async eliminarRol(rolId){
+                if(getAccessToken()){
+                    await axios.delete(`/roles/${rolId}`)
+                    .then((response) => {
+                        console.log("correcto")
+                    }).catch (e=> {
+                        console.log(e.message)
+                    })
+                }
+            }
+        },
+    }
 </script>

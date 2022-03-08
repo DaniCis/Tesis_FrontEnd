@@ -1,13 +1,12 @@
 import jwt_decode from "jwt-decode";
 
 export function getAccessToken(){
-    return localStorage.getItem('token');     
+    return localStorage.getItem('auth._token.local')     
 }
 export function getDecoded(){
     if(getAccessToken()){
-        var token_decoded = jwt_decode(getAccessToken());
-        console.log(token_decoded)
-        return token_decoded;
+        var token_decoded = jwt_decode(getAccessToken())
+        return token_decoded
     }
 }
 export function getUser(){
@@ -66,11 +65,4 @@ export function getSubmodulos(modulo,submodulo){
             break;
     }
     return submodulos
-}
-export function clearAccessToken(){
-    return localStorage.removeItem('token');
-}
-export function logout(){
-    clearAccessToken()
-    this.$router.push('/');
 }

@@ -74,17 +74,19 @@
                 const formData = new FormData();
                 formData.append('username',this.form.user);
                 formData.append('password',this.form.password);
-                await axios.post('/login', formData)
-                .then((response) => {
+                await this.$auth.loginWith('local', {
+                    data: formData
+                }).then((response) => {
                     if(response != null && response != undefined){
-                        localStorage.setItem('token', response.data.access_token);
                         this.user=''
                         this.password=''
                         this.$router.push('/dashboard');
                     }
                 }).catch (e=> {
-                    this.error = e.message
+                    //this.error = e.message
+                    this.$toast.error(e.message)
                 })
+
             },
             password_show_hide() {
                 this.show = !this.show;

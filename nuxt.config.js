@@ -24,7 +24,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/axios.client.js'
+    
   ],
   server:{
     port: 3000,
@@ -33,7 +33,8 @@ export default {
   },
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
-
+  
+  
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
   ],
@@ -44,8 +45,13 @@ export default {
     'bootstrap-vue/nuxt',
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth-next',
+    ["vue-toastification/nuxt", {
+      timeout: 4000,
+      draggable: false
+    }]
   ],
+
   bootstrapVue: {
     icons: true
   },
@@ -56,6 +62,22 @@ export default {
     baseURL: '',
   },
 
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: 'access_token',
+          global: true,
+          type: ''
+        },
+        endpoints: {
+          login: { url: 'http://10.147.17.173:5001/login', method: 'post'},
+          logout: false,
+          user:false
+        }
+      }
+    }
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }

@@ -54,6 +54,7 @@
     axios.defaults.baseURL ='http://10.147.17.173:5000';
     export default{
         components: { Sidebar, Navbar },
+        middleware: 'authenticated',
         data(){
             return{
                 form:{
@@ -62,26 +63,18 @@
                 }
             }
         },
-        fetch ({ store, redirect }) {
-            if (!store.state.user) {
-                return redirect('/')
-            }
-        },
         methods:{
             async crearModulo(){
-                if(this.$store.state.token){
-                    var params = {
-                        nombre_modulo: this.form.nombre,
-                        descripcion_modulo:this.form.descripcion
-                    }
-                    await axios.post('/modulos', params)
-                    .then((response) => {
-                        console.log("correcto")
-                    }).catch (e => {
-                        console.log(e.message)
-                    })
+                var params = {
+                    nombre_modulo: this.form.nombre,
+                    descripcion_modulo:this.form.descripcion
                 }
-                
+                await axios.post('/modulos', params)
+                .then((response) => {
+                    console.log("correcto")
+                }).catch (e => {
+                    console.log(e.message)
+                })
             }
         }
     }

@@ -57,11 +57,12 @@
     import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
-    import { getSubmodulos } from '~/utils/auth';
+    import { getAccessToken } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5000';
 
     export default{
         components: { Sidebar, Navbar },
+        middleware: 'authenticated',
         data(){
             return{
                 form:{
@@ -69,11 +70,7 @@
                     password:'',
                     rol:''
                 },
-                permisosCrud:[],
             }
-        },
-        mounted(){
-            this.permisosCrud = getSubmodulos('Administración','Usuarios')
         },
         methods:{
             async crearUsuario(){
@@ -82,11 +79,15 @@
                     password_usuario: this.form.password,
                     roles_id_rol:this.form.rol
                 }
-                await axios.post('/usuarios', params)
-                .then((response) => {
-                    console.log("correcto")
+                await axios.post('/usuarios', params,{
+                    headers:{
+                        Authorization: 'Bearer ' + getAccessToken()
+                    }
+                })
+                .then(() => {
+                    this.$toast.success('Usuario creado correctamente')
                 }).catch (e => {
-                    console.log(e.message)
+                    this.$toast.error(e.message)
                 })
                 
             }

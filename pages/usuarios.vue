@@ -118,6 +118,8 @@
     axios.defaults.baseURL ='http://10.147.17.173:5000';
     
     export default{
+        components: { Sidebar, Navbar },
+        middleware: 'authenticated',
         data() {
             return {
                 permisosCrud:[],
@@ -127,28 +129,35 @@
         async mounted(){
             this.permisosCrud = getSubmodulos('Administración','Usuarios')
             if('leer' in this.permisosCrud){
-                await axios.get('/usuarios')
+                await axios.get('/usuarios',{
+                    headers:{
+                        Authorization: 'Bearer ' + getAccessToken()
+                    }
+                })
                 .then(response => {
                     this.usuarios = response.data;
                     console.log(this.usuarios)
                 })
                 .catch(e => {
-                    console.log(e.message)
+                    this.$toast.error(e.message)
                 })
             } 
         },
         methods: {
             async eliminarUsuario(usuarioId){
                 if('eliminar' in this.permisosCrud){
-                    await axios.delete(`/usuario/${usuarioId}`)
-                    .then((response) => {
-                        console.log("correcto")
+                    await axios.delete(`/usuario/${usuarioId}`,{
+                        headers:{
+                            Authorization: 'Bearer ' + getAccessToken()
+                        }
+                    })
+                    .then(() => {
+                        this.$toast.success('Usuario eliminado correctamente')
                     }).catch (e => {
-                        console.log(e.message)
+                        this.$toast.error(e.message)
                     })
                 }
             }
         },
-        components: { Sidebar, Navbar }
     }
 </script>

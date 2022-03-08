@@ -19,7 +19,7 @@
            </nav>
             <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                 <div class="ms-md-auto pe-md-3"></div>
-                <ul class="navbar-nav  justify-content-end">
+                <ul class="navbar-nav  justify-content-end" >
                     <li class="nav-item d-flex align-items-center">
                         <a class="nav-link font-weight-bold px-0" style="height: 50px">
                             <b-icon icon='person-fill' style="width: 1.3em; height: 1.3em"></b-icon>
@@ -27,9 +27,7 @@
                         </a>
                     </li>
                     <li class="nav-item px-3 d-flex align-items-center">
-                        <a class="nav-link font-weight-bold px-0" style="height: 50px">
-                            <b-icon icon='gear-fill' style="width: 1.3em; height: 1.3em"></b-icon>
-                        </a>
+                        <b-button class="btn bg-gradient-secondary" @click="logout">Cerrar Sesión</b-button>
                     </li>
                 </ul>
             </div>
@@ -37,8 +35,8 @@
     </nav>
 </template>
 
-<script>import { getUser, logout } from "~/utils/auth";
-
+<script>
+    import { getUser } from "~/utils/auth";
     export default{
         props:['Modulo','Tabla'],
         name:'Navbar',
@@ -71,7 +69,7 @@
                 }
             },
             async logout(){
-                logout()
+                await this.$auth.logout();
             }
         },
     }

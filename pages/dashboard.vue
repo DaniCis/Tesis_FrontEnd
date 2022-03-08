@@ -151,5 +151,6 @@
 
     export default {
         components: { Sidebar, Navbar }, 
+        middleware: 'authenticated'
     }
 </script>

@@ -54,17 +54,13 @@
     axios.defaults.baseURL ='http://10.147.17.173:5000';
     export default{
         components: { Sidebar, Navbar },
+        middleware: 'authenticated',
         data(){
             return{
                 form:{
                     nombre:'',
                     modulo:'',
                 }
-            }
-        },
-        fetch ({ store, redirect }) {
-            if (!store.state.user) {
-                return redirect('/')
             }
         },
         methods:{

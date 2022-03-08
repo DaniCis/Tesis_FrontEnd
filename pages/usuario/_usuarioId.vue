@@ -57,9 +57,12 @@
     import axios from 'axios';
     import Sidebar from "../../components/Sidebar.vue";
     import Navbar from "~/components/Navbar.vue";
+    import { getAccessToken } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5000';
 
     export default{
+        components: { Sidebar, Navbar },
+        middleware: 'authenticated',
         data() {
             return {
                 user:[],
@@ -69,26 +72,24 @@
                     rol:''
                 },
                 permisosCrud:[],
-                editar:false
             };
         },
         async mounted(){
             await this.getUser()
-            this.permisosCrud = getSubmodulos('Administración','Usuarios')
-            if('editar' in this.permisosCrud)
-                editar = true
         },
         methods:{
             async getUser(){
-                if(editar){
-                    await axios.get(`/usuario/${this.$route.params.usuarioId}`)
-                    .then(response => {
-                        this.user= response.data;
-                    })
-                    .catch(e => {
-                        console.log(e.message)
-                    })
-                }
+                await axios.get(`/usuario/${this.$route.params.usuarioId}`,{
+                    headers:{
+                        Authorization: 'Bearer ' + getAccessToken()
+                    }
+                })
+                .then(response => {
+                    this.user = response.data;
+                })
+                .catch(e => {
+                    this.$toast.error(e.message)
+                })
             },
             async editarUsuario(){
                 var params ={
@@ -96,14 +97,17 @@
                     password_usuario: this.form.password,
                     roles_id_rol:this.form.rol
                 }
-                await axios.put(`/usuario/${this.$route.params.usuarioId}`, params)
-                .then((response) => {
-                console.log("correcto")
+                await axios.put(`/usuario/${this.$route.params.usuarioId}`, params,{
+                    headers:{
+                        Authorization: 'Bearer ' + getAccessToken()
+                    }
+                })
+                .then(() => {
+                    this.$toast.success('Usuario editado correctamente')
                 }).catch (e => {
-                    console.log(e.message)
+                    this.$toast.error(e.message)
                 })
             },           
         },
-        components: { Sidebar, Navbar }
     }
 </script>
