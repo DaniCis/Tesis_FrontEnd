@@ -29,7 +29,12 @@
                                                 <div class="row mt-3">
                                                     <div class="col-12 col-sm-6">
                                                         <label>Rol</label>
-                                                        <b-form-input class="form-control" type="number" v-model="form.rol" v-bind:placeholder="(this.user.roles_id_rol)"></b-form-input>
+                                                        <select v-model="form.rol" class="form-select" required>
+                                                            <option disabled value=''>holq</option>
+                                                            <option v-for="rol in this.roles" :value="rol.id_rol">
+                                                                {{rol.nombre_rol}}
+                                                            </option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="button-row d-flex mt-4">
@@ -37,7 +42,7 @@
                                                         Regresar
                                                     </b-button> 
                                                     <b-button class="btn bg-gradient-primary mb-0 js-btn-next" type="submit">
-                                                        Agregar
+                                                        Actualizar
                                                     </b-button>
                                                 </div>
                                             </div>
@@ -57,7 +62,7 @@
     import axios from 'axios';
     import Sidebar from "../../components/Sidebar.vue";
     import Navbar from "~/components/Navbar.vue";
-    import { getAccessToken } from '~/utils/auth';
+    import { getAccessToken, getSubmodulos } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5000';
 
     export default{
@@ -72,12 +77,25 @@
                     rol:''
                 },
                 permisosCrud:[],
+                roles:[]
             };
         },
         async mounted(){
             await this.getUser()
+            await this.getRoles()
+            this.permisosCrud = getSubmodulos('Administración','Usuarios')
         },
         methods:{
+            async getRoles(){
+                await axios.get('/roles',{
+                    headers:{
+                        Authorization: 'Bearer ' + getAccessToken()
+                    }
+                })
+                .then(response => {
+                    this.roles = response.data;
+                })
+            },
             async getUser(){
                 await axios.get(`/usuario/${this.$route.params.usuarioId}`,{
                     headers:{
@@ -92,21 +110,25 @@
                 })
             },
             async editarUsuario(){
-                var params ={
-                    nombre_usuario: this.form.nombre,
-                    password_usuario: this.form.password,
-                    roles_id_rol:this.form.rol
-                }
-                await axios.put(`/usuario/${this.$route.params.usuarioId}`, params,{
-                    headers:{
-                        Authorization: 'Bearer ' + getAccessToken()
+                if('editar' in this.permisosCrud){
+                    var params ={
+                        nombre_usuario: this.form.nombre,
+                        password_usuario: this.form.password,
+                        roles_id_rol:this.form.rol
                     }
-                })
-                .then(() => {
-                    this.$toast.success('Usuario editado correctamente')
-                }).catch (e => {
-                    this.$toast.error(e.message)
-                })
+                    await axios.put(`/usuario/${this.$route.params.usuarioId}`, params,{
+                        headers:{
+                            Authorization: 'Bearer ' + getAccessToken()
+                        }
+                    })
+                    .then(() => {
+                        this.$toast.success('Usuario editado correctamente')
+                    }).catch (e => {
+                        this.$toast.error(e.message)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para modificar')
+                }
             },           
         },
     }

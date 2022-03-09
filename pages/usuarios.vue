@@ -60,13 +60,13 @@
                                                             <span class="badge badge-sm bg-gradient-success">{{user.estado_usuario}}</span>
                                                         </td>
                                                         <td class="align-middle">
-                                                            <div class="contenedorAcciones">
-                                                                <div>
+                                                            <div class="contenedorAcciones" >
+                                                                <div v-if="editar">
                                                                     <NuxtLink :to="{name:'usuario-usuarioId', params:{usuarioId: user.id_usuario}}" >
                                                                         <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                     </NuxtLink>
                                                                 </div>
-                                                                <div >
+                                                                <div v-if="eliminar">
                                                                     <a class="trash cursor-pointer" v-on:click='eliminarUsuario(user.id_usuario)'>
                                                                         <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
                                                                     </a>
@@ -124,10 +124,18 @@
             return {
                 permisosCrud:[],
                 usuarios:[],
+                editar: null,
+                eliminar:null,
             };
         },
         async mounted(){
             this.permisosCrud = getSubmodulos('Administración','Usuarios')
+            if('editar' in this.permisosCrud){
+                this.editar = true
+            }
+            if('eliminar' in this.permisosCrud){
+                this.eliminar = true
+            }
             if('leer' in this.permisosCrud){
                 await axios.get('/usuarios',{
                     headers:{
@@ -141,7 +149,9 @@
                 .catch(e => {
                     this.$toast.error(e.message)
                 })
-            } 
+            }else{
+                this.$toast.error('No tiene permiso de lectura')
+            }
         },
         methods: {
             async eliminarUsuario(usuarioId){
@@ -156,6 +166,9 @@
                     }).catch (e => {
                         this.$toast.error(e.message)
                     })
+                }
+                else{
+                    this.$toast.error('No tiene permiso para eliminar')
                 }
             }
         },

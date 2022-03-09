@@ -118,25 +118,21 @@ import { getAccessToken } from '~/utils/auth';
             };
         },
         async mounted(){
-            if(getAccessToken()){
-                await axios.get('/roles')
-                .then(response => {
-                    this.roles = response.data;
-                }).catch (e=> {
-                    console.log(e.message)
-                })
-            }
+            await axios.get('/roles')
+            .then(response => {
+                this.roles = response.data;
+            }).catch (e=> {
+                console.log(e.message)
+            })
         },
         methods: {
             async eliminarRol(rolId){
-                if(getAccessToken()){
-                    await axios.delete(`/roles/${rolId}`)
-                    .then((response) => {
-                        console.log("correcto")
-                    }).catch (e=> {
-                        console.log(e.message)
-                    })
-                }
+                await axios.delete(`/roles/${rolId}`)
+                .then((response) => {
+                    console.log("correcto")
+                }).catch (e=> {
+                    console.log(e.message)
+                })
             }
         },
     }
