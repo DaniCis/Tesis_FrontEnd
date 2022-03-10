@@ -51,9 +51,9 @@
         },
         methods: {
             toggleSidenav() {
-                var body = document.getElementById("mainDashboard");
-                var sidenav = document.getElementById("sidenav-main");
-                var iconSidenav = document.getElementById("iconSidenav");
+                let body = document.getElementById("mainDashboard");
+                let sidenav = document.getElementById("sidenav-main");
+                let iconSidenav = document.getElementById("iconSidenav");
                 if (body.classList.contains("g-sidenav-pinned")) {
                     body.classList.remove("g-sidenav-pinned");
                     setTimeout(function () {

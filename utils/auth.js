@@ -5,23 +5,23 @@ export function getAccessToken(){
 }
 export function getDecoded(){
     if(getAccessToken()){
-        var token_decoded = jwt_decode(getAccessToken())
+        let token_decoded = jwt_decode(getAccessToken())
         return token_decoded
     }
 }
 export function getUser(){
-    var decoded = getDecoded()
-    var user = decoded.nombre_usuario
+    let decoded = getDecoded()
+    let user = decoded.nombre_usuario
     return user
 }
 export function getMenuAuth(){
-    var decoded = getDecoded()
-    var menu = decoded.autorizaciones.modulos
+    let decoded = getDecoded()
+    let menu = decoded.autorizaciones.modulos
     return menu
 }
 export function getModulo(modulo){
-    var menu = getMenuAuth()
-    var modulos
+    let menu = getMenuAuth()
+    let modulos
     switch(modulo){
         case 'Administración':
             modulos = menu.Administración
@@ -42,8 +42,8 @@ export function getModulo(modulo){
     return modulos
 }
 export function getSubmodulos(modulo,submodulo){
-    var mod = getModulo(modulo)
-    var submodulos = mod
+    let mod = getModulo(modulo)
+    let submodulos = mod
     switch (submodulo) {
         case 'Usuarios':
             submodulos = submodulos.Usuarios

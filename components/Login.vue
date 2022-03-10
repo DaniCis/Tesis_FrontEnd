@@ -90,7 +90,7 @@
             },
             password_show_hide() {
                 this.show = !this.show;
-                var input = document.getElementById("password");
+                let input = document.getElementById("password");
                 if (input.type === "password") {
                     input.type = "text";
                 } else {

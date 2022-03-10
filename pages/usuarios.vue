@@ -116,6 +116,7 @@
     import Navbar from '~/components/Navbar.vue';
     import { getAccessToken, getSubmodulos } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5000';
+    axios.defaults.headers.common['Authorization'] = getAccessToken()
     
     export default{
         components: { Sidebar, Navbar },
@@ -137,11 +138,7 @@
                 this.eliminar = true
             }
             if('leer' in this.permisosCrud){
-                await axios.get('/usuarios',{
-                    headers:{
-                        Authorization: 'Bearer ' + getAccessToken()
-                    }
-                })
+                await axios.get('/usuarios')
                 .then(response => {
                     this.usuarios = response.data;
                     console.log(this.usuarios)
@@ -156,11 +153,7 @@
         methods: {
             async eliminarUsuario(usuarioId){
                 if('eliminar' in this.permisosCrud){
-                    await axios.delete(`/usuario/${usuarioId}`,{
-                        headers:{
-                            Authorization: 'Bearer ' + getAccessToken()
-                        }
-                    })
+                    await axios.delete(`/usuario/${usuarioId}`)
                     .then(() => {
                         this.$toast.success('Usuario eliminado correctamente')
                     }).catch (e => {

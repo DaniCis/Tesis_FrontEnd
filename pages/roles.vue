@@ -106,7 +106,7 @@
     import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
-import { getAccessToken } from '~/utils/auth';
+    import { getAccessToken } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5000';
     
     export default{
@@ -122,16 +122,16 @@ import { getAccessToken } from '~/utils/auth';
             .then(response => {
                 this.roles = response.data;
             }).catch (e=> {
-                console.log(e.message)
+                this.$toast.error(e.message)
             })
         },
         methods: {
             async eliminarRol(rolId){
                 await axios.delete(`/roles/${rolId}`)
-                .then((response) => {
+                .then(() => {
                     console.log("correcto")
                 }).catch (e=> {
-                    console.log(e.message)
+                    this.$toast.error(e.message)
                 })
             }
         },
