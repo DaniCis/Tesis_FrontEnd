@@ -67,7 +67,7 @@
                                                                     </NuxtLink>
                                                                 </div>
                                                                 <div v-if="eliminar">
-                                                                    <a class="trash cursor-pointer" v-on:click='eliminarUsuario(user.id_usuario)'>
+                                                                    <a class="trash cursor-pointer"  v-on:click='showModal(user.id_usuario)'>
                                                                         <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
                                                                     </a>
                                                                 </div>
@@ -116,7 +116,6 @@
     import Navbar from '~/components/Navbar.vue';
     import { getAccessToken, getSubmodulos } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5000';
-    axios.defaults.headers.common['Authorization'] = getAccessToken()
     
     export default{
         components: { Sidebar, Navbar },
@@ -127,18 +126,49 @@
                 usuarios:[],
                 editar: null,
                 eliminar:null,
+                confirm: ''
             };
         },
         async mounted(){
             this.permisosCrud = getSubmodulos('Administración','Usuarios')
-            if('editar' in this.permisosCrud){
+            console.log(this.permisosCrud)
+            if('editar' in this.permisosCrud)
                 this.editar = true
-            }
-            if('eliminar' in this.permisosCrud){
+            if('eliminar' in this.permisosCrud)
                 this.eliminar = true
-            }
-            if('leer' in this.permisosCrud){
-                await axios.get('/usuarios')
+            if('leer' in this.permisosCrud)
+                this.getUsuarios()
+            else
+                this.$toast.error('No tiene permiso de lectura')
+        },
+        methods: {
+            showModal(usuarioId){
+                this.confirm = ''
+                this.$bvModal.msgBoxConfirm('¿Esta seguro que desea eliminar este registro?', {
+                    title: 'Confirmar',
+                    size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'danger',
+                    okTitle: 'Si',
+                    cancelTitle: 'No',
+                    footerClass: 'p-2',
+                    hideHeaderClose: false,
+                    centered: true
+                }).then(value => {
+                    this.confirm = value
+                    if(this.confirm == true){
+                        this.eliminarUsuario(usuarioId)
+                    }
+                }).catch( e=>{
+                    this.$toast.error(e.message)
+                })
+            },
+            async getUsuarios(){
+                await axios.get('/usuarios',{
+                    headers:{
+                        Authorization: 'Bearer ' + getAccessToken()
+                    }
+                })
                 .then(response => {
                     this.usuarios = response.data;
                     console.log(this.usuarios)
@@ -146,24 +176,22 @@
                 .catch(e => {
                     this.$toast.error(e.message)
                 })
-            }else{
-                this.$toast.error('No tiene permiso de lectura')
-            }
-        },
-        methods: {
+            },
             async eliminarUsuario(usuarioId){
                 if('eliminar' in this.permisosCrud){
-                    await axios.delete(`/usuario/${usuarioId}`)
+                    await axios.delete(`/usuario/${usuarioId}`,{
+                        headers:{
+                            Authorization: 'Bearer ' + getAccessToken()
+                        }
+                    })
                     .then(() => {
                         this.$toast.success('Usuario eliminado correctamente')
+                        this.getUsuarios()
                     }).catch (e => {
                         this.$toast.error(e.message)
                     })
                 }
-                else{
-                    this.$toast.error('No tiene permiso para eliminar')
-                }
-            }
+            },
         },
     }
 </script>

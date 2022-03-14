@@ -17,20 +17,19 @@
                                                 <div class="row mt-3">
                                                     <div class="col-12 col-sm-6">
                                                         <label>Nombre</label>
-                                                        <b-form-input class="form-control" type="text" v-model="form.nombre" v-bind:placeholder="(this.user.nombre_usuario)"></b-form-input>
+                                                        <b-form-input class="form-control" type="text" v-model='form.nombre'></b-form-input>
                                                     </div>
                                                 </div>
                                                 <div class="row mt-3">
                                                     <div class="col-12 col-sm-6">
                                                         <label>Contraseña</label>
-                                                        <b-form-input class="form-control" type="text" v-model="form.password" v-bind:placeholder="(this.user.password_usuario)"></b-form-input>
+                                                        <b-form-input class="form-control" type="password" v-model="form.password"></b-form-input>
                                                     </div>
                                                 </div>
                                                 <div class="row mt-3">
                                                     <div class="col-12 col-sm-6">
                                                         <label>Rol</label>
-                                                        <select v-model="form.rol" class="form-select" required>
-                                                            <option disabled value=''>holq</option>
+                                                        <select v-model="form.rol" class="form-select" >
                                                             <option v-for="rol in this.roles" :value="rol.id_rol">
                                                                 {{rol.nombre_rol}}
                                                             </option>
@@ -103,7 +102,10 @@
                     }
                 })
                 .then(response => {
-                    this.user = response.data;
+                    this.user = response.data
+                    this.form.nombre = response.data.nombre_usuario
+                    this.form.password = response.data.password_usuario
+                    this.form.rol = response.data.roles_id_rol
                 })
                 .catch(e => {
                     this.$toast.error(e.message)
@@ -114,8 +116,10 @@
                     var params ={
                         nombre_usuario: this.form.nombre,
                         password_usuario: this.form.password,
-                        roles_id_rol:this.form.rol
+                        roles_id_rol:this.form.rol,
+                        estado_usuario: true
                     }
+                    console.log(params)
                     await axios.put(`/usuario/${this.$route.params.usuarioId}`, params,{
                         headers:{
                             Authorization: 'Bearer ' + getAccessToken()

@@ -9,7 +9,7 @@
                         <div class="form mb-5">
                             <div class="row">
                                 <div class="col-12 col-lg-6">
-                                    <b-form class="mb-8" method="post" @submit.prevent="crearUsuario" style="height: 408px;">
+                                    <b-form class="mb-8" method="post" @submit.prevent="crearUsuario" @reset="onReset" style="height: 408px;">
                                         <div class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active">
                                             <h4 class="font-weight-bolder mb-0">Nuevo usuario</h4>
                                             <p class="mb-0 text-sm">Añadir</p>
@@ -23,7 +23,15 @@
                                                 <div class="row mt-3">
                                                     <div class="col-12 col-sm-6">
                                                         <label>Contraseña</label>
-                                                        <b-form-input class="form-control" type="text" placeholder="Contraseña" v-model='form.password' required></b-form-input>
+                                                        <div class="input-group mb-3">
+                                                            <b-form-input class="form-control" type="password" id='password' placeholder="Contraseña" v-model='form.password' required></b-form-input>
+                                                            <div class="input-group-append ">
+                                                                <span class="input-group-text" v-on:click="password_show_hide() ">
+                                                                    <b-icon v-show='!show' icon='eye' style="width: 0.9em; height: 0.9em;"></b-icon>
+                                                                    <b-icon v-show='show' icon='eye-slash' style="width: 0.9em; height: 0.9em;"></b-icon>
+                                                                </span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="row mt-3">
@@ -76,7 +84,8 @@
                     rol:''
                 },
                 permisosCrud:[],
-                roles:[]
+                roles:[],
+                show:true,
             }
         },
         async mounted(){
@@ -108,12 +117,27 @@
                     })
                     .then(() => {
                         this.$toast.success('Usuario creado correctamente')
+                        this.onReset()
                     }).catch (e => {
                         this.$toast.error(e.message)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
                 }
+            },
+            password_show_hide() {
+                this.show = !this.show;
+                let input = document.getElementById("password");
+                if (input.type === "password") {
+                    input.type = "text";
+                } else {
+                    input.type = "password";
+                }
+            },
+            onReset(){
+                this.form.nombre = ''
+                this.form.password = ''
+                this.form.rol = null
             }
         }
     }
