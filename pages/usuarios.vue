@@ -30,12 +30,13 @@
                                                         <option value="10">10</option>
                                                         <option value="15">15</option>
                                                     </select>
-                                                    Entradas por página
+                                                    Registros por página
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="dataTable-container">
-                                            <table class="table table-flush dataTable-table">
+                                            <table id='content-table' class="table table-flush dataTable-table" :per-page="perPage"
+                                                :current-page="currentPage">
                                                 <thead>
                                                     <tr>
                                                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
@@ -78,25 +79,15 @@
                                             </table>
                                         </div>
                                         <div class="dataTable-bottom">
-                                            <div class="dataTable-info">1 de {{this.usuarios.length}} </div>
+                                            <div class="dataTable-info"> {{currentPage}} de {{this.usuarios.length}} </div>
                                             <nav class="dataTable-pagination">
-                                                <ul class="dataTable-pagination-list">
-                                                    <li class="pager">
-                                                        <a>‹</a>
-                                                    </li>
-                                                    <li class="active">
-                                                        <a>1</a>
-                                                    </li>
-                                                    <li class="pager">
-                                                        <a>2</a>
-                                                    </li>
-                                                    <li class="pager">
-                                                        <a>3</a>
-                                                    </li>
-                                                    <li class="pager">
-                                                        <a>›</a>
-                                                    </li>
-                                                </ul>
+                                                <b-pagination
+                                                    @change="handlePageChange"
+                                                    v-model="currentPage"
+                                                    :per-page="perPage"
+                                                    :total-rows="rows"
+                                                    aria-controls="content-table"
+                                                ></b-pagination>
                                             </nav>
                                         </div>
                                     </div>
@@ -126,8 +117,15 @@
                 usuarios:[],
                 editar: null,
                 eliminar:null,
-                confirm: ''
+                confirm: '',
+                perPage: 3,
+                currentPage: 1,
             };
+        },
+        computed: {
+            rows() {
+                return this.usuarios.length
+            }
         },
         async mounted(){
             this.permisosCrud = getSubmodulos('Administración','Usuarios')
@@ -191,6 +189,9 @@
                         this.$toast.error(e.message)
                     })
                 }
+            },
+            handlePageChange(value) {
+                this.currentPage = value;
             },
         },
     }
