@@ -47,7 +47,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
     ["vue-toastification/nuxt", {
-      timeout: 4000,
+      timeout: 3000,
       draggable: false
     }]
   ],
