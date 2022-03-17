@@ -82,15 +82,15 @@
                         this.password=''
                         this.$router.push('/dashboard');
                     }
-                }).catch (e=> {
+                }).catch (()=> {
                     //this.error = e.message
-                    this.$toast.error(e.message)
+                    this.$toast.error('Usuario o contraseña incorrecta ')
                 })
 
             },
             password_show_hide() {
                 this.show = !this.show;
-                let input = document.getElementById("password");
+                var input = document.getElementById("password");
                 if (input.type === "password") {
                     input.type = "text";
                 } else {

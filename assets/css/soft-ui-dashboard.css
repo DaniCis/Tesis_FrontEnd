@@ -24947,20 +24947,6 @@ pre[class*="language-"] {
 .vh-completa{
   height: 100vh;
 }
-/** DROPDOWN *****/
-.dropdown-menu{
-  min-width:7.5rem!important;
-}
-#dropdown-right{
-  display: inline;
-}
-#dropdown-right__BV_toggle_{
-  margin-bottom: 0;
-  padding-left: 5px;
-  box-shadow: none;
-  background-color: #f8f9fa;
-  color:#8392ab;
-}
 
 .contenedorAcciones{
   display: flex;
@@ -24990,12 +24976,14 @@ pre[class*="language-"] {
   color: #8392ab;
   font-weight: 400;
 }
-.dataTable-wrapper .dataTable-top .dataTable-dropdown label .dataTable-selector {
+.dataTable-wrapper .dataTable-top .dataTable-dropdown label {
   border-color: #e9ecef;
   border-radius: 0.25rem;
 }
 .dataTable-selector {
   padding: 6px;
+  width:30%!important;
+  display: inline!important;
 }
 .dataTable-container{
   margin-bottom: 16px;

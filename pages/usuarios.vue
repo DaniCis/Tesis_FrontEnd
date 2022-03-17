@@ -24,8 +24,8 @@
                                     <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                                         <div class="dataTable-top">
                                             <div class="dataTable-dropdown">
-                                                <label>
-                                                    <select class="dataTable-selector">
+                                                <label style="width: 200px"> 
+                                                    <select class="form-select dataTable-selector">
                                                         <option value="5">5</option>
                                                         <option value="10">10</option>
                                                         <option value="15">15</option>
@@ -83,11 +83,12 @@
                                             </table>
                                         </div>
                                         <div class="dataTable-bottom">
-                                            <div class="dataTable-info"> {{currentPage}} de {{this.usuarios.length}} </div>
+                                            <div class="dataTable-info"> {{pagActual}} de {{this.usuarios.length}} </div>
                                             <nav class="dataTable-pagination">
                                                 <b-pagination
-                                                    v-model="currentPage"
                                                     aria-controls="content-table"
+                                                    :table-rows="this.usuarios.length"
+                                                    :per-page="porPag"
                                                 ></b-pagination>
                                             </nav>
                                         </div>
@@ -103,13 +104,13 @@
                                                     <b-form-input v-else readonly class="form-control" type="text" v-model='form.nombre'></b-form-input>
                                                 </div>
                                             </div>
-                                            <div class="row mt-3">
-                                                <div class="col-12 col-md-8" v-show="titleBtn == 'Agregar'">
+                                            <div class="row mt-3" v-show="titleBtn == 'Agregar'">
+                                                <div class="col-12 col-md-8" >
                                                     <label>Contraseña</label>
                                                     <div class="input-group mb-3">
                                                         <b-form-input class="form-control" type="password" id='password' placeholder="Contraseña" v-model='form.password' required ></b-form-input>
                                                         <div class="input-group-append ">
-                                                            <span class="input-group-text" v-on:click="password_show_hide() ">
+                                                            <span class="input-group-text" v-on:click="password_show_hide('password') ">
                                                                 <b-icon v-show='!show' icon='eye' style="width: 0.9em; height: 0.9em;"></b-icon>
                                                                 <b-icon v-show='show' icon='eye-slash' style="width: 0.9em; height: 0.9em;"></b-icon>
                                                             </span>
@@ -121,7 +122,7 @@
                                                 <div class="col-12 col-md-8">
                                                     <label>Rol</label>
                                                     <select v-if="titleBtn =='Agregar'" v-model="form.rol" class="form-select" required >
-                                                        <option disabled value="">Seleccione</option>
+                                                        <option disabled :value='null'> Seleccione</option>
                                                         <option v-for="rol in this.roles" :value="rol.id_rol">
                                                             {{rol.nombre_rol}}
                                                         </option>
@@ -133,18 +134,49 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="button-row d-flex mt-5">
-                                                <b-button  @click='closeModal' class="btn bg-gradient-secondary me-3 ms-auto mb-0">
+                                            <div class="row mt-4" v-if="titleBtn !='Agregar'">
+                                                <div class="col-12 col-md-8">
+                                                    <a class='link ms-2' v-b-modal.modal-multi>Editar contraseña</a>
+                                                </div>
+                                            </div>
+                                            <div class="button-row d-flex mt-4">
+                                                <b-button  @click="closeModal('user-modal')" class="btn bg-gradient-secondary me-3 ms-auto mb-0">
                                                     Cancelar
                                                 </b-button>
                                                 <b-button v-if="titleBtn == 'Agregar' " class="btn bg-gradient-primary mb-0 js-btn-next" @click='crearUsuario'>
                                                     Agregar
                                                 </b-button>
-                                                <b-button v-else class="btn bg-gradient-primary mb-0 js-btn-next" @click='editarUsuario(editId)'>
+                                                <b-button v-else class="btn bg-gradient-primary mb-0 js-btn-next" @click='editarRol(editId)'>
                                                     Actualizar
                                                 </b-button>
                                             </div>
                                         </div>
+                                    </b-form>
+                                </b-modal>
+                                <b-modal id="modal-multi" title="Editar contraseña" hide-footer>
+                                    <b-form method='post'>
+                                        <div class="row mt-2">
+                                            <div class="col-12 col-md-8">
+                                                <label>Contraseña</label>
+                                                <div class="input-group mb-3">
+                                                    <b-form-input class="form-control" type="password" id='password2' placeholder="Contraseña" v-model='form.password' required ></b-form-input>
+                                                    <div class="input-group-append ">
+                                                        <span class="input-group-text" v-on:click="password_show_hide('password2') ">
+                                                            <b-icon v-show='!show2' icon='eye' style="width: 0.9em; height: 0.9em;"></b-icon>
+                                                            <b-icon v-show='show2' icon='eye-slash' style="width: 0.9em; height: 0.9em;"></b-icon>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            <div class="button-row d-flex mt-5">
+                                                <b-button  @click="closeModal('modal-multi')" class="btn bg-gradient-secondary me-3 ms-auto mb-0">
+                                                    Cancelar
+                                                </b-button>
+                                                <b-button class="btn bg-gradient-primary mb-0 js-btn-next" @click='editarPassword(editId)'>
+                                                    Actualizar
+                                                </b-button>
+                                            </div>
                                     </b-form>
                                 </b-modal>
                             </div>
@@ -178,13 +210,15 @@
                 user:[],
                 usuarios:[],
                 show:true,
+                show2:true,
                 editId:null,
                 editar: null,
                 eliminar:null,
                 confirm: '',
                 title:'',
                 titleBtn:'',
-                currentPage:1
+                pagActual:1,
+                porPag:5,
             };
         },
         async mounted(){
@@ -205,7 +239,7 @@
                 }).then(response => {
                     this.roles = response.data;
                 }).catch(e => {
-                    this.$toast.error('Ocurrió un error al cargar: ', e.message)
+                    this.$toast.error('Ocurrió un error al cargar: ' + e.message)
                 })
             },
             async getUsuarios(){
@@ -213,7 +247,7 @@
                 }).then(response => {
                     this.usuarios = response.data;
                 }) .catch(e => {
-                    this.$toast.error('Ocurrió un error al cargar: ',e.message)
+                    this.$toast.error('Ocurrió un error al cargar: ' + e.message)
                 })
             },
             async getUser(usuarioId){
@@ -223,7 +257,7 @@
                     this.form.nombre = response.data.nombre_usuario
                     this.form.rol = response.data.roles_id_rol
                 }) .catch(e => {
-                    this.$toast.error('Ocurrió un error al cargar: ',e.message)
+                    this.$toast.error('Ocurrió un error al cargar: '+ e.message)
                 })
             },
             async crearUsuario(){
@@ -236,27 +270,37 @@
                     await axios.post('/usuarios', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Usuario creado con éxito')
-                        this.cerrar()
+                        this.closeModal('user-modal')
+                        this.getUsuarios()
                     }).catch (e => {
-                        this.$toast.error('Ocurrió un error al agregar: ',e.message)
+                        this.$toast.error('Ocurrió un error al agregar: '+ e.message)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
                 }
             },
-            async editarUsuario(usuarioId){
+            async editarRol(usuarioId){
                 if(this.editar){
-                    var params ={
-                        nombre_usuario: this.form.nombre,
-                        roles_id_rol:this.form.rol,
-                    }
-                    await axios.put(`/usuario/${usuarioId}`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                    await axios.put(`/usuario/${usuarioId}/editarRol`, {roles_id_rol: this.form.rol} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                     }).then(() => {
                         this.$toast.success('Usuario editado con éxito')
-                        this.closeModal()
+                        this.closeModal('user-modal')
                         this.getUsuarios()
                     }).catch (e => {
-                        this.$toast.error('Ocurrió un error al editar: ', e.message)
+                        this.$toast.error('Ocurrió un error al editar: '+ e.message)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para modificar')
+                }
+            },
+            async editarPassword(usuarioId){
+                if(this.editar){
+                    await axios.put(`/usuario/${usuarioId}/editarPassword`, {password_usuario: this.form.password} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                    }).then(() => {
+                        this.$toast.success('Contraseña editada con éxito')
+                        this.closeModal('modal-multi')
+                    }).catch (e => {
+                        this.$toast.error('Ocurrió un error al editar: '+ e.message)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para modificar')
@@ -269,15 +313,18 @@
                         this.$toast.success('Usuario eliminado con éxito')
                         this.getUsuarios()
                     }).catch (e => {
-                        this.$toast.error('Ocurrió un error al eliminar: ',e.message)
+                        this.$toast.error('Ocurrió un error al eliminar: '+ e.message)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para eliminar')
                 }
             },
-            password_show_hide() {
-                this.show = !this.show;
-                let input = document.getElementById("password");
+            password_show_hide(id) {
+                var input = document.getElementById(id);
+                if(id=='password')
+                    this.show = !this.show;
+                else
+                    this.show2 = !this.show2;
                 if (input.type === "password") {
                     input.type = "text";
                 } else {
@@ -289,8 +336,8 @@
                 this.form.password = ''
                 this.form.rol = null
             },
-            closeModal(){
-                this.$bvModal.hide('user-modal')
+            closeModal(name){
+                this.$bvModal.hide(name)
             },
             openModal(usuarioId, action){
                 this.$bvModal.show('user-modal')

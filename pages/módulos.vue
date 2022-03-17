@@ -14,7 +14,7 @@
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4">
                                         <div class="ms-auto my-auto">
-                                            <a href='./modulo/nuevoModulo' class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo módulo</a>
+                                            <a @click="openModal(modulo.id_modulo, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo módulo</a>
                                         </div>
                                     </div>
                                 </div>
@@ -24,8 +24,8 @@
                                     <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                                         <div class="dataTable-top">
                                             <div class="dataTable-dropdown">
-                                                <label>
-                                                    <select class="dataTable-selector">
+                                                <label style="width: 200px">
+                                                    <select class="form-select dataTable-selector">
                                                         <option value="5">5</option>
                                                         <option value="10">10</option>
                                                         <option value="15">15</option>
@@ -53,12 +53,16 @@
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones">
-                                                                <NuxtLink :to="{name:'modulo-moduloId', params:{moduloId: modulo.id_modulo}}">
-                                                                    <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
-                                                                </NuxtLink>
-                                                                <a class="trash" v-on:click='eliminarModulo(modulo.id_modulo)'>
-                                                                    <b-icon class="icon cursor-pointer" icon='trash' style="width: 1.2em; height: 1.2em;color: #ff0c0c;"></b-icon>
-                                                                </a>
+                                                                <div v-if="editar">
+                                                                    <a class="cursor-pointer" @click="openModal(modulo.id_modulo, 'editar')">
+                                                                        <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
+                                                                    </a>
+                                                                </div>
+                                                                <div v-if="eliminar">
+                                                                    <a class="trash cursor-pointer"  @click='showModalDelete(modulo.id_modulo)'>
+                                                                        <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                                    </a>
+                                                                </div>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -69,26 +73,35 @@
                                             <div class="dataTable-info">1 de {{this.modulos.length}}</div>
                                             <nav class="dataTable-pagination">
                                                 <ul class="dataTable-pagination-list">
-                                                    <li class="pager">
-                                                        <a>‹</a>
-                                                    </li>
-                                                    <li class="active">
-                                                        <a>1</a>
-                                                    </li>
-                                                    <li class="pager">
-                                                        <a>2</a>
-                                                    </li>
-                                                    <li class="pager">
-                                                        <a>3</a>
-                                                    </li>
-                                                    <li class="pager">
-                                                        <a>›</a>
-                                                    </li>
+                                                    
                                                 </ul>
                                             </nav>
                                         </div>
                                     </div>
                                 </div>
+                                <b-modal id="module-modal" :title="title" hide-footer>
+                                    <b-form method='post'>
+                                        <div>
+                                            <div class="row mt-2">
+                                                <div class="col-12 col-md-8">
+                                                    <label>Nombre</label>
+                                                    <b-form-input  class="form-control" type="text" v-model='form.nombre'></b-form-input>
+                                                </div>
+                                            </div>
+                                             <div class="button-row d-flex mt-5">
+                                                <b-button  @click="closeModal('module-modal')" class="btn bg-gradient-secondary me-3 ms-auto mb-0">
+                                                    Cancelar
+                                                </b-button>
+                                                <b-button v-if="titleBtn == 'Agregar' " class="btn bg-gradient-primary mb-0 js-btn-next" @click='crearModulo'>
+                                                    Agregar
+                                                </b-button>
+                                                <b-button v-else class="btn bg-gradient-primary mb-0 js-btn-next" @click='editarModulo(editId)'>
+                                                    Actualizar
+                                                </b-button>
+                                            </div>
+                                        </div>
+                                    </b-form>
+                                </b-modal>
                             </div>
                         </div>
                     </div>
@@ -102,7 +115,7 @@
     import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
-import { getAccessToken } from '~/utils/auth';
+    import { getAccessToken, getSubmodulos } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5000';
     
     export default{
@@ -110,33 +123,130 @@ import { getAccessToken } from '~/utils/auth';
         middleware: 'authenticated',
         data() {
             return {
-                modulos:[]
+                form:{
+                    nombre:''
+                },
+                permisosCrud:[],
+                modulo:[],
+                modulos:[],
+                editar:null,
+                eliminar:null,
+                editId:null,
+                confirm: '',
+                title:'',
+                titleBtn:'',
             };
         },
         async mounted(){
-            if(getAccessToken()){
-                await axios.get('/modulos')
-                .then(response => {
-                    this.modulos = response.data;
-                    console.log(this.modulos);
-                })
-                .catch(e => {
-                    console.log(e.message)
-                })
-            }
+            this.permisosCrud = getSubmodulos('Administración','Módulos')
+            if('editar' in this.permisosCrud)
+                this.editar = true
+            if('eliminar' in this.permisosCrud)
+                this.eliminar = true
+            if('leer' in this.permisosCrud)
+                this.getModulos()
+            else
+                this.$toast.error('No tiene permiso de lectura')
         },
         methods: {
-            async eliminarModulo(moduloId){
-                if(getAccessToken()){
-                    await axios.delete(`/modulos/${moduloId}`)
-                    .then(response => {
-                        console.log("bien");
+            async getModulo(moduloId){
+                await axios.get(`/modulos/${moduloId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                }) .then(response => {
+                    this.modulo = response.data
+                    this.form.nombre = response.data.nombre_modulo
+                }) .catch(e => {
+                    this.$toast.error('Ocurrió un error al cargar: '+ e.message)
+                })
+            },
+            async getModulos(){
+                await axios.get('/modulos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then(response => {
+                    this.modulos = response.data;
+                }).catch(e => {
+                    this.$toast.error('Ocurrió un error al cargar: '+ e.message)
+                })
+            },
+            async crearModulo(){
+                if('crear' in this.permisosCrud){
+                    await axios.post('/modulos', {nombre_modulo: this.form.nombre,},{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
+                        this.$toast.success('Módulo creado con éxito')
+                        this.closeModal('module-modal')
+                        this.getModulos()
+                    }).catch (e => {
+                        this.$toast.error('Ocurrió un error al agregar: '+ e.message)
                     })
-                    .catch(e => {
-                        console.log(e.message)
-                    })
+                }else{
+                    this.$toast.error('No tiene permisos para agregar')
                 }
-            }   
+            },
+            async editarModulo(moduloId){
+                 if(this.editar){
+                    await axios.put(`/modulos/${moduloId}`, {nombre_modulo: this.form.nombre} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                    }).then(() => {
+                        this.$toast.success('Módulo editado con éxito')
+                        this.closeModal('module-modal')
+                        this.getModulos()
+                    }).catch (e => {
+                        this.$toast.error('Ocurrió un error al editar: '+ e.message)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para modificar')
+                }
+            },
+            async eliminarModulo(moduloId){
+                if(this.eliminar){
+                    await axios.delete(`/modulos/${moduloId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
+                        this.$toast.success('Módulo eliminado con éxito')
+                        this.getModulos()
+                    }).catch (e => {
+                        this.$toast.error('Ocurrió un error al eliminar: '+ e.message)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para eliminar')
+                }
+            },
+            onReset(){
+                this.form.nombre = ''
+            },
+            closeModal(){
+                this.$bvModal.hide('module-modal')
+            },
+            openModal(moduloId, action){
+                this.$bvModal.show('module-modal')
+                if(action == 'editar'){
+                    this.getModulo(moduloId)
+                    this.editId = moduloId
+                    this.title = 'Editar Módulo'
+                    this.titleBtn = 'Actualizar'
+                }else{
+                    this.onReset()
+                    this.title='Añadir Nuevo Módulo'
+                    this.titleBtn = 'Agregar'
+                }
+            },
+            showModalDelete(moduloId){
+                this.confirm = ''
+                this.$bvModal.msgBoxConfirm('¿Está seguro que desea eliminar este registro?', {
+                    title: 'Confirmar',
+                    size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'danger',
+                    okTitle: 'Si',
+                    cancelTitle: 'No',
+                    footerClass: 'p-2',
+                    hideHeaderClose: false,
+                    centered: true
+                }).then(value => {
+                    this.confirm = value
+                    if(this.confirm == true){
+                        this.eliminarModulo(moduloId)
+                    }
+                }).catch( e=>{
+                    this.$toast.error(e.message)
+                })
+            },  
         },
     }
 </script>

@@ -24,8 +24,8 @@
                                     <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns"> 
                                         <div class="dataTable-top">
                                             <div class="dataTable-dropdown">
-                                                <label>
-                                                    <select class="dataTable-selector">
+                                                <label style="width: 200px">
+                                                    <select class="form-select dataTable-selector">
                                                         <option value="5">5</option>
                                                         <option value="10">10</option>
                                                         <option value="15">15</option>
@@ -179,7 +179,7 @@
                 }).then(response => {
                     this.roles = response.data;
                 }).catch (e=> {
-                    this.$toast.error('Ocurrió un error al cargar: ',e.message)
+                    this.$toast.error('Ocurrió un error al cargar: ' + e.message)
                 })
             },
             async getRol(rolId){
@@ -190,7 +190,7 @@
                     this.form.descripcion = response.data.descripcion_rol
                 })
                 .catch(e => {
-                     this.$toast.error('Ocurrió un error al cargar: ',e.message)
+                     this.$toast.error('Ocurrió un error al cargar: ' + e.message)
                 })
             },
             async crearRol(){
@@ -204,7 +204,7 @@
                         this.$toast.success('Rol creado con éxito')
                         this.cerrar()
                     }).catch (e => {
-                         this.$toast.error('Ocurrió un error al agregar: ',e.message)
+                         this.$toast.error('Ocurrió un error al agregar: ' + e.message)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
@@ -222,7 +222,7 @@
                         this.closeModal()
                         this.getRoles()
                     }).catch (e => {
-                        this.$toast.error('Ocurrió un error al editar: ',e.message)
+                        this.$toast.error('Ocurrió un error al editar: '+ e.message)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para modificar')
@@ -235,7 +235,7 @@
                         this.$toast.success('Rol eliminado correctamente')
                         this.getRoles()
                     }).catch (e=> {
-                        this.$toast.error('Ocurrió un error al eliminar: ',e.message)
+                        this.$toast.error('Ocurrió un error al eliminar: '+ e.message)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para eliminar')
