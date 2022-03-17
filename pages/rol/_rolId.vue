@@ -66,11 +66,6 @@
         async mounted(){
             await this.getRol()
         },
-        fetch ({ store, redirect }) {
-            if (!store.state.user) {
-                return redirect('/')
-            }
-        },
         methods:{
             async getRol(){
                 if(this.$store.state.token){
@@ -99,7 +94,7 @@
                         console.log("editado correcto")
                     }).catch (e => {
                         console.log(e.message)
-                })
+                    })
                 }
             }
         },

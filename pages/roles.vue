@@ -14,7 +14,7 @@
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4">
                                         <div class="ms-auto my-auto">
-                                            <a href='./rol/nuevoRol' class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo rol</a>
+                                            <a @click="openModal(rol.id_rol, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo rol</a>
                                         </div>
                                     </div>
                                 </div>
@@ -30,7 +30,7 @@
                                                         <option value="10">10</option>
                                                         <option value="15">15</option>
                                                     </select>
-                                                    Entradas por página
+                                                    Registros por página
                                                 </label>
                                             </div>
                                         </div>
@@ -57,12 +57,16 @@
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones">
-                                                                <NuxtLink  :to="{name:'rol-rolId', params:{rolId: rol.id_rol}}">
-                                                                    <b-icon class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em;"></b-icon>
-                                                                </NuxtLink>
-                                                                <a class="trash" v-on:click='eliminarRol(rol.id_rol)'>
-                                                                    <b-icon icon='trash cursor-pointer' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
-                                                                </a>
+                                                                <div v-if="editar">
+                                                                    <a class="cursor-pointer" @click="openModal(rol.id_rol, 'editar')">
+                                                                        <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
+                                                                    </a>
+                                                                </div>
+                                                                <div v-if="eliminar">
+                                                                    <a class="trash cursor-pointer"  @click='showModalDelete(rol.id_rol)'>
+                                                                        <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                                    </a>
+                                                                </div>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -93,6 +97,35 @@
                                         </div>
                                     </div>
                                 </div>
+                                <b-modal id="rol-modal" :title="title" hide-footer>
+                                    <b-form method='post'>
+                                        <div>
+                                            <div class="row mt-2">
+                                                <div class="col-12 col-md-8">
+                                                    <label>Nombre</label>
+                                                    <b-form-input class="form-control" placeholder="Nombre" type="text" v-model='form.nombre' required></b-form-input>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3">
+                                                <div class="col-12 col-md-8">
+                                                    <label>Descripción</label>
+                                                    <b-form-input class="form-control" type="text" placeholder="Descripción" v-model='form.descripcion' required></b-form-input>
+                                                </div>
+                                            </div>
+                                             <div class="button-row d-flex mt-5">
+                                                <b-button  @click='closeModal' class="btn bg-gradient-secondary me-3 ms-auto mb-0">
+                                                    Cancelar
+                                                </b-button>
+                                                <b-button v-if="titleBtn == 'Agregar' " class="btn bg-gradient-primary mb-0 js-btn-next" @click='crearRol'>
+                                                    Agregar
+                                                </b-button>
+                                                <b-button v-else class="btn bg-gradient-primary mb-0 js-btn-next" @click='editarRol(editId)'>
+                                                    Actualizar
+                                                </b-button>
+                                            </div>
+                                        </div>
+                                    </b-form>
+                                </b-modal>
                             </div>
                         </div>
                     </div>
@@ -106,7 +139,7 @@
     import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
-    import { getAccessToken } from '~/utils/auth';
+    import { getAccessToken, getSubmodulos } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5000';
     
     export default{
@@ -114,26 +147,141 @@
         middleware: 'authenticated',
         data() {
             return {
-                roles: []
-            };
+                form:{
+                    nombre:'',
+                    descripcion:'',
+                },
+                permisosCrud:[],
+                rol:[],
+                roles: [],
+                editId:null,
+                editar:null,
+                eliminar:null,
+                confirm: '',
+                title:'',
+                titleBtn:'',
+            }
         },
         async mounted(){
-            await axios.get('/roles')
-            .then(response => {
-                this.roles = response.data;
-            }).catch (e=> {
-                this.$toast.error(e.message)
-            })
+            this.permisosCrud = getSubmodulos('Administración','Roles')
+            if('editar' in this.permisosCrud)
+                this.editar = true
+            if('eliminar' in this.permisosCrud)
+                this.eliminar = true
+            if('leer' in this.permisosCrud)
+                this.getRoles()
+            else
+                this.$toast.error('No tiene permiso de lectura')
         },
         methods: {
-            async eliminarRol(rolId){
-                await axios.delete(`/roles/${rolId}`)
-                .then(() => {
-                    console.log("correcto")
+            async getRoles(){
+                await axios.get('/roles',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then(response => {
+                    this.roles = response.data;
                 }).catch (e=> {
+                    this.$toast.error('Ocurrió un error al cargar: ',e.message)
+                })
+            },
+            async getRol(rolId){
+                await axios.get(`/roles/${rolId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then(response => {
+                    this.rol = response.data;
+                    this.form.nombre = response.data.nombre_rol
+                    this.form.descripcion = response.data.descripcion_rol
+                })
+                .catch(e => {
+                     this.$toast.error('Ocurrió un error al cargar: ',e.message)
+                })
+            },
+            async crearRol(){
+                if('crear'in this.permisosCrud){
+                    var params = {
+                        nombre_rol: this.form.nombre,
+                        descripcion_rol:this.form.descripcion
+                    }
+                    await axios.post('/roles', params)
+                    .then(() => {
+                        this.$toast.success('Rol creado con éxito')
+                        this.cerrar()
+                    }).catch (e => {
+                         this.$toast.error('Ocurrió un error al agregar: ',e.message)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para agregar')
+                }
+            },
+            async editarRol(rolId){
+                if(this.editar){
+                    var params = {
+                        nombre_rol: this.form.nombre,
+                        descripcion_rol:this.form.descripcion
+                    }
+                    await axios.put(`/roles/${rolId}`, params)
+                    .then(() => {
+                        this.$toast.success('Rol editado con éxito')
+                        this.closeModal()
+                        this.getRoles()
+                    }).catch (e => {
+                        this.$toast.error('Ocurrió un error al editar: ',e.message)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para modificar')
+                }
+            },
+            async eliminarRol(rolId){
+                if(this.eliminar){
+                    await axios.delete(`/roles/${rolId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
+                        this.$toast.success('Rol eliminado correctamente')
+                        this.getRoles()
+                    }).catch (e=> {
+                        this.$toast.error('Ocurrió un error al eliminar: ',e.message)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para eliminar')
+                }
+            },
+            onReset(){
+                this.form.nombre = ''
+                this.form.descripcion = ''
+            },
+            closeModal(){
+                this.$bvModal.hide('rol-modal')
+            },
+            openModal(rolId, action){
+                this.$bvModal.show('rol-modal')
+                if(action == 'editar'){
+                    this.getRol(rolId)
+                    this.editId = rolId
+                    this.title = 'Editar Rol'
+                    this.titleBtn = 'Actualizar'
+                }else{
+                    this.onReset()
+                    this.title='Añadir Nuevo Rol'
+                    this.titleBtn = 'Agregar'
+                }
+            },
+            showModalDelete(rolId){
+                this.confirm = ''
+                this.$bvModal.msgBoxConfirm('¿Está seguro que desea eliminar este registro?', {
+                    title: 'Confirmar',
+                    size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'danger',
+                    okTitle: 'Si',
+                    cancelTitle: 'No',
+                    footerClass: 'p-2',
+                    hideHeaderClose: false,
+                    centered: true
+                }).then(value => {
+                    this.confirm = value
+                    if(this.confirm == true){
+                        this.eliminarRol(rolId)
+                    }
+                }).catch( e=>{
                     this.$toast.error(e.message)
                 })
-            }
+            },
         },
     }
 </script>
