@@ -12,7 +12,7 @@
                                     <div>
                                         <h5>Roles</h5>
                                     </div>
-                                    <div class="ms-auto my-auto mt-lg-0 mt-4">
+                                    <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
                                         <div class="ms-auto my-auto">
                                             <a @click="openModal(rol.id_rol, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo rol</a>
                                         </div>
@@ -155,6 +155,7 @@
                 rol:[],
                 roles: [],
                 editId:null,
+                crear:null,
                 editar:null,
                 eliminar:null,
                 confirm: '',
@@ -164,6 +165,8 @@
         },
         async mounted(){
             this.permisosCrud = getSubmodulos('Administración','Roles')
+            if('crear' in this.permisosCrud)
+                this.crear= true
             if('editar' in this.permisosCrud)
                 this.editar = true
             if('eliminar' in this.permisosCrud)
@@ -194,7 +197,7 @@
                 })
             },
             async crearRol(){
-                if('crear'in this.permisosCrud){
+                if(this.crear){
                     var params = {
                         nombre_rol: this.form.nombre,
                         descripcion_rol:this.form.descripcion

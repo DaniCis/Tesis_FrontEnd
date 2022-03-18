@@ -12,7 +12,7 @@
                                     <div>
                                         <h5>Módulos</h5>
                                     </div>
-                                    <div class="ms-auto my-auto mt-lg-0 mt-4">
+                                    <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
                                         <div class="ms-auto my-auto">
                                             <a @click="openModal(modulo.id_modulo, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo módulo</a>
                                         </div>
@@ -131,6 +131,7 @@
                 modulos:[],
                 editar:null,
                 eliminar:null,
+                crear:null,
                 editId:null,
                 confirm: '',
                 title:'',
@@ -143,6 +144,8 @@
                 this.editar = true
             if('eliminar' in this.permisosCrud)
                 this.eliminar = true
+            if('crear' in this.permisosCrud)
+                this.crear= true
             if('leer' in this.permisosCrud)
                 this.getModulos()
             else
@@ -167,7 +170,7 @@
                 })
             },
             async crearModulo(){
-                if('crear' in this.permisosCrud){
+                if(this.crear){
                     await axios.post('/modulos', {nombre_modulo: this.form.nombre,},{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Módulo creado con éxito')

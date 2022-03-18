@@ -12,7 +12,7 @@
                                     <div>
                                         <h5>Submódulos</h5>
                                     </div>
-                                    <div class="ms-auto my-auto mt-lg-0 mt-4">
+                                    <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
                                         <div class="ms-auto my-auto">
                                             <a @click="openModal(submodulo.id_submodulo, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo submódulo</a>
                                         </div>
@@ -153,6 +153,7 @@ import { getAccessToken, getSubmodulos } from '~/utils/auth';
                 submodulos:[],
                 editId:null,
                 editar: null,
+                crear:null,
                 eliminar:null,
                 confirm: '',
                 title:'',
@@ -166,6 +167,8 @@ import { getAccessToken, getSubmodulos } from '~/utils/auth';
                 this.editar = true
             if('eliminar' in this.permisosCrud)
                 this.eliminar = true
+            if('crear' in this.permisosCrud)
+                this.crear = true
             if('leer' in this.permisosCrud)
                 this.getSubmodulos()
             else
@@ -200,7 +203,7 @@ import { getAccessToken, getSubmodulos } from '~/utils/auth';
                 })
             },
             async crearSubmodulo(){
-                if('crear' in this.permisosCrud){
+                if(this.crear){
                     var params = {
                         nombre_submodulo: this.form.nombre,
                         nombre_modulo:this.form.modulo

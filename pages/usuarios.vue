@@ -12,7 +12,7 @@
                                     <div>
                                         <h5>Usuarios</h5>
                                     </div>
-                                    <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="'crear' in this.permisosCrud">
+                                    <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
                                         <div class="ms-auto my-auto">
                                             <a @click="openModal(user.id_usuario, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo usuario</a>
                                         </div>
@@ -212,6 +212,7 @@
                 show:true,
                 show2:true,
                 editId:null,
+                crear:null,
                 editar: null,
                 eliminar:null,
                 confirm: '',
@@ -228,6 +229,8 @@
                 this.editar = true
             if('eliminar' in this.permisosCrud)
                 this.eliminar = true
+            if('crear' in this.permisosCrud)
+                this.crear = true
             if('leer' in this.permisosCrud)
                 this.getUsuarios()
             else
@@ -261,7 +264,7 @@
                 })
             },
             async crearUsuario(){
-                if('crear' in this.permisosCrud){
+                if(this.crear){
                     var params = {
                         nombre_usuario: this.form.nombre,
                         password_usuario: this.form.password,
