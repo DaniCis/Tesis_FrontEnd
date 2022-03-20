@@ -41,6 +41,7 @@
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Id</th>
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
                                                     <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Descripción</th>
+                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Permisos</th>
                                                     <th class="text-secondary opacity-7"></th>
                                                     </tr>
                                                 </thead>
@@ -54,6 +55,11 @@
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <p class="text-s font-weight-bold mb-0">{{rol.descripcion_rol}}</p>
+                                                        </td>
+                                                        <td class="align-middle text-sm">
+                                                            <div>
+                                                                <a class="link cursor-pointer"></a>
+                                                            </div>
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones">
@@ -97,31 +103,34 @@
                                         </div>
                                     </div>
                                 </div>
-                                <b-modal id="rol-modal" :title="title" hide-footer>
-                                    <b-form method='post'>
-                                        <div>
-                                            <div class="row mt-2">
-                                                <div class="col-12 col-md-8">
-                                                    <label>Nombre</label>
-                                                    <b-form-input class="form-control" placeholder="Nombre" type="text" v-model='form.nombre' required></b-form-input>
-                                                </div>
+                                <b-modal id="rol-modal" :title="title"  cancel-title='Cancelar' :ok-title="titleBtn" @ok="handleOk($event,editId)"  >
+                                    <b-form  @submit.stop.prevent="handleSubmit(editId)">
+                                        <div class="row mt-2">
+                                            <div class="col-12 col-md-8">
+                                                <b-form-group
+                                                    label="Nombre" 
+                                                    label-for="name-input" 
+                                                    invalid-feedback="Este campo es requerido" 
+                                                    :state="form.nameState">
+                                                    <b-form-input
+                                                        id="name-input" class="form-control" type="text" placeholder="Nombre" ref='name_input'
+                                                        v-model="form.nombre" :state="form.nameState" required>
+                                                    </b-form-input>
+                                                </b-form-group>
                                             </div>
-                                            <div class="row mt-3">
-                                                <div class="col-12 col-md-8">
-                                                    <label>Descripción</label>
-                                                    <b-form-input class="form-control" type="text" placeholder="Descripción" v-model='form.descripcion' required></b-form-input>
-                                                </div>
-                                            </div>
-                                             <div class="button-row d-flex mt-5">
-                                                <b-button  @click='closeModal' class="btn bg-gradient-secondary me-3 ms-auto mb-0">
-                                                    Cancelar
-                                                </b-button>
-                                                <b-button v-if="titleBtn == 'Agregar' " class="btn bg-gradient-primary mb-0 js-btn-next" @click='crearRol'>
-                                                    Agregar
-                                                </b-button>
-                                                <b-button v-else class="btn bg-gradient-primary mb-0 js-btn-next" @click='editarRol(editId)'>
-                                                    Actualizar
-                                                </b-button>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-12 col-md-8">
+                                                <b-form-group
+                                                    label="Descripción" 
+                                                    label-for="des-input" 
+                                                    invalid-feedback="Este campo es requerido" 
+                                                    :state="form.desState">
+                                                    <b-form-input 
+                                                        id="de-input" class="form-control" type="text" placeholder="Descripción" ref='des_input'
+                                                        v-model="form.descripcion" :state="form.desState" required>
+                                                    </b-form-input>
+                                                </b-form-group>
                                             </div>
                                         </div>
                                     </b-form>
@@ -150,6 +159,8 @@
                 form:{
                     nombre:'',
                     descripcion:'',
+                    nameState:null,
+                    desState:null,
                 },
                 permisosCrud:[],
                 rol:[],
@@ -205,7 +216,7 @@
                     await axios.post('/roles', params)
                     .then(() => {
                         this.$toast.success('Rol creado con éxito')
-                        this.cerrar()
+                        this.getRoles()
                     }).catch (e => {
                          this.$toast.error('Ocurrió un error al agregar: ' + e.message)
                     })
@@ -222,7 +233,6 @@
                     await axios.put(`/roles/${rolId}`, params)
                     .then(() => {
                         this.$toast.success('Rol editado con éxito')
-                        this.closeModal()
                         this.getRoles()
                     }).catch (e => {
                         this.$toast.error('Ocurrió un error al editar: '+ e.message)
@@ -244,22 +254,49 @@
                     this.$toast.error('No tiene permisos para eliminar')
                 }
             },
+            validarForm() {
+                const valid = this.$refs.name_input.checkValidity()
+                const valid2 = this.$refs.des_input.checkValidity()
+                this.form.nameState = valid
+                this.form.desState = valid2
+                if(valid == false || valid2 == false)
+                    return false
+                else
+                    return true
+            },
+            handleOk(bvModalEvt,rolId){
+                bvModalEvt.preventDefault()
+                this.handleSubmit(rolId)
+            },
+            handleSubmit(rolId) {
+                if (!this.validarForm())
+                    return
+                if(this.titleBtn == 'Agregar')
+                    this.crearRol()
+                else
+                    this.editarRol(rolId)
+                this.$nextTick(() => {
+                    this.closeModal()
+                })
+            },
             onReset(){
                 this.form.nombre = ''
                 this.form.descripcion = ''
+                this.form.nameState = null
+                this.form.desState = null
             },
             closeModal(){
                 this.$bvModal.hide('rol-modal')
             },
             openModal(rolId, action){
                 this.$bvModal.show('rol-modal')
+                this.onReset()
                 if(action == 'editar'){
                     this.getRol(rolId)
                     this.editId = rolId
                     this.title = 'Editar Rol'
                     this.titleBtn = 'Actualizar'
                 }else{
-                    this.onReset()
                     this.title='Añadir Nuevo Rol'
                     this.titleBtn = 'Agregar'
                 }

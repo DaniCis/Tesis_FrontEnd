@@ -82,9 +82,10 @@
                         this.password=''
                         this.$router.push('/dashboard');
                     }
-                }).catch (()=> {
+                }).catch (e=> {
                     //this.error = e.message
-                    this.$toast.error('Usuario o contraseña incorrecta ')
+                    //this.$toast.error('Usuario o contraseña incorrecta ')
+                    this.$toast.error(e.message)
                 })
 
             },

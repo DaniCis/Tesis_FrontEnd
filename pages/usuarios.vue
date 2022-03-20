@@ -94,21 +94,40 @@
                                         </div>
                                     </div>
                                 </div>
-                                <b-modal id="user-modal" :title="title" hide-footer>
-                                    <b-form  method="post">
-                                        <div>
-                                            <div class="row mt-2">
-                                                <div class="col-12 col-md-8">
-                                                    <label>Nombre</label>
-                                                    <b-form-input v-if="titleBtn == 'Agregar'" class="form-control" type="text" v-model='form.nombre'></b-form-input>
-                                                    <b-form-input v-else readonly class="form-control" type="text" v-model='form.nombre'></b-form-input>
-                                                </div>
+                                <b-modal id="user-modal" :title="title"  cancel-title='Cancelar' :ok-title="titleBtn" @ok="handleOk($event,editId)" >
+                                    <b-form @submit.stop.prevent="handleSubmit(editId)">
+                                        <div class="row mt-2">
+                                            <div class="col-12 col-md-8">
+                                                <b-form-group v-if="titleBtn == 'Agregar'"
+                                                    label="Nombre" 
+                                                    label-for="name-input" 
+                                                    invalid-feedback="Este campo es requerido" 
+                                                    :state="form.nameState">
+                                                    <b-form-input  
+                                                        id="name-input" class="form-control" type="text" placeholder="Nombre" ref='name_input'
+                                                        v-model="form.nombre" :state="form.nameState" required>
+                                                    </b-form-input>
+                                                </b-form-group>
+                                                <b-form-group v-else
+                                                    label="Nombre" 
+                                                    label-for="name-input">
+                                                    <b-form-input 
+                                                        id="name-input" class="form-control" type="text" readonly ref='name_input' :state="form.nameState"
+                                                        v-model="form.nombre" >
+                                                    </b-form-input>
+                                                </b-form-group>
                                             </div>
-                                            <div class="row mt-3" v-show="titleBtn == 'Agregar'">
-                                                <div class="col-12 col-md-8" >
-                                                    <label>Contraseña</label>
+                                        </div>
+                                        <div class="row mt-3" v-show="titleBtn == 'Agregar'">
+                                            <div class="col-12 col-md-8" >
+                                                <b-form-group
+                                                    label="Contraseña" 
+                                                    label-for="password" 
+                                                    invalid-feedback="Este campo es requerido" 
+                                                    :state="form.passState">
                                                     <div class="input-group mb-3">
-                                                        <b-form-input class="form-control" type="password" id='password' placeholder="Contraseña" v-model='form.password' required ></b-form-input>
+                                                        <b-form-input class="form-control" type="password" id='password' placeholder="Contraseña" v-model='form.password' ref="pass_input" :state="form.passState" required>
+                                                        </b-form-input>
                                                         <div class="input-group-append ">
                                                             <span class="input-group-text" v-on:click="password_show_hide('password') ">
                                                                 <b-icon v-show='!show' icon='eye' style="width: 0.9em; height: 0.9em;"></b-icon>
@@ -116,67 +135,64 @@
                                                             </span>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </b-form-group>
                                             </div>
-                                            <div class="row mt-2">
-                                                <div class="col-12 col-md-8">
-                                                    <label>Rol</label>
-                                                    <select v-if="titleBtn =='Agregar'" v-model="form.rol" class="form-select" required >
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-12 col-md-8">
+                                                <b-form-group v-if="titleBtn =='Agregar'"
+                                                    label="Rol" 
+                                                    label-for="rol-select" 
+                                                    invalid-feedback="Seleccione un rol" 
+                                                    :state="form.rolState">
+                                                    <select 
+                                                        id="rol-select" v-model="form.rol" class="form-select" ref='rol_select' :state="form.rolState" required>
                                                         <option disabled :value='null'> Seleccione</option>
                                                         <option v-for="rol in this.roles" :value="rol.id_rol">
                                                             {{rol.nombre_rol}}
                                                         </option>
                                                     </select>
-                                                    <select v-else v-model="form.rol" class="form-select">
+                                                </b-form-group>
+                                                <b-form-group v-else
+                                                    label="Rol" 
+                                                    label-for="rol-select" >
+                                                   <select id="rol-select" v-model="form.rol" class="form-select" ref='rol_select' :state="form.rolState">
                                                         <option v-for="rol in this.roles" :value="rol.id_rol">
                                                             {{rol.nombre_rol}}
                                                         </option>
-                                                    </select>
-                                                </div>
+                                                    </select>                                         
+                                                </b-form-group>
                                             </div>
-                                            <div class="row mt-4" v-if="titleBtn !='Agregar'">
-                                                <div class="col-12 col-md-8">
-                                                    <a class='link ms-2' v-b-modal.modal-multi>Editar contraseña</a>
-                                                </div>
-                                            </div>
-                                            <div class="button-row d-flex mt-4">
-                                                <b-button  @click="closeModal('user-modal')" class="btn bg-gradient-secondary me-3 ms-auto mb-0">
-                                                    Cancelar
-                                                </b-button>
-                                                <b-button v-if="titleBtn == 'Agregar' " class="btn bg-gradient-primary mb-0 js-btn-next" @click='crearUsuario'>
-                                                    Agregar
-                                                </b-button>
-                                                <b-button v-else class="btn bg-gradient-primary mb-0 js-btn-next" @click='editarRol(editId)'>
-                                                    Actualizar
-                                                </b-button>
+                                        </div>
+                                        <div class="row mt-4" v-if="titleBtn !='Agregar'">
+                                            <div class="col-12 col-md-8">
+                                                <a class='link ms-2' v-b-modal.modal-multi>Editar contraseña</a>
                                             </div>
                                         </div>
                                     </b-form>
                                 </b-modal>
-                                <b-modal id="modal-multi" title="Editar contraseña" hide-footer>
-                                    <b-form method='post'>
+                                <b-modal id="modal-multi" title="Editar contraseña" cancel-title='Cancelar' :ok-title="titleBtn" @ok="handleOk2($event,editId)">
+                                    <b-form @submit.stop.prevent="handleSubmit2(editId)">
                                         <div class="row mt-2">
                                             <div class="col-12 col-md-8">
-                                                <label>Contraseña</label>
-                                                <div class="input-group mb-3">
-                                                    <b-form-input class="form-control" type="password" id='password2' placeholder="Contraseña" v-model='form.password' required ></b-form-input>
-                                                    <div class="input-group-append ">
-                                                        <span class="input-group-text" v-on:click="password_show_hide('password2') ">
-                                                            <b-icon v-show='!show2' icon='eye' style="width: 0.9em; height: 0.9em;"></b-icon>
-                                                            <b-icon v-show='show2' icon='eye-slash' style="width: 0.9em; height: 0.9em;"></b-icon>
-                                                        </span>
+                                                <b-form-group
+                                                    label="Contraseña" 
+                                                    label-for="password2" 
+                                                    invalid-feedback="Este campo es requerido" 
+                                                    :state="form.pass2State">
+                                                    <div class="input-group mb-3">
+                                                        <b-form-input class="form-control" type="password" id='password2' placeholder="Contraseña" v-model='form.password' ref="pass2_input" :state="form.pass2State" required>
+                                                        </b-form-input>
+                                                        <div class="input-group-append ">
+                                                            <span class="input-group-text" v-on:click="password_show_hide('password2') ">
+                                                                <b-icon v-show='!show2' icon='eye' style="width: 0.9em; height: 0.9em;"></b-icon>
+                                                                <b-icon v-show='show2' icon='eye-slash' style="width: 0.9em; height: 0.9em;"></b-icon>
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                </b-form-group>
                                             </div>
-                                            </div>
-                                            <div class="button-row d-flex mt-5">
-                                                <b-button  @click="closeModal('modal-multi')" class="btn bg-gradient-secondary me-3 ms-auto mb-0">
-                                                    Cancelar
-                                                </b-button>
-                                                <b-button class="btn bg-gradient-primary mb-0 js-btn-next" @click='editarPassword(editId)'>
-                                                    Actualizar
-                                                </b-button>
-                                            </div>
+                                        </div>
                                     </b-form>
                                 </b-modal>
                             </div>
@@ -196,13 +212,17 @@
     axios.defaults.baseURL ='http://10.147.17.173:5000';
     
     export default{
-        components: { Sidebar, Navbar },
+        components: { Sidebar, Navbar},
         middleware: 'authenticated',
         data() {
             return {
                 form:{
                     nombre:'',
                     password:'',
+                    nameState:'',
+                    passState:'',
+                    pass2State:'',
+                    rolState:'',
                     rol:''
                 },
                 roles:[],
@@ -215,6 +235,7 @@
                 crear:null,
                 editar: null,
                 eliminar:null,
+                error:null,
                 confirm: '',
                 title:'',
                 titleBtn:'',
@@ -273,7 +294,6 @@
                     await axios.post('/usuarios', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Usuario creado con éxito')
-                        this.closeModal('user-modal')
                         this.getUsuarios()
                     }).catch (e => {
                         this.$toast.error('Ocurrió un error al agregar: '+ e.message)
@@ -287,7 +307,6 @@
                     await axios.put(`/usuario/${usuarioId}/editarRol`, {roles_id_rol: this.form.rol} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                     }).then(() => {
                         this.$toast.success('Usuario editado con éxito')
-                        this.closeModal('user-modal')
                         this.getUsuarios()
                     }).catch (e => {
                         this.$toast.error('Ocurrió un error al editar: '+ e.message)
@@ -301,7 +320,6 @@
                     await axios.put(`/usuario/${usuarioId}/editarPassword`, {password_usuario: this.form.password} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                     }).then(() => {
                         this.$toast.success('Contraseña editada con éxito')
-                        this.closeModal('modal-multi')
                     }).catch (e => {
                         this.$toast.error('Ocurrió un error al editar: '+ e.message)
                     })
@@ -322,39 +340,81 @@
                     this.$toast.error('No tiene permisos para eliminar')
                 }
             },
-            password_show_hide(id) {
-                var input = document.getElementById(id);
-                if(id=='password')
-                    this.show = !this.show;
-                else
-                    this.show2 = !this.show2;
-                if (input.type === "password") {
-                    input.type = "text";
-                } else {
-                    input.type = "password";
+            validarForm() {
+                const valid = this.$refs.name_input.checkValidity()
+                const valid3 = this.$refs.rol_select.checkValidity()
+                this.form.nameState = valid
+                this.form.rolState = valid3
+                if(this.titleBtn == 'Agregar'){
+                    const valid2 = this.$refs.pass_input.checkValidity()
+                    this.form.passState = valid2
+                    if(valid == false || valid2 == false || valid3 == false )
+                        return false
+                    else
+                        return true
+                }else{
+                    if(valid == false || valid3 == false )
+                        return false
+                    else
+                        return true
                 }
+            },
+            validarPass(){
+                const valid = this.$refs.pass2_input.checkValidity()
+                this.form.pass2State = valid
+                return valid
+            },
+            handleOk(bvModalEvt, usuarioId){
+                bvModalEvt.preventDefault()
+                this.handleSubmit(usuarioId)
+            },
+            handleOk2(bvModalEvt, usuarioId){
+                bvModalEvt.preventDefault()
+                this.handleSubmit2(usuarioId)
+            },
+            handleSubmit(usuarioId) {
+                if (!this.validarForm())
+                    return
+                if(this.titleBtn == 'Agregar')
+                    this.crearUsuario()
+                else
+                    this.editarRol(usuarioId)
+                this.$nextTick(() => {
+                    this.closeModal('user-modal')
+                })
+            },
+            handleSubmit2(usuarioId){
+                if(!this.validarPass())
+                    return
+                this.editarPassword(usuarioId)
+                this.$nextTick(() => {
+                    this.closeModal('modal-multi')
+                })
             },
             onReset(){
                 this.form.nombre = ''
                 this.form.password = ''
                 this.form.rol = null
+                this.form.nameState = null,
+                this.form.passState = null,
+                this.form.pass2State = null,
+                this.form.rolState = null
             },
             closeModal(name){
                 this.$bvModal.hide(name)
             },
             openModal(usuarioId, action){
                 this.$bvModal.show('user-modal')
+                this.onReset()
                 if(action == 'editar'){
                     this.getUser(usuarioId)
                     this.editId = usuarioId
                     this.title = 'Editar Usuario'
                     this.titleBtn = 'Actualizar'
                 }else{
-                    this.onReset()
                     this.title='Añadir Nuevo Usuario'
                     this.titleBtn = 'Agregar'
                 }
-                
             },
             showModalDelete(usuarioId){
                 this.confirm = ''
@@ -376,6 +436,18 @@
                 }).catch( e=>{
                     this.$toast.error(e.message)
                 })
+            },
+            password_show_hide(id) {
+                var input = document.getElementById(id);
+                if(id=='password')
+                    this.show = !this.show;
+                else
+                    this.show2 = !this.show2;
+                if (input.type === "password") {
+                    input.type = "text";
+                } else {
+                    input.type = "password";
+                }
             },
         },
     }

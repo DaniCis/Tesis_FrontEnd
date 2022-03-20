@@ -83,41 +83,46 @@
                                         </div>
                                     </div>
                                 </div>
-                                <b-modal id="submodule-modal" :title="title" hide-footer>
-                                    <b-form method='post'>
-                                        <div>
-                                            <div class="row mt-2">
-                                                <div class="col-12 col-md-8">
-                                                    <label>Nombre</label>
-                                                    <b-form-input class="form-control" type="text" v-model='form.nombre' required></b-form-input>
-                                                </div>
+                                <b-modal id="submodule-modal" :title="title" cancel-title='Cancelar' :ok-title="titleBtn" @ok="handleOk($event,editId)" >
+                                    <b-form  @submit.stop.prevent="handleSubmit(editId)">
+                                        <div class="row mt-2">
+                                            <div class="col-12 col-md-8">
+                                                <b-form-group
+                                                    label="Nombre" 
+                                                    label-for="name-input" 
+                                                    invalid-feedback="Este campo es requerido" 
+                                                    :state="form.nameState">
+                                                    <b-form-input
+                                                        id="name-input" class="form-control" type="text" placeholder="Nombre" ref='name_input'
+                                                        v-model="form.nombre" :state="form.nameState" required>
+                                                    </b-form-input>
+                                                </b-form-group>
                                             </div>
-                                            <div class="row mt-2">
-                                                <div class="col-12 col-md-8">
-                                                    <label>Módulo al que pertenece</label>
-                                                    <select v-if="titleBtn =='Agregar'" v-model="form.modulo" class="form-select" required >
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-12 col-md-8">
+                                                <b-form-group v-if="titleBtn =='Agregar'"
+                                                    label="Módulo al que pertenece" 
+                                                    label-for="mod-select" 
+                                                    invalid-feedback="Seleccione un rol" 
+                                                    :state="form.rolState">
+                                                    <select 
+                                                        id="mod-select" v-model="form.modulo" class="form-select" ref='mod_select' :state="form.modState" required>
                                                         <option disabled :value='null'>Seleccione</option>
                                                         <option v-for="modulo in this.modulos" :value="modulo.id_modulo">
                                                             {{modulo.nombre_modulo}}
                                                         </option>
                                                     </select>
-                                                    <select v-else v-model="form.modulo" class="form-select">
-                                                        <option v-for="modulo in this.modulos" :value="modulo.id_modulo">
-                                                            {{modulo.nombre_modulo}}
+                                                </b-form-group>
+                                                <b-form-group v-else
+                                                    label="Módulo al que pertenece" 
+                                                    label-for="mod-select" >
+                                                   <select  v-model="form.rol" class="form-select">
+                                                        <option v-for="rol in this.roles" :value="rol.id_rol">
+                                                            {{rol.nombre_rol}}
                                                         </option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="button-row d-flex mt-5">
-                                                <b-button  @click="closeModal('submodule-modal')" class="btn bg-gradient-secondary me-3 ms-auto mb-0">
-                                                    Cancelar
-                                                </b-button>
-                                                <b-button v-if="titleBtn == 'Agregar' " class="btn bg-gradient-primary mb-0 js-btn-next" @click='crearSubmodulo'>
-                                                    Agregar
-                                                </b-button>
-                                                <b-button v-else class="btn bg-gradient-primary mb-0 js-btn-next" @click='editarSubmodulo(editId)'>
-                                                    Actualizar
-                                                </b-button>
+                                                    </select>                                         
+                                                </b-form-group>
                                             </div>
                                         </div>
                                     </b-form>
@@ -145,7 +150,9 @@ import { getAccessToken, getSubmodulos } from '~/utils/auth';
             return {
                 form:{
                     nombre:'',
-                    modulo:''
+                    modulo:'',
+                    nameState:null,
+                    modState:null
                 },
                 permisosCrud:[],
                 modulos:[],
@@ -173,7 +180,6 @@ import { getAccessToken, getSubmodulos } from '~/utils/auth';
                 this.getSubmodulos()
             else
                 this.$toast.error('No tiene permiso de lectura')
-
         },
         methods: {
             async getModulos(){
@@ -185,11 +191,11 @@ import { getAccessToken, getSubmodulos } from '~/utils/auth';
                 })
             },
             async getSubmodulo(submoduloId){
-                 await axios.get(`/submodulo/${submoduloId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                 await axios.get(`/submodulos/${submoduloId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                 }) .then(response => {
                     this.submodulo = response.data
-                    this.form.nombre = response.data.nombre_submodulos
-                    this.form.modulo = response.data.nombre_submodulos
+                    this.form.nombre = response.data.nombre_submodulo
+                    this.form.modulo = response.data.nombre_modulo
                 }) .catch(e => {
                     this.$toast.error('Ocurrió un error al cargar: '+ e.message)
                 })
@@ -211,7 +217,6 @@ import { getAccessToken, getSubmodulos } from '~/utils/auth';
                     await axios.post('/submodulos', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Submódulo creado con éxito')
-                        this.closeModal('submodule-modal')
                         this.getSubmodulos()
                     }).catch (e => {
                         this.$toast.error('Ocurrió un error al agregar: '+ e.message)
@@ -229,7 +234,6 @@ import { getAccessToken, getSubmodulos } from '~/utils/auth';
                     await axios.put(`/submodulos/${submoduloId}`, params ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                     }).then(() => {
                         this.$toast.success('Submódulo editado con éxito')
-                        this.closeModal('submodule-modal')
                         this.getSubmodulos()
                     }).catch (e => {
                         this.$toast.error('Ocurrió un error al editar: '+ e.message)
@@ -251,22 +255,49 @@ import { getAccessToken, getSubmodulos } from '~/utils/auth';
                     this.$toast.error('No tiene permisos para eliminar')
                 }
             },
+            validarForm() {
+                const valid = this.$refs.name_input.checkValidity()
+                const valid2 = this.$refs.mod_select.checkValidity()
+                this.form.nameState = valid
+                this.form.modState = valid2
+                if(valid == false || valid2 == false)
+                    return false
+                else
+                    return true
+            },
+            handleOk(bvModalEvt, submoduloId){
+                bvModalEvt.preventDefault()
+                this.handleSubmit(submoduloId)
+            },
+            handleSubmit(submoduloId) {
+                if (!this.validarForm())
+                    return
+                if(this.titleBtn == 'Agregar')
+                    this.crearSubmodulo()
+                else
+                    this.editarSubmodulo(submoduloId)
+                this.$nextTick(() => {
+                    this.closeModal()
+                })
+            },
             onReset(){
                 this.form.nombre = ''
                 this.form.modulo= ''
+                this.form.nameState = null,
+                this.form.modState = null
             },
             closeModal(){
                 this.$bvModal.hide('submodule-modal')
             },
             openModal(submoduloId, action){
                 this.$bvModal.show('submodule-modal')
+                this.onReset()
                 if(action == 'editar'){
                     this.getSubmodulo(submoduloId)
                     this.editId = submoduloId
                     this.title = 'Editar Submódulo'
                     this.titleBtn = 'Actualizar'
                 }else{
-                    this.onReset()
                     this.title='Añadir Nuevo Submódulo'
                     this.titleBtn = 'Agregar'
                 }

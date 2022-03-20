@@ -79,25 +79,20 @@
                                         </div>
                                     </div>
                                 </div>
-                                <b-modal id="module-modal" :title="title" hide-footer>
-                                    <b-form method='post'>
-                                        <div>
-                                            <div class="row mt-2">
-                                                <div class="col-12 col-md-8">
-                                                    <label>Nombre</label>
-                                                    <b-form-input  class="form-control" type="text" v-model='form.nombre'></b-form-input>
-                                                </div>
-                                            </div>
-                                             <div class="button-row d-flex mt-5">
-                                                <b-button  @click="closeModal('module-modal')" class="btn bg-gradient-secondary me-3 ms-auto mb-0">
-                                                    Cancelar
-                                                </b-button>
-                                                <b-button v-if="titleBtn == 'Agregar' " class="btn bg-gradient-primary mb-0 js-btn-next" @click='crearModulo'>
-                                                    Agregar
-                                                </b-button>
-                                                <b-button v-else class="btn bg-gradient-primary mb-0 js-btn-next" @click='editarModulo(editId)'>
-                                                    Actualizar
-                                                </b-button>
+                                <b-modal id="module-modal" :title="title" cancel-title='Cancelar' :ok-title="titleBtn" @ok="handleOk($event,editId)">
+                                    <b-form @submit.stop.prevent="handleSubmit(editId)">
+                                        <div class="row mt-2">
+                                            <div class="col-12 col-md-8">
+                                                <b-form-group
+                                                    label="Nombre" 
+                                                    label-for="name-input" 
+                                                    invalid-feedback="Este campo es requerido" 
+                                                    :state="form.nameState">
+                                                    <b-form-input
+                                                        id="name-input" class="form-control" type="text" placeholder="Nombre" ref='name_input'
+                                                        v-model="form.nombre" :state="form.nameState" required>
+                                                    </b-form-input>
+                                                </b-form-group>
                                             </div>
                                         </div>
                                     </b-form>
@@ -124,7 +119,8 @@
         data() {
             return {
                 form:{
-                    nombre:''
+                    nombre:'',
+                    nameState:null
                 },
                 permisosCrud:[],
                 modulo:[],
@@ -174,7 +170,6 @@
                     await axios.post('/modulos', {nombre_modulo: this.form.nombre,},{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Módulo creado con éxito')
-                        this.closeModal('module-modal')
                         this.getModulos()
                     }).catch (e => {
                         this.$toast.error('Ocurrió un error al agregar: '+ e.message)
@@ -188,7 +183,6 @@
                     await axios.put(`/modulos/${moduloId}`, {nombre_modulo: this.form.nombre} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                     }).then(() => {
                         this.$toast.success('Módulo editado con éxito')
-                        this.closeModal('module-modal')
                         this.getModulos()
                     }).catch (e => {
                         this.$toast.error('Ocurrió un error al editar: '+ e.message)
@@ -210,21 +204,42 @@
                     this.$toast.error('No tiene permisos para eliminar')
                 }
             },
+            validarForm() {
+                const valid = this.$refs.name_input.checkValidity()
+                this.form.nameState = valid
+                return valid
+            },
+            handleOk(bvModalEvt,moduloId){
+                bvModalEvt.preventDefault()
+                this.handleSubmit(moduloId)
+            },
+            handleSubmit(moduloId) {
+                if (!this.validarForm())
+                    return
+                if(this.titleBtn == 'Agregar')
+                    this.crearModulo()
+                else
+                    this.editarModulo(moduloId)
+                this.$nextTick(() => {
+                    this.closeModal()
+                })
+            },
             onReset(){
-                this.form.nombre = ''
+                this.form.nombre = '',
+                this.form.nameState = null
             },
             closeModal(){
                 this.$bvModal.hide('module-modal')
             },
             openModal(moduloId, action){
                 this.$bvModal.show('module-modal')
+                this.onReset()
                 if(action == 'editar'){
                     this.getModulo(moduloId)
                     this.editId = moduloId
                     this.title = 'Editar Módulo'
                     this.titleBtn = 'Actualizar'
                 }else{
-                    this.onReset()
                     this.title='Añadir Nuevo Módulo'
                     this.titleBtn = 'Agregar'
                 }
