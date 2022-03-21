@@ -14,7 +14,7 @@
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
                                         <div class="ms-auto my-auto">
-                                            <a @click="openModal(rol.id_rol, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo rol</a>
+                                            <a @click="openModal('rol-modal',rol.id_rol, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo rol</a>
                                         </div>
                                     </div>
                                 </div>
@@ -35,7 +35,7 @@
                                             </div>
                                         </div>
                                         <div class="dataTable-container">
-                                              <table class="table table-flush dataTable-table">
+                                            <table class="table table-flush dataTable-table">
                                                 <thead>
                                                     <tr>
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Id</th>
@@ -51,20 +51,20 @@
                                                         <h6 class=" ms-3 mb-2 text-sm">{{rol.id_rol}}</h6>
                                                         </td>
                                                         <td>
-                                                            <p class="text-s font-weight-bold mb-0">{{rol.nombre_rol}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{rol.nombre_rol}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <p class="text-s font-weight-bold mb-0">{{rol.descripcion_rol}}</p>
                                                         </td>
                                                         <td class="align-middle text-sm">
                                                             <div>
-                                                                <a class="link cursor-pointer"></a>
+                                                                <a @click="openModal('auth-modal', rol.id_rol, 'ver')" class="link cursor-pointer">v</a>
                                                             </div>
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones">
                                                                 <div v-if="editar">
-                                                                    <a class="cursor-pointer" @click="openModal(rol.id_rol, 'editar')">
+                                                                    <a class="cursor-pointer" @click="openModal('rol-modal', rol.id_rol, 'editar')">
                                                                         <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                     </a>
                                                                 </div>
@@ -135,6 +135,72 @@
                                         </div>
                                     </b-form>
                                 </b-modal>
+                                <b-modal id='auth-modal' size="lg"  :title="title"  cancel-title='Cancelar' :ok-title="titleBtn" >
+                                    <table class="table table-flush dataTable-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Id</th>
+                                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Submódulo</th>
+                                                <th colspan="4" class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Permisos</th>
+                                                <th class="text-secondary opacity-7"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="permiso in this.permisos">
+                                                <td>
+                                                    <h6 class="ms-3 mb-2 text-sm">1</h6>
+                                                </td>
+                                                <td>
+                                                    <p class="text-sm font-weight-bold mb-0">{{permiso.nombre_submodulo}}</p>
+                                                </td>
+                                                <td class="align-middle text-md">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="" id="Check1" checked="">
+                                                        <label class="form-check-label" for="Check1">Crear</label>
+                                                    </div>
+                                                </td>
+                                                <td class="align-middle text-md">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                            Leer
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td class="align-middle text-md">
+                                                     <b-form-checkbox
+                                                        value="true"
+                                                        unchecked-value="false"
+                                                        >
+                                                       Editar
+                                                    </b-form-checkbox>
+                                                </td>
+                                                <td class="align-middle text-md">
+                                                     <b-form-checkbox
+                                                        value="true"
+                                                        unchecked-value="false"
+                                                        >
+                                                       Eliminar
+                                                    </b-form-checkbox>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <div class="contenedorAcciones">
+                                                        <div v-if="editar">
+                                                            <a class="cursor-pointer" >
+                                                                <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
+                                                            </a>
+                                                        </div>
+                                                        <div v-if="eliminar">
+                                                            <a class="trash cursor-pointer" >
+                                                                <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </b-modal>
                             </div>
                         </div>
                     </div>
@@ -163,6 +229,7 @@
                     desState:null,
                 },
                 permisosCrud:[],
+                permisos:[],
                 rol:[],
                 roles: [],
                 editId:null,
@@ -172,6 +239,10 @@
                 confirm: '',
                 title:'',
                 titleBtn:'',
+                crearProceso:'',
+                leerProceso:'',
+                editarProceso:'',
+                eliminarProceso:'',
             }
         },
         async mounted(){
@@ -254,6 +325,16 @@
                     this.$toast.error('No tiene permisos para eliminar')
                 }
             },
+            async getPermisos(rolId){
+                await axios.get(`/rol_submodulos/${rolId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then(response => {
+                    this.permisos = response.data;
+                    console.log(this.permisos)
+                })
+                .catch(e => {
+                     this.$toast.error('Ocurrió un error al cargar: ' + e.message)
+                })
+            },
             validarForm() {
                 const valid = this.$refs.name_input.checkValidity()
                 const valid2 = this.$refs.des_input.checkValidity()
@@ -288,18 +369,36 @@
             closeModal(){
                 this.$bvModal.hide('rol-modal')
             },
-            openModal(rolId, action){
-                this.$bvModal.show('rol-modal')
-                this.onReset()
-                if(action == 'editar'){
-                    this.getRol(rolId)
-                    this.editId = rolId
-                    this.title = 'Editar Rol'
-                    this.titleBtn = 'Actualizar'
+            openModal(name,rolId, action){
+                this.$bvModal.show(name)
+                if(name=='rol-modal'){
+                    this.onReset()
+                    if(action == 'editar'){
+                        this.getRol(rolId)
+                        this.editId = rolId
+                        this.title = 'Editar Rol'
+                        this.titleBtn = 'Actualizar'
+                    }else{
+                        this.title='Añadir Nuevo Rol'
+                        this.titleBtn = 'Agregar'
+                    }
                 }else{
-                    this.title='Añadir Nuevo Rol'
-                    this.titleBtn = 'Agregar'
+                    if(action == 'editar'){
+                        //this.getRol(rolId)
+                        this.editId = rolId
+                        this.title = 'Editar Permisos'
+                        this.titleBtn = 'Actualizar'
+                    }else if(action == 'ver'){
+                        this.getPermisos(rolId)
+                        this.titleBtn ='ok'
+                        this.title = 'Nombre'
+                    }
+                    else{
+                        this.title='Añadir Nuevo Permiso'
+                        this.titleBtn = 'Agregar'
+                    }
                 }
+                
             },
             showModalDelete(rolId){
                 this.confirm = ''
