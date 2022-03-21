@@ -24,13 +24,13 @@
                                     <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                                         <div class="dataTable-top">
                                             <div class="dataTable-dropdown">
-                                                <label style="width: 200px">
-                                                    <select class="form-select dataTable-selector">
-                                                        <option value="5">5</option>
-                                                        <option value="10">10</option>
-                                                        <option value="15">15</option>
+                                                <label style="width: 200px"> 
+                                                    <select class="form-select dataTable-selector" v-model='porPag'>
+                                                        <option value=5>5</option>
+                                                        <option value=10>10</option>
+                                                        <option value=15>15</option>
                                                     </select>
-                                                    Entradas por página
+                                                    Registros por página
                                                 </label>
                                             </div>
                                         </div>
@@ -44,7 +44,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="modulo in this.modulos">
+                                                    <tr v-for="modulo in paginador(this.modulos)">
                                                         <td>
                                                             <h6 class=" ms-3 mb-2 text-sm">{{modulo.id_modulo}}</h6>
                                                         </td>
@@ -70,11 +70,13 @@
                                             </table>
                                         </div>
                                         <div class="dataTable-bottom">
-                                            <div class="dataTable-info">1 de {{this.modulos.length}}</div>
+                                            <div class="dataTable-info"></div>
                                             <nav class="dataTable-pagination">
-                                                <ul class="dataTable-pagination-list">
-                                                    
-                                                </ul>
+                                                <b-pagination
+                                                v-model="pagActual"
+                                                :total-rows="this.modulos.length"
+                                                :per-page="porPag"
+                                                ></b-pagination>
                                             </nav>
                                         </div>
                                     </div>
@@ -132,6 +134,10 @@
                 confirm: '',
                 title:'',
                 titleBtn:'',
+                inicio:'',
+                fin:'',
+                pagActual:1,
+                porPag:5,
             };
         },
         async mounted(){
@@ -265,6 +271,16 @@
                     this.$toast.error(e.message)
                 })
             },  
+            paginador(items) {
+                const inicio = (this.pagActual - 1) * this.porPag;
+                const final =
+                    inicio + this.porPag > items.length
+                    ? items.length
+                    : inicio  + this.porPag;
+                this.inicio = inicio + 1
+                this.fin = final
+                return items.slice(inicio, final);
+            }
         },
     }
 </script>

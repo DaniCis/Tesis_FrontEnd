@@ -25,10 +25,10 @@
                                         <div class="dataTable-top">
                                             <div class="dataTable-dropdown">
                                                 <label style="width: 200px"> 
-                                                    <select class="form-select dataTable-selector">
-                                                        <option value="5">5</option>
-                                                        <option value="10">10</option>
-                                                        <option value="15">15</option>
+                                                    <select class="form-select dataTable-selector" v-model='porPag'>
+                                                        <option value=5>5</option>
+                                                        <option value=10>10</option>
+                                                        <option value=15>15</option>
                                                     </select>
                                                     Registros por página
                                                 </label>
@@ -46,7 +46,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="user in this.usuarios">
+                                                    <tr v-for="user in paginador(this.usuarios)">
                                                         <td>
                                                             <h6 class=" ms-3 mb-2 text-sm">{{user.id_usuario}}</h6>
                                                         </td>
@@ -83,12 +83,12 @@
                                             </table>
                                         </div>
                                         <div class="dataTable-bottom">
-                                            <div class="dataTable-info"> {{pagActual}} de {{this.usuarios.length}} </div>
+                                            <div class="dataTable-info"> {{this.inicio}} {{this.fin}} {{this.usuarios.length}} </div>
                                             <nav class="dataTable-pagination">
                                                 <b-pagination
-                                                    aria-controls="content-table"
-                                                    :table-rows="this.usuarios.length"
-                                                    :per-page="porPag"
+                                                v-model="pagActual"
+                                                :total-rows="this.usuarios.length"
+                                                :per-page="porPag"
                                                 ></b-pagination>
                                             </nav>
                                         </div>
@@ -239,6 +239,8 @@
                 confirm: '',
                 title:'',
                 titleBtn:'',
+                inicio:'',
+                fin:'',
                 pagActual:1,
                 porPag:5,
             };
@@ -449,6 +451,16 @@
                     input.type = "password";
                 }
             },
+            paginador(items) {
+                const inicio = (this.pagActual - 1) * this.porPag;
+                const final =
+                    inicio + this.porPag > items.length
+                    ? items.length
+                    : inicio  + this.porPag;
+                this.inicio = inicio + 1
+                this.fin = final
+                return items.slice(inicio, final);
+            }
         },
     }
 </script>

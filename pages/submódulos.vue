@@ -1,5 +1,5 @@
 <template>
-    <div class="g-sidenav-show  bg-gray-100 vh-completa" id='mainDashboard'>
+    <div class="g-sidenav-show bg-gray-100 vh-completa" id='mainDashboard'>
         <Sidebar />
         <Navbar :Modulo='"Administración"' :Tabla='"Submódulos"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
@@ -24,13 +24,13 @@
                                     <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                                         <div class="dataTable-top">
                                             <div class="dataTable-dropdown">
-                                                <label style="width: 200px">
-                                                    <select class="form-select dataTable-selector">
-                                                        <option value="5">5</option>
-                                                        <option value="10">10</option>
-                                                        <option value="15">15</option>
+                                                <label style="width: 200px"> 
+                                                    <select class="form-select dataTable-selector" v-model='porPag'>
+                                                        <option value=5>5</option>
+                                                        <option value=10>10</option>
+                                                        <option value=15>15</option>
                                                     </select>
-                                                    Entradas por página
+                                                    Registros por página
                                                 </label>
                                             </div>
                                         </div>
@@ -45,7 +45,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="submodulo in this.submodulos">
+                                                    <tr v-for="submodulo in paginador(this.submodulos)">
                                                         <td>
                                                             <h6 class=" ms-3 mb-2 text-sm">{{submodulo.id_submodulo}}</h6>
                                                         </td>
@@ -74,11 +74,13 @@
                                             </table>
                                         </div>
                                         <div class="dataTable-bottom">
-                                            <div class="dataTable-info">1 de {{this.submodulos.length}}</div>
+                                            <div class="dataTable-info"></div>
                                             <nav class="dataTable-pagination">
-                                                <ul class="dataTable-pagination-list">
-                                                    
-                                                </ul>
+                                                <b-pagination
+                                                v-model="pagActual"
+                                                :total-rows="this.submodulos.length"
+                                                :per-page="porPag"
+                                                ></b-pagination>
                                             </nav>
                                         </div>
                                     </div>
@@ -98,31 +100,32 @@
                                                     </b-form-input>
                                                 </b-form-group>
                                             </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-12 col-md-8">
-                                                <b-form-group v-if="titleBtn =='Agregar'"
-                                                    label="Módulo al que pertenece" 
-                                                    label-for="mod-select" 
-                                                    invalid-feedback="Seleccione un rol" 
-                                                    :state="form.rolState">
-                                                    <select 
-                                                        id="mod-select" v-model="form.modulo" class="form-select" ref='mod_select' :state="form.modState" required>
-                                                        <option disabled :value='null'>Seleccione</option>
-                                                        <option v-for="modulo in this.modulos" :value="modulo.id_modulo">
-                                                            {{modulo.nombre_modulo}}
-                                                        </option>
-                                                    </select>
-                                                </b-form-group>
-                                                <b-form-group v-else
-                                                    label="Módulo al que pertenece" 
-                                                    label-for="mod-select" >
-                                                   <select  v-model="form.rol" class="form-select">
-                                                        <option v-for="rol in this.roles" :value="rol.id_rol">
-                                                            {{rol.nombre_rol}}
-                                                        </option>
-                                                    </select>                                         
-                                                </b-form-group>
+                                            <div class="row mt-2">
+                                                <div class="col-12 col-md-8">
+                                                    <b-form-group v-if="titleBtn =='Agregar'"
+                                                        label="Módulo al que pertence" 
+                                                        label-for="mod-select" 
+                                                        invalid-feedback="Seleccione un módulo" 
+                                                        :state="form.modState">
+                                                        <select 
+                                                            id="mod-select" v-model="form.modulo" class="form-select" ref='mod_select' :state="form.modState" required>
+                                                            <option disabled :value='null'> Seleccione</option>
+                                                            <option v-for="modulo in this.modulos" :value="modulo.id_modulo">
+                                                                {{modulo.nombre_modulo}}
+                                                            </option>
+                                                        </select>
+                                                    </b-form-group>
+                                                    <b-form-group v-else
+                                                        label="Módulo al que pertence" 
+                                                        label-for="mod-select" >
+                                                        <select id="mod-select" v-model="form.modulo" class="form-select" ref='mod_select' :state="form.modState">
+                                                            <option>{{form.modulo}}</option>
+                                                            <option v-for="modulo in this.modulos" :value="modulo.id_modulo">
+                                                                {{modulo.nombre_modulo}}
+                                                            </option>
+                                                        </select>                                         
+                                                    </b-form-group>
+                                                </div>
                                             </div>
                                         </div>
                                     </b-form>
@@ -140,7 +143,7 @@
     import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
-import { getAccessToken, getSubmodulos } from '~/utils/auth';
+    import { getAccessToken, getSubmodulos } from '~/utils/auth';
     axios.defaults.baseURL ='http://10.147.17.173:5000';
     
     export default{
@@ -165,6 +168,10 @@ import { getAccessToken, getSubmodulos } from '~/utils/auth';
                 confirm: '',
                 title:'',
                 titleBtn:'',
+                inicio:'',
+                fin:'',
+                pagActual:1,
+                porPag:5,
             };
         },
         async mounted(){
@@ -194,8 +201,8 @@ import { getAccessToken, getSubmodulos } from '~/utils/auth';
                  await axios.get(`/submodulos/${submoduloId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                 }) .then(response => {
                     this.submodulo = response.data
-                    this.form.nombre = response.data.nombre_submodulo
-                    this.form.modulo = response.data.nombre_modulo
+                    this.form.nombre = this.submodulo.nombre_submodulo
+                    this.form.modulo = this.submodulo.nombre_modulo
                 }) .catch(e => {
                     this.$toast.error('Ocurrió un error al cargar: '+ e.message)
                 })
@@ -212,7 +219,7 @@ import { getAccessToken, getSubmodulos } from '~/utils/auth';
                 if(this.crear){
                     var params = {
                         nombre_submodulo: this.form.nombre,
-                        nombre_modulo:this.form.modulo
+                        modulos_id_modulo:this.form.modulo
                     }
                     await axios.post('/submodulos', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
@@ -229,7 +236,7 @@ import { getAccessToken, getSubmodulos } from '~/utils/auth';
                 if(this.editar){
                     var params = {
                         nombre_submodulo: this.form.nombre,
-                        nombre_modulo:this.form.modulo
+                        modulos_id_modulo: this.form.modulo
                     }
                     await axios.put(`/submodulos/${submoduloId}`, params ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                     }).then(() => {
@@ -323,6 +330,16 @@ import { getAccessToken, getSubmodulos } from '~/utils/auth';
                     this.$toast.error(e.message)
                 })
             },   
+            paginador(items) {
+                const inicio = (this.pagActual - 1) * this.porPag;
+                const final =
+                    inicio + this.porPag > items.length
+                    ? items.length
+                    : inicio  + this.porPag;
+                this.inicio = inicio + 1
+                this.fin = final
+                return items.slice(inicio, final);
+            }
         },
     }
 </script>

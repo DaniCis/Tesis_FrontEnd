@@ -14,7 +14,7 @@
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
                                         <div class="ms-auto my-auto">
-                                            <a @click="openModal('rol-modal',rol.id_rol, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo rol</a>
+                                            <a @click="openModal(rol.id_rol, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo rol</a>
                                         </div>
                                     </div>
                                 </div>
@@ -24,11 +24,11 @@
                                     <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns"> 
                                         <div class="dataTable-top">
                                             <div class="dataTable-dropdown">
-                                                <label style="width: 200px">
-                                                    <select class="form-select dataTable-selector">
-                                                        <option value="5">5</option>
-                                                        <option value="10">10</option>
-                                                        <option value="15">15</option>
+                                                <label style="width: 200px"> 
+                                                    <select class="form-select dataTable-selector" v-model='porPag'>
+                                                        <option value=5>5</option>
+                                                        <option value=10>10</option>
+                                                        <option value=15>15</option>
                                                     </select>
                                                     Registros por página
                                                 </label>
@@ -46,7 +46,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="rol in this.roles">
+                                                    <tr v-for="rol in paginador(this.roles)">
                                                         <td>
                                                         <h6 class=" ms-3 mb-2 text-sm">{{rol.id_rol}}</h6>
                                                         </td>
@@ -58,13 +58,13 @@
                                                         </td>
                                                         <td class="align-middle text-sm">
                                                             <div>
-                                                                <a @click="openModal('auth-modal', rol.id_rol, 'ver')" class="link cursor-pointer">v</a>
+                                                                <a class="link cursor-pointer">v</a>
                                                             </div>
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones">
                                                                 <div v-if="editar">
-                                                                    <a class="cursor-pointer" @click="openModal('rol-modal', rol.id_rol, 'editar')">
+                                                                    <a class="cursor-pointer" @click="openModal(rol.id_rol, 'editar')">
                                                                         <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                     </a>
                                                                 </div>
@@ -80,25 +80,13 @@
                                             </table>
                                         </div>
                                         <div class="dataTable-bottom">
-                                            <div class="dataTable-info">1 de {{this.roles.length}} </div>
+                                            <div class="dataTable-info"> </div>
                                             <nav class="dataTable-pagination">
-                                                <ul class="dataTable-pagination-list">
-                                                    <li class="pager">
-                                                        <a>‹</a>
-                                                    </li>
-                                                    <li class="active">
-                                                        <a>1</a>
-                                                    </li>
-                                                    <li class="pager">
-                                                        <a>2</a>
-                                                    </li>
-                                                    <li class="pager">
-                                                        <a>3</a>
-                                                    </li>
-                                                    <li class="pager">
-                                                        <a>›</a>
-                                                    </li>
-                                                </ul>
+                                                <b-pagination
+                                                v-model="pagActual"
+                                                :total-rows="this.roles.length"
+                                                :per-page="porPag"
+                                                ></b-pagination>
                                             </nav>
                                         </div>
                                     </div>
@@ -134,72 +122,6 @@
                                             </div>
                                         </div>
                                     </b-form>
-                                </b-modal>
-                                <b-modal id='auth-modal' size="lg"  :title="title"  cancel-title='Cancelar' :ok-title="titleBtn" >
-                                    <table class="table table-flush dataTable-table">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Id</th>
-                                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Submódulo</th>
-                                                <th colspan="4" class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Permisos</th>
-                                                <th class="text-secondary opacity-7"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="permiso in this.permisos">
-                                                <td>
-                                                    <h6 class="ms-3 mb-2 text-sm">1</h6>
-                                                </td>
-                                                <td>
-                                                    <p class="text-sm font-weight-bold mb-0">{{permiso.nombre_submodulo}}</p>
-                                                </td>
-                                                <td class="align-middle text-md">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="Check1" checked="">
-                                                        <label class="form-check-label" for="Check1">Crear</label>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle text-md">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                                        <label class="form-check-label" for="flexCheckDefault">
-                                                            Leer
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle text-md">
-                                                     <b-form-checkbox
-                                                        value="true"
-                                                        unchecked-value="false"
-                                                        >
-                                                       Editar
-                                                    </b-form-checkbox>
-                                                </td>
-                                                <td class="align-middle text-md">
-                                                     <b-form-checkbox
-                                                        value="true"
-                                                        unchecked-value="false"
-                                                        >
-                                                       Eliminar
-                                                    </b-form-checkbox>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <div class="contenedorAcciones">
-                                                        <div v-if="editar">
-                                                            <a class="cursor-pointer" >
-                                                                <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
-                                                            </a>
-                                                        </div>
-                                                        <div v-if="eliminar">
-                                                            <a class="trash cursor-pointer" >
-                                                                <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
                                 </b-modal>
                             </div>
                         </div>
@@ -239,10 +161,10 @@
                 confirm: '',
                 title:'',
                 titleBtn:'',
-                crearProceso:'',
-                leerProceso:'',
-                editarProceso:'',
-                eliminarProceso:'',
+                inicio:'',
+                fin:'',
+                pagActual:1,
+                porPag:5,
             }
         },
         async mounted(){
@@ -325,16 +247,6 @@
                     this.$toast.error('No tiene permisos para eliminar')
                 }
             },
-            async getPermisos(rolId){
-                await axios.get(`/rol_submodulos/${rolId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
-                }).then(response => {
-                    this.permisos = response.data;
-                    console.log(this.permisos)
-                })
-                .catch(e => {
-                     this.$toast.error('Ocurrió un error al cargar: ' + e.message)
-                })
-            },
             validarForm() {
                 const valid = this.$refs.name_input.checkValidity()
                 const valid2 = this.$refs.des_input.checkValidity()
@@ -369,36 +281,18 @@
             closeModal(){
                 this.$bvModal.hide('rol-modal')
             },
-            openModal(name,rolId, action){
-                this.$bvModal.show(name)
-                if(name=='rol-modal'){
-                    this.onReset()
-                    if(action == 'editar'){
-                        this.getRol(rolId)
-                        this.editId = rolId
-                        this.title = 'Editar Rol'
-                        this.titleBtn = 'Actualizar'
-                    }else{
-                        this.title='Añadir Nuevo Rol'
-                        this.titleBtn = 'Agregar'
-                    }
+            openModal(rolId, action){
+                this.$bvModal.show('rol-modal')
+                this.onReset()
+                if(action == 'editar'){
+                    this.getRol(rolId)
+                    this.editId = rolId
+                    this.title = 'Editar Rol'
+                    this.titleBtn = 'Actualizar'
                 }else{
-                    if(action == 'editar'){
-                        //this.getRol(rolId)
-                        this.editId = rolId
-                        this.title = 'Editar Permisos'
-                        this.titleBtn = 'Actualizar'
-                    }else if(action == 'ver'){
-                        this.getPermisos(rolId)
-                        this.titleBtn ='ok'
-                        this.title = 'Nombre'
-                    }
-                    else{
-                        this.title='Añadir Nuevo Permiso'
-                        this.titleBtn = 'Agregar'
-                    }
+                    this.title='Añadir Nuevo Rol'
+                    this.titleBtn = 'Agregar'
                 }
-                
             },
             showModalDelete(rolId){
                 this.confirm = ''
@@ -421,6 +315,16 @@
                     this.$toast.error(e.message)
                 })
             },
+            paginador(items) {
+                const inicio = (this.pagActual - 1) * this.porPag;
+                const final =
+                    inicio + this.porPag > items.length
+                    ? items.length
+                    : inicio  + this.porPag;
+                this.inicio = inicio + 1
+                this.fin = final
+                return items.slice(inicio, final);
+            }
         },
     }
 </script>
