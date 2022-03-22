@@ -83,7 +83,6 @@
                                             </table>
                                         </div>
                                         <div class="dataTable-bottom">
-                                            <div class="dataTable-info"> {{this.inicio}} {{this.fin}} {{this.usuarios.length}} </div>
                                             <nav class="dataTable-pagination">
                                                 <b-pagination
                                                 v-model="pagActual"
@@ -239,8 +238,6 @@
                 confirm: '',
                 title:'',
                 titleBtn:'',
-                inicio:'',
-                fin:'',
                 pagActual:1,
                 porPag:5,
             };
@@ -457,8 +454,6 @@
                     inicio + this.porPag > items.length
                     ? items.length
                     : inicio  + this.porPag;
-                this.inicio = inicio + 1
-                this.fin = final
                 return items.slice(inicio, final);
             }
         },

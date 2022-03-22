@@ -74,7 +74,6 @@
                                             </table>
                                         </div>
                                         <div class="dataTable-bottom">
-                                            <div class="dataTable-info"></div>
                                             <nav class="dataTable-pagination">
                                                 <b-pagination
                                                 v-model="pagActual"
@@ -103,12 +102,12 @@
                                             <div class="row mt-2">
                                                 <div class="col-12 col-md-8">
                                                     <b-form-group v-if="titleBtn =='Agregar'"
-                                                        label="Módulo al que pertence" 
+                                                        label="Módulo al que pertenece" 
                                                         label-for="mod-select" 
                                                         invalid-feedback="Seleccione un módulo" 
                                                         :state="form.modState">
                                                         <select 
-                                                            id="mod-select" v-model="form.modulo" class="form-select" ref='mod_select' :state="form.modState" required>
+                                                            id="mod-select" class="form-select" v-model="form.modulo" ref='mod_select' :state="form.modState" required>
                                                             <option disabled :value='null'> Seleccione</option>
                                                             <option v-for="modulo in this.modulos" :value="modulo.id_modulo">
                                                                 {{modulo.nombre_modulo}}
@@ -116,10 +115,9 @@
                                                         </select>
                                                     </b-form-group>
                                                     <b-form-group v-else
-                                                        label="Módulo al que pertence" 
+                                                        label="Módulo al que pertenece" 
                                                         label-for="mod-select" >
                                                         <select id="mod-select" v-model="form.modulo" class="form-select" ref='mod_select' :state="form.modState">
-                                                            <option>{{form.modulo}}</option>
                                                             <option v-for="modulo in this.modulos" :value="modulo.id_modulo">
                                                                 {{modulo.nombre_modulo}}
                                                             </option>
@@ -168,8 +166,6 @@
                 confirm: '',
                 title:'',
                 titleBtn:'',
-                inicio:'',
-                fin:'',
                 pagActual:1,
                 porPag:5,
             };
@@ -201,8 +197,8 @@
                  await axios.get(`/submodulos/${submoduloId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                 }) .then(response => {
                     this.submodulo = response.data
-                    this.form.nombre = this.submodulo.nombre_submodulo
-                    this.form.modulo = this.submodulo.nombre_modulo
+                    this.form.nombre = response.data.nombre_submodulo
+                    this.form.modulo = response.data.modulos_id_modulo
                 }) .catch(e => {
                     this.$toast.error('Ocurrió un error al cargar: '+ e.message)
                 })
@@ -336,8 +332,6 @@
                     inicio + this.porPag > items.length
                     ? items.length
                     : inicio  + this.porPag;
-                this.inicio = inicio + 1
-                this.fin = final
                 return items.slice(inicio, final);
             }
         },

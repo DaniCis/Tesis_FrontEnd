@@ -51,6 +51,9 @@ export function getSubmodulos(modulo,submodulo){
         case 'Roles':
             submodulos = submodulos.Roles
             break;
+        case 'Permisos':
+            submodulos = submodulos.Permisos
+            break;
         case 'Módulos':
             submodulos = submodulos.Módulos
             break;

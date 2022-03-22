@@ -11,15 +11,15 @@
         <div class="collapse navbar-collapse  w-auto  max-height-vh-100 h-100" id="sidenav-collapse-main">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/dashboard" id='menuDash'>
+                    <a class="nav-link active"  href="/dashboard" id='menuDash'>
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                            <b-icon icon='house' style="color:#fff"></b-icon>
+                            <b-icon icon='house' style="color:#000"></b-icon>
                         </div>
                         <span class="nav-link-text ms-1">Inicio</span>
                     </a>
                 </li>
                  <div class="nav-item" v-if="'Administración' in this.modulos">
-                    <a class="nav-link" id="submenuAdm" v-b-toggle.collapse-1 v-on:click="actAdm = !actAdm" >
+                    <a class="nav-link  nuxt-link-active" id="submenuAdm" v-b-toggle.collapse-1 v-on:click="actAdm = !actAdm" >
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='tools' style="color:#000"></b-icon>
                         </div>
@@ -50,7 +50,7 @@
                     <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Módulos</h6>
                 </li>
                 <div class="nav-item" v-if="'Compras' in this.modulos">
-                    <a class="nav-link" id="submenuCom" v-b-toggle.collapse-2 v-on:click="actComp = !actComp">
+                    <a class="nav-link  nuxt-link-active" id="submenuCom" v-b-toggle.collapse-2 v-on:click="actComp = !actComp">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='cart' style="color:#000"></b-icon>
                         </div>
@@ -72,7 +72,7 @@
                     </b-collapse>
                 </div>
                 <div class="nav-item" v-if="'Ventas' in this.modulos">
-                    <a class="nav-link" id="submenuVen" v-b-toggle.collapse-3 v-on:click="actVent = !actVent">
+                    <a class="nav-link  nuxt-link-active" id="submenuVen" v-b-toggle.collapse-3 v-on:click="actVent = !actVent">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='bag' style="color:#000"></b-icon>
                         </div>
@@ -94,7 +94,7 @@
                     </b-collapse>
                 </div>
                 <div class="nav-item" v-if="'Inventarios' in this.modulos">
-                    <a class="nav-link" id="submenuInv" v-b-toggle.collapse-4 v-on:click="actInv = !actInv">
+                    <a class="nav-link  nuxt-link-active" id="submenuInv" v-b-toggle.collapse-4 v-on:click="actInv = !actInv">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='box-seam' style="color:#000"></b-icon>
                         </div>
@@ -116,7 +116,7 @@
                     </b-collapse>
                 </div>
                 <div class="nav-item" v-if="'Movimientos' in this.modulos">
-                    <a class="nav-link" id="submenuMov" v-b-toggle.collapse-5 v-on:click="actMov= !actMov">
+                    <a class="nav-link  nuxt-link-active" id="submenuMov" v-b-toggle.collapse-5 v-on:click="actMov= !actMov">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='cash-stack' style="color:#000"></b-icon>
                         </div>
@@ -143,7 +143,7 @@
 </template>
 
 <script>
-    import { getMenuAuth, getModulo } from "~/utils/auth"
+    import { getMenuAuth,} from "~/utils/auth"
     export default{
         data(){
             return{
@@ -158,7 +158,6 @@
         },
         mounted(){
             this.modulos = getMenuAuth()
-            this.submodulos = getModulo('Compras')
         },
     }
 </script>
@@ -168,5 +167,10 @@
     }
     .card-body p{
         font-size: 0.9rem;
+    }
+    .link-active{
+        background-color: #fff!important;
+        color: #344767!important;
+        font-weight: bold!important;;
     }
 </style>

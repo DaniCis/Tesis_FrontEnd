@@ -58,7 +58,7 @@
                                                         </td>
                                                         <td class="align-middle text-sm">
                                                             <div>
-                                                                <a class="link cursor-pointer">v</a>
+                                                                <nuxt-link :to="{name:'permisos',params:{rolId: rol.id_rol}}">PPP</nuxt-link>
                                                             </div>
                                                         </td>
                                                         <td class="align-middle">
@@ -80,7 +80,6 @@
                                             </table>
                                         </div>
                                         <div class="dataTable-bottom">
-                                            <div class="dataTable-info"> </div>
                                             <nav class="dataTable-pagination">
                                                 <b-pagination
                                                 v-model="pagActual"
@@ -151,7 +150,6 @@
                     desState:null,
                 },
                 permisosCrud:[],
-                permisos:[],
                 rol:[],
                 roles: [],
                 editId:null,
@@ -161,8 +159,6 @@
                 confirm: '',
                 title:'',
                 titleBtn:'',
-                inicio:'',
-                fin:'',
                 pagActual:1,
                 porPag:5,
             }
@@ -321,8 +317,6 @@
                     inicio + this.porPag > items.length
                     ? items.length
                     : inicio  + this.porPag;
-                this.inicio = inicio + 1
-                this.fin = final
                 return items.slice(inicio, final);
             }
         },

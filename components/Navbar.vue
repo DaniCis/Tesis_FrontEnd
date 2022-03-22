@@ -19,15 +19,18 @@
            </nav>
             <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                 <div class="ms-md-auto pe-md-3"></div>
-                <ul class="navbar-nav  justify-content-end" >
+                <ul class="navbar-nav justify-content-end" >
                     <li class="nav-item d-flex align-items-center">
-                        <a class="nav-link font-weight-bold px-0" style="height: 50px">
+                        <a class="nav-link px-0 font-weight-bold">
                             <b-icon icon='person-fill' style="width: 1.3em; height: 1.3em"></b-icon>
                             <span class="d-sm-inline d-none">{{this.user}}</span>
                         </a>
                     </li>
                     <li class="nav-item px-3 d-flex align-items-center">
-                        <b-button class="btn bg-gradient-secondary" @click="logout">Cerrar Sesión</b-button>
+                        <div class="nav-link cursor-pointer" >
+                            <b-icon icon='box-arrow-right' variant="dark" style="width: 1.3em; height: 1.3em"></b-icon>
+                            <a @click="logout" class="d-sm-inline d-none">Cerrar Sesión</a>
+                        </div>
                     </li>
                 </ul>
             </div>
