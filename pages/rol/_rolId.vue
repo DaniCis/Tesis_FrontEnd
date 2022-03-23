@@ -231,7 +231,7 @@
                 }).then(response => {
                     this.submodulos = response.data;
                 }).catch(e => {
-                    this.$toast.error('Ocurrió un error al cargar: ' + e.message)
+                    this.$toast.error(e.response.data.detail)
                 })
             },
             async getPermiso(permisoId){
@@ -245,7 +245,7 @@
                     this.form.eliminar = this.permiso.eliminarProceso_autorizacion
                     this.form.id_submodulo = this.permiso.id_submodulo
                 }) .catch(e => {
-                    this.$toast.error('Ocurrió un error al cargar: '+ e.message)
+                    this.$toast.error(e.response.data.detail)
                 })
             },
             async getPermisos(rolId){
@@ -255,7 +255,7 @@
                     this.permisos = response.data.permisos;
                 })
                 .catch(e => {
-                     this.$toast.error('Ocurrió un error al cargar: ' + e.message)
+                     this.$toast.error(e.response.data.detail)
                 })
             },
             async crearPermiso(){
@@ -273,7 +273,7 @@
                         this.$toast.success('Permiso creado con éxito')
                         this.getPermisos(this.rolId)
                     }).catch (e => {
-                         this.$toast.error('Ocurrió un error al agregar: ' + e.message)
+                         this.$toast.error(e.response.data.detail)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
@@ -294,7 +294,7 @@
                         this.$toast.success('Permiso editado con éxito')
                         this.getPermisos(this.rolId)
                     }).catch (e => {
-                        this.$toast.error('Ocurrió un error al editar: '+ e.message)
+                        this.$toast.error(e.response.data.detail)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para modificar')
@@ -307,7 +307,7 @@
                         this.$toast.success('Permiso eliminado con éxito')
                         this.getPermisos(this.rolId)
                     }).catch (e => {
-                        this.$toast.error('Ocurrió un error al eliminar: '+ e.message)
+                        this.$toast.error(e.response.data.detail)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para eliminar')
@@ -391,7 +391,7 @@
                         this.eliminarPermiso(permisoId)
                     }
                 }).catch( e=>{
-                    this.$toast.error(e.message)
+                    this.$toast.error(e.response.data.detail)
                 })
             }, 
             paginador(items) {

@@ -157,7 +157,7 @@
                     this.modulo = response.data
                     this.form.nombre = response.data.nombre_modulo
                 }) .catch(e => {
-                    this.$toast.error('Ocurrió un error al cargar: '+ e.message)
+                    this.$toast.error(e.response.data.detail)
                 })
             },
             async getModulos(){
@@ -165,7 +165,7 @@
                 }).then(response => {
                     this.modulos = response.data;
                 }).catch(e => {
-                    this.$toast.error('Ocurrió un error al cargar: '+ e.message)
+                    this.$toast.error(e.response.data.detail)
                 })
             },
             async crearModulo(){
@@ -175,7 +175,7 @@
                         this.$toast.success('Módulo creado con éxito')
                         this.getModulos()
                     }).catch (e => {
-                        this.$toast.error('Ocurrió un error al agregar: '+ e.message)
+                       this.$toast.error(e.response.data.detail)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
@@ -188,7 +188,7 @@
                         this.$toast.success('Módulo editado con éxito')
                         this.getModulos()
                     }).catch (e => {
-                        this.$toast.error('Ocurrió un error al editar: '+ e.message)
+                        this.$toast.error(e.response.data.detail)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para modificar')
@@ -201,7 +201,7 @@
                         this.$toast.success('Módulo eliminado con éxito')
                         this.getModulos()
                     }).catch (e => {
-                        this.$toast.error('Ocurrió un error al eliminar: '+ e.message)
+                        this.$toast.error(e.response.data.detail)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para eliminar')
@@ -265,7 +265,7 @@
                         this.eliminarModulo(moduloId)
                     }
                 }).catch( e=>{
-                    this.$toast.error(e.message)
+                    this.$toast.error(e.response.data.detail)
                 })
             },  
             paginador(items) {

@@ -83,9 +83,8 @@
                         this.$router.push('/dashboard');
                     }
                 }).catch (e=> {
-                    //this.error = e.message
                     //this.$toast.error('Usuario o contraseña incorrecta ')
-                    this.$toast.error(e.message)
+                    this.$toast.error(e.response.data.detail)
                 })
 
             },

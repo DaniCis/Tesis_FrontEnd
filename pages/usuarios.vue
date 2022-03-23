@@ -261,7 +261,7 @@
                 }).then(response => {
                     this.roles = response.data;
                 }).catch(e => {
-                    this.$toast.error('Ocurrió un error al cargar: ' + e.message)
+                    this.$toast.error(e.response.data.detail)
                 })
             },
             async getUsuarios(){
@@ -269,7 +269,7 @@
                 }).then(response => {
                     this.usuarios = response.data;
                 }) .catch(e => {
-                    this.$toast.error('Ocurrió un error al cargar: ' + e.message)
+                    this.$toast.error(e.response.data.detail)
                 })
             },
             async getUser(usuarioId){
@@ -279,7 +279,7 @@
                     this.form.nombre = response.data.nombre_usuario
                     this.form.rol = response.data.roles_id_rol
                 }) .catch(e => {
-                    this.$toast.error('Ocurrió un error al cargar: '+ e.message)
+                    this.$toast.error(e.response.data.detail)
                 })
             },
             async crearUsuario(){
@@ -294,7 +294,7 @@
                         this.$toast.success('Usuario creado con éxito')
                         this.getUsuarios()
                     }).catch (e => {
-                        this.$toast.error('Ocurrió un error al agregar: '+ e.message)
+                        this.$toast.error(e.response.data.detail)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
@@ -307,7 +307,7 @@
                         this.$toast.success('Usuario editado con éxito')
                         this.getUsuarios()
                     }).catch (e => {
-                        this.$toast.error('Ocurrió un error al editar: '+ e.message)
+                        this.$toast.error(e.response.data.detail)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para modificar')
@@ -319,7 +319,7 @@
                     }).then(() => {
                         this.$toast.success('Contraseña editada con éxito')
                     }).catch (e => {
-                        this.$toast.error('Ocurrió un error al editar: '+ e.message)
+                        this.$toast.error(e.response.data.detail)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para modificar')
@@ -332,7 +332,7 @@
                         this.$toast.success('Usuario eliminado con éxito')
                         this.getUsuarios()
                     }).catch (e => {
-                        this.$toast.error('Ocurrió un error al eliminar: '+ e.message)
+                        this.$toast.error(e.response.data.detail)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para eliminar')
@@ -433,7 +433,7 @@
                         this.eliminarUsuario(usuarioId)
                     }
                 }).catch( e=>{
-                    this.$toast.error(e.message)
+                    this.$toast.error(e.response.data.detail)
                 })
             },
             password_show_hide(id) {

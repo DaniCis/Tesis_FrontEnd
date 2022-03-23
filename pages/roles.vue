@@ -184,7 +184,7 @@
                 }).then(response => {
                     this.roles = response.data;
                 }).catch (e=> {
-                    this.$toast.error('Ocurrió un error al cargar: ' + e.message)
+                    this.$toast.error(e.response.data.detail)
                 })
             },
             async getRol(rolId){
@@ -195,7 +195,7 @@
                     this.form.descripcion = response.data.descripcion_rol
                 })
                 .catch(e => {
-                     this.$toast.error('Ocurrió un error al cargar: ' + e.message)
+                     this.$toast.error(e.response.data.detail)
                 })
             },
             async crearRol(){
@@ -209,7 +209,7 @@
                         this.$toast.success('Rol creado con éxito')
                         this.getRoles()
                     }).catch (e => {
-                         this.$toast.error('Ocurrió un error al agregar: ' + e.message)
+                         this.$toast.error(e.response.data.detail)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
@@ -226,7 +226,7 @@
                         this.$toast.success('Rol editado con éxito')
                         this.getRoles()
                     }).catch (e => {
-                        this.$toast.error('Ocurrió un error al editar: '+ e.message)
+                        this.$toast.error(e.response.data.detail)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para modificar')
@@ -239,7 +239,7 @@
                         this.$toast.success('Rol eliminado correctamente')
                         this.getRoles()
                     }).catch (e=> {
-                        this.$toast.error('Ocurrió un error al eliminar: '+ e.message)
+                        this.$toast.error(e.response.data.detail)
                     })
                 }else{
                     this.$toast.error('No tiene permisos para eliminar')
@@ -310,7 +310,7 @@
                         this.eliminarRol(rolId)
                     }
                 }).catch( e=>{
-                    this.$toast.error(e.message)
+                    this.$toast.error(e.response.data.detail)
                 })
             },
             paginador(items) {
