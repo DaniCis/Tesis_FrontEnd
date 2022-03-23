@@ -14,7 +14,7 @@
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
                                         <div class="ms-auto my-auto">
-                                            <a @click="openModal(rol.id_rol, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo rol</a>
+                                            <a @click="openModal(null, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo rol</a>
                                         </div>
                                     </div>
                                 </div>
@@ -26,9 +26,9 @@
                                             <div class="dataTable-dropdown">
                                                 <label style="width: 200px"> 
                                                     <select class="form-select dataTable-selector" v-model='porPag'>
-                                                        <option value=5>5</option>
-                                                        <option value=10>10</option>
-                                                        <option value=15>15</option>
+                                                         <option value=10>10</option>
+                                                        <option value=20>20</option>
+                                                        <option value=30>30</option>
                                                     </select>
                                                     Registros por página
                                                 </label>
@@ -41,7 +41,7 @@
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Id</th>
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
                                                     <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Descripción</th>
-                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Permisos</th>
+                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2"></th>
                                                     <th class="text-secondary opacity-7"></th>
                                                     </tr>
                                                 </thead>
@@ -58,7 +58,9 @@
                                                         </td>
                                                         <td class="align-middle text-sm">
                                                             <div>
-                                                                <nuxt-link :to="{name:'permisos',params:{rolId: rol.id_rol}}">PPP</nuxt-link>
+                                                                <nuxt-link :to="{name:'rol-rolId',params:{rolId: rol.id_rol}}">
+                                                                    Permisos
+                                                                </nuxt-link>
                                                             </div>
                                                         </td>
                                                         <td class="align-middle">
@@ -160,7 +162,7 @@
                 title:'',
                 titleBtn:'',
                 pagActual:1,
-                porPag:5,
+                porPag:10,
             }
         },
         async mounted(){

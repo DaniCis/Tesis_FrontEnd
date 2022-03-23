@@ -8,13 +8,20 @@
                     <div class="col-12">
                         <div class="card mb-4">
                             <div class="card-header pb-0">
+                                <div class='text-sm'>
+                                    <nuxt-link to='/roles'>
+                                         <b-icon class='cursor-pointer' icon='arrow90deg-left' style="width: 1.3em; height: 1.3em"></b-icon> &nbsp;
+                                        Regresar a Roles 
+                                        </nuxt-link>
+                                        <br> <br>
+                                </div>
                                 <div class="d-lg-flex">
                                     <div>
                                         <h5>{{this.rol}}</h5>
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4" >
                                         <div class="ms-auto my-auto">
-                                            <a  class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo permiso</a>
+                                            <a @click="openModal(null, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo permiso</a>
                                         </div>
                                     </div>
                                 </div>
@@ -26,9 +33,9 @@
                                             <div class="dataTable-dropdown">
                                                 <label style="width: 200px"> 
                                                     <select class="form-select dataTable-selector" v-model='porPag'>
-                                                        <option value=5>5</option>
                                                         <option value=10>10</option>
-                                                        <option value=15>15</option>
+                                                        <option value=20>20</option>
+                                                        <option value=30>30</option>
                                                     </select>
                                                     Registros por página
                                                 </label>
@@ -111,29 +118,50 @@
                                 </div>
                                 <b-modal id="permission-modal" :title="title" cancel-title='Cancelar' :ok-title="titleBtn" @ok="handleOk($event,editId)">
                                     <b-form @submit.stop.prevent="handleSubmit(editId)">
-                                            <div class="row mt-2">
-                                                <div class="col-12 col-md-8"> 
-                                                    <b-form-group v-if="this.titleBtn=='Actualizar'"
-                                                        label="SubMódulo" 
-                                                        label-for="name-input">
-                                                        <b-form-input
-                                                            id="name-input" class="form-control" type="text" ref='name_input'
-                                                            readonly>
-                                                        </b-form-input>
-                                                    </b-form-group>
-                                                    <b-form-group v-else
-                                                        label="SubMódulo" 
-                                                        label-for="submod-select">
-                                                        <select 
-                                                        id="submod-select"  class="form-select" ref='submod_select'  required>
-                                                            <option disabled :value='null'> Seleccione</option>
-                                                            <option v-for="subm in this.submodulos" :value="subm.id_submodulo">
-                                                                {{subm.nombre_submodulo}}
-                                                            </option>
-                                                        </select>
-                                                    </b-form-group>
-                                                </div>
+                                        <div class="row mt-2">
+                                            <div class="col-12 col-md-8"> 
+                                                <b-form-group v-if="this.titleBtn=='Actualizar'"
+                                                    label="Submódulo" 
+                                                    label-for="name-input">
+                                                    <b-form-input
+                                                        id="name-input" class="form-control" type="text" ref='submod_select' v-model='form.submodulo'
+                                                        :state="form.subState" readonly>
+                                                    </b-form-input>
+                                                    <input type='hidden' v-model='form.id_submodulo'/>
+                                                </b-form-group>
+                                                <b-form-group v-else
+                                                    label="Submódulo" 
+                                                    label-for="submod-select"
+                                                    invalid-feedback="Seleccione un submódulo"
+                                                    :state="form.subState">
+                                                    <select 
+                                                        id="submod-select" class="form-select" ref='submod_select' v-model='form.submodulo' :state="form.subState" required>
+                                                        <option disabled :value='null'> Seleccione</option>
+                                                        <option v-for="subm in this.submodulos" :value="subm.id_submodulo">
+                                                            {{subm.nombre_submodulo}}
+                                                        </option>
+                                                    </select>
+                                                </b-form-group>
                                             </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-12 col-md-10">
+                                                <b-form-group label='Operaciones' label-for='group-check'>
+                                                    <b-form-checkbox inline value=true unchecked-value=false v-model="form.crear">
+                                                        Crear
+                                                    </b-form-checkbox>
+                                                    <b-form-checkbox inline value=true unchecked-value=false v-model="form.leer">
+                                                        Leer
+                                                    </b-form-checkbox>
+                                                    <b-form-checkbox inline value=true unchecked-value=false v-model="form.editar">
+                                                        Editar
+                                                    </b-form-checkbox>
+                                                    <b-form-checkbox inline value=true unchecked-value=false v-model="form.eliminar">
+                                                        Eliminar
+                                                    </b-form-checkbox>
+                                                </b-form-group>
+                                            </div>
+                                        </div>
                                     </b-form>
                                 </b-modal>
                             </div>
@@ -157,6 +185,15 @@
         middleware: 'authenticated',
         data(){
             return{
+                form:{
+                    id_submodulo:'',
+                    submodulo:'',
+                    subState:'',
+                    crear:'',
+                    leer:'',
+                    editar:'',
+                    eliminar:''
+                },
                 permisosCrud:[],
                 permisos:[],
                 permiso:[],
@@ -166,14 +203,16 @@
                 editar:null,
                 eliminar:null,
                 rol:'',
+                rolId:'',
                 confirm: '',
                 title:'',
                 titleBtn:'',
                 pagActual:1,
-                porPag:5,
+                porPag:10,
             }
         },
         async mounted(){
+            this.rolId = this.$route.params.rolId
             this.permisosCrud = getSubmodulos('Administración','Permisos')
             if('crear' in this.permisosCrud)
                 this.crear= true
@@ -182,7 +221,7 @@
             if('eliminar' in this.permisosCrud)
                 this.eliminar = true
             if('leer' in this.permisosCrud)
-                this.getPermisos(3)
+                this.getPermisos(this.rolId)
             else
                 this.$toast.error('No tiene permiso de lectura')
         },
@@ -195,77 +234,146 @@
                     this.$toast.error('Ocurrió un error al cargar: ' + e.message)
                 })
             },
-            async getPermiso(permissionId){
-
+            async getPermiso(permisoId){
+                await axios.get(`/permiso/${permisoId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                }) .then(response => {
+                    this.permiso = response.data
+                    this.form.submodulo = this.permiso.nombre_submodulo
+                    this.form.crear = this.permiso.crearProceso_autorizacion
+                    this.form.leer = this.permiso.leerProceso_autorizacion
+                    this.form.editar = this.permiso.editarProceso_autorizacion
+                    this.form.eliminar = this.permiso.eliminarProceso_autorizacion
+                    this.form.id_submodulo = this.permiso.id_submodulo
+                }) .catch(e => {
+                    this.$toast.error('Ocurrió un error al cargar: '+ e.message)
+                })
             },
             async getPermisos(rolId){
                 await axios.get(`/permisos/${rolId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
-                    this.rol= response.data.nombre_rol
+                    this.rol = response.data.nombre_rol
                     this.permisos = response.data.permisos;
-                    console.log(this.permisos)
                 })
                 .catch(e => {
                      this.$toast.error('Ocurrió un error al cargar: ' + e.message)
                 })
             },
             async crearPermiso(){
-
+                if(this.crear){
+                    var params = {
+                        submodulos_id_submodulo: this.form.submodulo,
+                        roles_id_rol: this.rolId,
+                        crearProceso_autorizacion: this.verificarCheck(this.form.crear),
+                        editarProceso_autorizacion: this.verificarCheck(this.form.editar),
+                        eliminarProceso_autorizacion: this.verificarCheck(this.form.eliminar),
+                        leerProceso_autorizacion: this.verificarCheck(this.form.leer),
+                    }
+                    await axios.post('/permiso', params)
+                    .then(() => {
+                        this.$toast.success('Permiso creado con éxito')
+                        this.getPermisos(this.rolId)
+                    }).catch (e => {
+                         this.$toast.error('Ocurrió un error al agregar: ' + e.message)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para agregar')
+                }
             },
-            async editarPermiso(){
-
+            async editarPermiso(permisoId){
+                if(this.editar){
+                    var params = {
+                        submodulos_id_submodulo: this.form.id_submodulo,
+                        roles_id_rol: this.rolId,
+                        crearProceso_autorizacion: this.verificarCheck2(this.form.crear),
+                        editarProceso_autorizacion: this.verificarCheck2(this.form.editar),
+                        eliminarProceso_autorizacion: this.verificarCheck2(this.form.eliminar),
+                        leerProceso_autorizacion: this.verificarCheck2(this.form.leer),
+                    }
+                    await axios.put(`/permiso/${permisoId}`, params)
+                    .then(() => {
+                        this.$toast.success('Permiso editado con éxito')
+                        this.getPermisos(this.rolId)
+                    }).catch (e => {
+                        this.$toast.error('Ocurrió un error al editar: '+ e.message)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para modificar')
+                }
             },
-            async eliminarPermiso(){
-
+            async eliminarPermiso(permisoId){
+                if(this.eliminar){
+                    await axios.delete(`/permiso/${permisoId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
+                        this.$toast.success('Permiso eliminado con éxito')
+                        this.getPermisos(this.rolId)
+                    }).catch (e => {
+                        this.$toast.error('Ocurrió un error al eliminar: '+ e.message)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para eliminar')
+                }
             },
-            validarForm() {
-                const valid = this.$refs.name_input.checkValidity()
-                const valid2 = this.$refs.mod_select.checkValidity()
-                this.form.nameState = valid
-                this.form.modState = valid2
-                if(valid == false || valid2 == false)
+            verificarCheck(check){
+                if(check =='')
                     return false
                 else
                     return true
             },
-            handleOk(bvModalEvt, permissionId){
-                bvModalEvt.preventDefault()
-                this.handleSubmit(permissionId)
+            verificarCheck2(check){
+                if(check == 'false')
+                    return false
+                else
+                    return true
             },
-            handleSubmit(permissionId) {
+            validarForm() {
+                const valid = this.$refs.submod_select.checkValidity()
+                this.form.subState = valid
+                if(valid == false)
+                    return false
+                else
+                    return true
+            },
+            handleOk(bvModalEvt, permisoId){
+                bvModalEvt.preventDefault()
+                this.handleSubmit(permisoId)
+            },
+            handleSubmit(permisoId) {
                 if (!this.validarForm())
                     return
                 if(this.titleBtn == 'Agregar')
                     this.crearPermiso()
                 else
-                    this.editarPermiso(permissionId)
+                    this.editarPermiso(permisoId)
                 this.$nextTick(() => {
                     this.closeModal()
                 })
             },
             onReset(){
-                this.form.nombre = ''
-                this.form.modulo= ''
-                this.form.nameState = null,
-                this.form.modState = null
+                this.form.submodulo = ''
+                this.form.leer =''
+                this.form.crear =''
+                this.form.editar=''
+                this.form.eliminar =''
+                this.form.subState = null
             },
             closeModal(){
                 this.$bvModal.hide('permission-modal')
             },
-            openModal(permissionId, action){
+            openModal(permisoId, action){
                 this.$bvModal.show('permission-modal')
                 this.onReset()
                 if(action == 'editar'){
-                    this.getPermiso(permissionId)
-                    this.editId = permissionId
+                    this.getPermiso(permisoId)
+                    this.editId = permisoId
                     this.title = 'Editar Permiso'
                     this.titleBtn = 'Actualizar'
                 }else{
+                    this.getSubmodulos()
                     this.title='Añadir Nuevo Permiso'
                     this.titleBtn = 'Agregar'
                 }
             },
-            showModalDelete(permissionId){
+            showModalDelete(permisoId){
                 this.confirm = ''
                 this.$bvModal.msgBoxConfirm('¿Está seguro que desea eliminar este registro?', {
                     title: 'Confirmar',
@@ -280,7 +388,7 @@
                 }).then(value => {
                     this.confirm = value
                     if(this.confirm == true){
-                        this.eliminarPermiso(permissionId)
+                        this.eliminarPermiso(permisoId)
                     }
                 }).catch( e=>{
                     this.$toast.error(e.message)
@@ -295,7 +403,5 @@
                 return items.slice(inicio, final);
             }
         }
-        
     }
-
 </script>

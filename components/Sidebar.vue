@@ -11,15 +11,15 @@
         <div class="collapse navbar-collapse  w-auto  max-height-vh-100 h-100" id="sidenav-collapse-main">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active"  href="/dashboard" id='menuDash'>
+                    <nuxt-link class="nav-link"  to="/dashboard" id='menuDash'>
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='house' style="color:#000"></b-icon>
                         </div>
                         <span class="nav-link-text ms-1">Inicio</span>
-                    </a>
+                    </nuxt-link>
                 </li>
                  <div class="nav-item" v-if="'Administración' in this.modulos">
-                    <a class="nav-link  nuxt-link-active" id="submenuAdm" v-b-toggle.collapse-1 v-on:click="actAdm = !actAdm" >
+                    <a class="nav-link" ref="menuAdm" v-b-toggle.collapse-1 @click="actAdm = !actAdm" :class="actAdm ? 'nuxt-link-active' :null" >
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='tools' style="color:#000"></b-icon>
                         </div>
@@ -50,7 +50,7 @@
                     <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Módulos</h6>
                 </li>
                 <div class="nav-item" v-if="'Compras' in this.modulos">
-                    <a class="nav-link  nuxt-link-active" id="submenuCom" v-b-toggle.collapse-2 v-on:click="actComp = !actComp">
+                    <a class="nav-link" id="submenuCom" v-b-toggle.collapse-2 @click="actComp = !actComp">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='cart' style="color:#000"></b-icon>
                         </div>
@@ -72,7 +72,7 @@
                     </b-collapse>
                 </div>
                 <div class="nav-item" v-if="'Ventas' in this.modulos">
-                    <a class="nav-link  nuxt-link-active" id="submenuVen" v-b-toggle.collapse-3 v-on:click="actVent = !actVent">
+                    <a class="nav-link" id="submenuVen" v-b-toggle.collapse-3 @click="actVent = !actVent">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='bag' style="color:#000"></b-icon>
                         </div>
@@ -82,7 +82,7 @@
                             <b-icon v-show='!actVent' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
-                    <b-collapse id="collapse-3"> 
+                    <b-collapse id="collapse-3" > 
                         <b-card>
                             <b-card-text v-if="'Clientes' in this.modulos.Ventas">
                                 <nuxt-link to="/clientes">Clientes</nuxt-link>
@@ -94,7 +94,7 @@
                     </b-collapse>
                 </div>
                 <div class="nav-item" v-if="'Inventarios' in this.modulos">
-                    <a class="nav-link  nuxt-link-active" id="submenuInv" v-b-toggle.collapse-4 v-on:click="actInv = !actInv">
+                    <a class="nav-link" id="submenuInv" v-b-toggle.collapse-4 @:click="actInv = !actInv">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='box-seam' style="color:#000"></b-icon>
                         </div>
@@ -116,7 +116,7 @@
                     </b-collapse>
                 </div>
                 <div class="nav-item" v-if="'Movimientos' in this.modulos">
-                    <a class="nav-link  nuxt-link-active" id="submenuMov" v-b-toggle.collapse-5 v-on:click="actMov= !actMov">
+                    <a class="nav-link" id="submenuMov" v-b-toggle.collapse-5 @:click="actMov= !actMov">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='cash-stack' style="color:#000"></b-icon>
                         </div>
@@ -126,7 +126,7 @@
                             <b-icon v-show='!actMov' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
-                    <b-collapse id="collapse-5"> 
+                    <b-collapse id="collapse-5" > 
                         <b-card>
                             <b-card-text v-if="'Movimientos' in this.modulos.Movimientos">
                                 <nuxt-link to="/movimientos">Movimientos</nuxt-link>
@@ -158,7 +158,7 @@
         },
         mounted(){
             this.modulos = getMenuAuth()
-        },
+        }
     }
 </script>
 <style>
@@ -168,9 +168,20 @@
     .card-body p{
         font-size: 0.9rem;
     }
-    .link-active{
+    .nav-item .nuxt-link-active {
         background-color: #fff!important;
         color: #344767!important;
-        font-weight: bold!important;;
+    }
+    .navbar-nav .nuxt-link-active {
+        font-weight: 600!important;
+        box-shadow: 0 20px 27px 0 rgb(0,0,0,5%);
+        border-radius: 0.5rem;
+    }
+    .nuxt-link-active .icon,
+    .icon .nuxt-link-active{
+        background-image: linear-gradient(310deg,#cb0c9f 0%, #cb0c9f 100%);
+    }
+    .nuxt-link-active .icon svg{
+        color: #fff!important;
     }
 </style>

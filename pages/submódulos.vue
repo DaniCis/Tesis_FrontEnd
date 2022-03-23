@@ -14,7 +14,7 @@
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
                                         <div class="ms-auto my-auto">
-                                            <a @click="openModal(submodulo.id_submodulo, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo submódulo</a>
+                                            <a @click="openModal(null, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo submódulo</a>
                                         </div>
                                     </div>
                                 </div>
@@ -26,9 +26,9 @@
                                             <div class="dataTable-dropdown">
                                                 <label style="width: 200px"> 
                                                     <select class="form-select dataTable-selector" v-model='porPag'>
-                                                        <option value=5>5</option>
                                                         <option value=10>10</option>
-                                                        <option value=15>15</option>
+                                                        <option value=20>20</option>
+                                                        <option value=30>30</option>
                                                     </select>
                                                     Registros por página
                                                 </label>
@@ -167,11 +167,10 @@
                 title:'',
                 titleBtn:'',
                 pagActual:1,
-                porPag:5,
+                porPag:10,
             };
         },
         async mounted(){
-            await this.getModulos()
             this.permisosCrud = getSubmodulos('Administración','Submódulos')
             if('editar' in this.permisosCrud)
                 this.editar = true
@@ -295,6 +294,7 @@
             openModal(submoduloId, action){
                 this.$bvModal.show('submodule-modal')
                 this.onReset()
+                this.getModulos()
                 if(action == 'editar'){
                     this.getSubmodulo(submoduloId)
                     this.editId = submoduloId

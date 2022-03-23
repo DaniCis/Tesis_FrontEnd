@@ -28,8 +28,9 @@
                     </li>
                     <li class="nav-item px-3 d-flex align-items-center">
                         <div class="nav-link cursor-pointer" >
-                            <b-icon icon='box-arrow-right' variant="dark" style="width: 1.3em; height: 1.3em"></b-icon>
-                            <a @click="logout" class="d-sm-inline d-none">Cerrar Sesión</a>
+                            <b-icon @click="logout" icon='box-arrow-right' variant="dark" style="width: 1.3em; height: 1.3em"></b-icon>
+                            <a @click="logout" class="d-sm-inline d-none">
+                            Cerrar Sesión</a>
                         </div>
                     </li>
                 </ul>
