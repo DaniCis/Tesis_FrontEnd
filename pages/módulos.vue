@@ -170,7 +170,7 @@
             },
             async crearModulo(){
                 if(this.crear){
-                    await axios.post('/modulos', {nombre_modulo: this.form.nombre,},{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.post('/modulos', {nombre_modulo: this.form.nombre} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Módulo creado con éxito')
                         this.getModulos()

@@ -255,7 +255,7 @@
                     this.permisos = response.data.permisos;
                 })
                 .catch(e => {
-                     this.$toast.error(e.response.data.detail)
+                    this.$toast.error(e.response.data.detail)
                 })
             },
             async crearPermiso(){
@@ -268,8 +268,8 @@
                         eliminarProceso_autorizacion: this.verificarCheck(this.form.eliminar),
                         leerProceso_autorizacion: this.verificarCheck(this.form.leer),
                     }
-                    await axios.post('/permiso', params)
-                    .then(() => {
+                    await axios.post('/permiso', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
                         this.$toast.success('Permiso creado con éxito')
                         this.getPermisos(this.rolId)
                     }).catch (e => {
@@ -289,8 +289,8 @@
                         eliminarProceso_autorizacion: this.verificarCheck2(this.form.eliminar),
                         leerProceso_autorizacion: this.verificarCheck2(this.form.leer),
                     }
-                    await axios.put(`/permiso/${permisoId}`, params)
-                    .then(() => {
+                    await axios.put(`/permiso/${permisoId}`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
                         this.$toast.success('Permiso editado con éxito')
                         this.getPermisos(this.rolId)
                     }).catch (e => {

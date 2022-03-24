@@ -168,7 +168,7 @@
         async mounted(){
             this.permisosCrud = getSubmodulos('Administración','Roles')
             if('crear' in this.permisosCrud)
-                this.crear= true
+                this.crear = true
             if('editar' in this.permisosCrud)
                 this.editar = true
             if('eliminar' in this.permisosCrud)
@@ -204,8 +204,8 @@
                         nombre_rol: this.form.nombre,
                         descripcion_rol:this.form.descripcion
                     }
-                    await axios.post('/roles', params)
-                    .then(() => {
+                    await axios.post('/roles', params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
                         this.$toast.success('Rol creado con éxito')
                         this.getRoles()
                     }).catch (e => {
@@ -221,8 +221,8 @@
                         nombre_rol: this.form.nombre,
                         descripcion_rol:this.form.descripcion
                     }
-                    await axios.put(`/roles/${rolId}`, params)
-                    .then(() => {
+                    await axios.put(`/roles/${rolId}`, params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
                         this.$toast.success('Rol editado con éxito')
                         this.getRoles()
                     }).catch (e => {
