@@ -46,9 +46,14 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    <tr v-if="error">
+                                                        <td colspan="4">
+                                                            <h6 class="ms-3 mb-2 text-sm text-center">No existen registros</h6> 
+                                                        </td>       
+                                                    </tr>
                                                     <tr v-for="rol in paginador(this.roles)">
                                                         <td>
-                                                        <h6 class=" ms-3 mb-2 text-sm">{{rol.id_rol}}</h6>
+                                                            <h6 class=" ms-3 mb-2 text-sm">{{rol.id_rol}}</h6>
                                                         </td>
                                                         <td>
                                                             <p class="text-sm font-weight-bold mb-0">{{rol.nombre_rol}}</p>
@@ -158,6 +163,7 @@
                 crear:null,
                 editar:null,
                 eliminar:null,
+                error:false,
                 confirm: '',
                 title:'',
                 titleBtn:'',
@@ -182,7 +188,10 @@
             async getRoles(){
                 await axios.get('/roles',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
-                    this.roles = response.data;
+                    if(response.data !=null)
+                        this.roles = response.data
+                    else
+                        this.error=true
                 }).catch (e=> {
                     this.$toast.error(e.response.data.detail)
                 })

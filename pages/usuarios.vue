@@ -46,6 +46,11 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    <tr v-if="error">
+                                                        <td colspan="4">
+                                                            <h6 class="ms-3 mb-2 text-sm text-center">No existen registros</h6> 
+                                                        </td>       
+                                                    </tr>
                                                     <tr v-for="user in paginador(this.usuarios)">
                                                         <td>
                                                             <h6 class=" ms-3 mb-2 text-sm">{{user.id_usuario}}</h6>
@@ -230,6 +235,7 @@
                 usuarios:[],
                 show:true,
                 show2:true,
+                error:false,
                 editId:null,
                 crear:null,
                 editar: null,
@@ -267,7 +273,10 @@
             async getUsuarios(){
                 await axios.get('/usuarios',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
-                    this.usuarios = response.data;
+                    if(response.data !=null)
+                        this.usuarios = response.data
+                    else
+                        this.error = true
                 }) .catch(e => {
                     this.$toast.error(e.response.data.detail)
                 })

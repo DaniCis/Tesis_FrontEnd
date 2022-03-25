@@ -84,7 +84,8 @@
                     }
                 }).catch (e=> {
                     //this.$toast.error('Usuario o contraseña incorrecta ')
-                    this.$toast.error(e.response.data.detail)
+                    //this.$toast.error(e.response.data.detail)
+                    this.$toast.error(e.message)
                 })
 
             },

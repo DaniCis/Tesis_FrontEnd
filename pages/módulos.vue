@@ -44,6 +44,11 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    <tr v-if="error">
+                                                        <td colspan="3">
+                                                            <h6 class="ms-3 mb-2 text-sm text-center">No existen registros</h6> 
+                                                        </td>       
+                                                    </tr>
                                                     <tr v-for="modulo in paginador(this.modulos)">
                                                         <td>
                                                             <h6 class=" ms-3 mb-2 text-sm">{{modulo.id_modulo}}</h6>
@@ -130,6 +135,7 @@
                 eliminar:null,
                 crear:null,
                 editId:null,
+                error:false,
                 confirm: '',
                 title:'',
                 titleBtn:'',
@@ -163,7 +169,10 @@
             async getModulos(){
                 await axios.get('/modulos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
-                    this.modulos = response.data;
+                    if(response.data!=null)
+                        this.modulos = response.data;
+                    else
+                        this.error=true
                 }).catch(e => {
                     this.$toast.error(e.response.data.detail)
                 })

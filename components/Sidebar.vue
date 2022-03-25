@@ -19,7 +19,7 @@
                     </nuxt-link>
                 </li>
                  <div class="nav-item" v-if="'Administración' in this.modulos">
-                    <a class="nav-link" ref="menuAdm" v-b-toggle.collapse-1 @click="actAdm = !actAdm" :class="actAdm ? 'nuxt-link-active' :null" >
+                    <a class="nav-link" ref="menuAdm" v-b-toggle.collapse-1 @click="actAdm = !actAdm"  >
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='tools' style="color:#000"></b-icon>
                         </div>

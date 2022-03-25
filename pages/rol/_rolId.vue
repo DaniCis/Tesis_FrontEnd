@@ -52,6 +52,11 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    <tr v-if="error">
+                                                        <td colspan="4">
+                                                            <h6 class="ms-3 mb-2 text-sm text-center">No existen registros</h6> 
+                                                        </td>       
+                                                    </tr>
                                                     <tr v-for="permiso in paginador(this.permisos)">
                                                         <td>
                                                             <h6 class="ms-3 mb-2 text-sm">{{permiso.id_permiso}}</h6>
@@ -61,28 +66,28 @@
                                                         </td>
                                                         <td class="align-middle text-md">
                                                             <div class="form-check">
-                                                                <input v-if="permiso.crearProceso_autorizacion == true" class="form-check-input" type="checkbox" id="check1" disabled checked>
+                                                                <input v-if="permiso.crear_autorizacion == true" class="form-check-input" type="checkbox" id="check1" disabled checked>
                                                                 <input v-else class="form-check-input" type="checkbox" disabled id="check1" >
                                                                 <label class="form-check-label" for="check1">Crear</label>
                                                             </div>
                                                         </td>
                                                         <td class="align-middle text-md">
                                                             <div class="form-check">
-                                                                <input v-if="permiso.leerProceso_autorizacion == true" class="form-check-input" type="checkbox" disabled id="check2" checked>
+                                                                <input v-if="permiso.leer_autorizacion == true" class="form-check-input" type="checkbox" disabled id="check2" checked>
                                                                 <input v-else class="form-check-input" type="checkbox" disabled id="check2">
                                                                 <label class="form-check-label" for="check2">Leer</label>
                                                             </div>
                                                         </td>
                                                         <td class="align-middle text-md">
                                                             <div class="form-check">
-                                                                <input v-if="permiso.editarProceso_autorizacion == true" class="form-check-input" type="checkbox" disabled id="check3" checked>
+                                                                <input v-if="permiso.editar_autorizacion == true" class="form-check-input" type="checkbox" disabled id="check3" checked>
                                                                 <input v-else class="form-check-input" type="checkbox" disabled id="check3">
                                                                 <label class="form-check-label" for="check3">Editar</label>
                                                             </div>
                                                         </td>
                                                         <td class="align-middle text-md">
                                                             <div class="form-check">
-                                                                <input v-if="permiso.eliminarProceso_autorizacion == true" class="form-check-input" type="checkbox" disabled id="check4" checked>
+                                                                <input v-if="permiso.eliminar_autorizacion == true" class="form-check-input" type="checkbox" disabled id="check4" checked>
                                                                 <input v-else class="form-check-input" type="checkbox" disabled id="check3">
                                                                 <label class="form-check-label" for="check4">Eliminar</label>
                                                             </div>
@@ -202,6 +207,7 @@
                 crear:null,
                 editar:null,
                 eliminar:null,
+                error:false,
                 rol:'',
                 rolId:'',
                 confirm: '',
@@ -239,20 +245,25 @@
                 }) .then(response => {
                     this.permiso = response.data
                     this.form.submodulo = this.permiso.nombre_submodulo
-                    this.form.crear = this.permiso.crearProceso_autorizacion
-                    this.form.leer = this.permiso.leerProceso_autorizacion
-                    this.form.editar = this.permiso.editarProceso_autorizacion
-                    this.form.eliminar = this.permiso.eliminarProceso_autorizacion
+                    this.form.crear = this.permiso.crear_autorizacion
+                    this.form.leer = this.permiso.leer_autorizacion
+                    this.form.editar = this.permiso.editar_autorizacion
+                    this.form.eliminar = this.permiso.eliminar_autorizacion
                     this.form.id_submodulo = this.permiso.id_submodulo
                 }) .catch(e => {
                     this.$toast.error(e.response.data.detail)
                 })
             },
             async getPermisos(rolId){
+                this.error = false,
                 await axios.get(`/permisos/${rolId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
-                    this.rol = response.data.nombre_rol
-                    this.permisos = response.data.permisos;
+                    if(response.data != null ){
+                        this.rol = response.data.nombre_rol
+                        this.permisos = response.data.permisos
+                        console.log(this.permisos)
+                    }else
+                        this.error = true
                 })
                 .catch(e => {
                     this.$toast.error(e.response.data.detail)
@@ -263,10 +274,10 @@
                     var params = {
                         submodulos_id_submodulo: this.form.submodulo,
                         roles_id_rol: this.rolId,
-                        crearProceso_autorizacion: this.verificarCheck(this.form.crear),
-                        editarProceso_autorizacion: this.verificarCheck(this.form.editar),
-                        eliminarProceso_autorizacion: this.verificarCheck(this.form.eliminar),
-                        leerProceso_autorizacion: this.verificarCheck(this.form.leer),
+                        crear_autorizacion: this.verificarCheck(this.form.crear),
+                        editar_autorizacion: this.verificarCheck(this.form.editar),
+                        eliminar_autorizacion: this.verificarCheck(this.form.eliminar),
+                        leer_autorizacion: this.verificarCheck(this.form.leer),
                     }
                     await axios.post('/permiso', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
@@ -284,10 +295,10 @@
                     var params = {
                         submodulos_id_submodulo: this.form.id_submodulo,
                         roles_id_rol: this.rolId,
-                        crearProceso_autorizacion: this.verificarCheck2(this.form.crear),
-                        editarProceso_autorizacion: this.verificarCheck2(this.form.editar),
-                        eliminarProceso_autorizacion: this.verificarCheck2(this.form.eliminar),
-                        leerProceso_autorizacion: this.verificarCheck2(this.form.leer),
+                        crear_autorizacion: this.verificarCheck2(this.form.crear),
+                        editar_autorizacion: this.verificarCheck2(this.form.editar),
+                        eliminar_autorizacion: this.verificarCheck2(this.form.eliminar),
+                        leer_autorizacion: this.verificarCheck2(this.form.leer),
                     }
                     await axios.put(`/permiso/${permisoId}`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {

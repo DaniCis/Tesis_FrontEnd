@@ -45,6 +45,11 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    <tr v-if="error">
+                                                        <td colspan="4">
+                                                            <h6 class="ms-3 mb-2 text-sm text-center">No existen registros</h6> 
+                                                        </td>       
+                                                    </tr>
                                                     <tr v-for="submodulo in paginador(this.submodulos)">
                                                         <td>
                                                             <h6 class=" ms-3 mb-2 text-sm">{{submodulo.id_submodulo}}</h6>
@@ -163,6 +168,7 @@
                 editar: null,
                 crear:null,
                 eliminar:null,
+                error:false,
                 confirm: '',
                 title:'',
                 titleBtn:'',
@@ -205,7 +211,10 @@
             async getSubmodulos(){
                 await axios.get('/submodulos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
-                    this.submodulos = response.data;
+                    if(response.data != null)
+                        this.submodulos = response.data
+                    else
+                        this.error = true
                 }).catch(e => {
                     this.$toast.error(e.response.data.detail)
                 })
