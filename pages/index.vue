@@ -6,7 +6,8 @@
           <div class="container">
             <div class="row">
               <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
-                <div class="card card-plain mt-8">
+                <div class="card card-plain mt-7">
+                  <!--<img src="@/assets/img/logo.jpeg" style="height: 20%; width: auto">-->
                   <div class="card-header pb-0 text-left bg-transparent">
                       <h3 class="font-weight-bolder text-info text-gradient">Bienvenido</h3>
                       <p class="mb-0">Ingrese sus credenciales de acceso</p>
@@ -38,7 +39,7 @@
               <div class="col-md-6" style="position: static">
                 <div class="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
                     <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6">
-                        <img src="@/assets/img/curved6.jpg"/>
+                        <img src="@/assets/img/fondoLogin.jpg"/>
                     </div>
                 </div>
               </div>
