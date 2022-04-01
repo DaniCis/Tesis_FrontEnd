@@ -6,8 +6,8 @@
           <div class="container">
             <div class="row">
               <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
-                <div class="card card-plain mt-7">
-                  <!--<img src="@/assets/img/logo.jpeg" style="height: 20%; width: auto">-->
+                <div class="card card-plain mt-6">
+                  <img src="@/assets/img/logo.jpeg" style="height: 20%; width: auto"><br>
                   <div class="card-header pb-0 text-left bg-transparent">
                       <h3 class="font-weight-bolder text-info text-gradient">Bienvenido</h3>
                       <p class="mb-0">Ingrese sus credenciales de acceso</p>
@@ -28,7 +28,6 @@
                                 </span>
                             </div>
                         </div>
-                        <Notification :message="error" v-if="error"/>
                         <div class="text-center">
                             <b-button type="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">Iniciar</b-button>
                         </div>
@@ -82,10 +81,9 @@
                   this.password=''
                   this.$router.push('/dashboard');
               }
-          }).catch (e=> {
-              //this.$toast.error('Usuario o contraseña incorrecta ')
-              //this.$toast.error(e.response.data.detail)
-              this.$toast.error(e.message)
+          }).catch (e=> { 
+            this.$toast.error(e.response.data.detail + '. Vuelva a ingresar')
+            //this.$toast.error(e.message)
           })
       },
       password_show_hide() {

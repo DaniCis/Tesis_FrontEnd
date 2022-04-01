@@ -115,24 +115,21 @@
                         </b-card>
                     </b-collapse>
                 </div>
-                <div class="nav-item" v-if="'Movimientos' in this.modulos">
-                    <a class="nav-link" id="submenuMov" v-b-toggle.collapse-5 @:click="actMov= !actMov">
+                <div class="nav-item" v-if="'Garantías' in this.modulos">
+                    <a class="nav-link" id="submenuMov" v-b-toggle.collapse-5 @:click="actGar= !actGar">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='cash-stack' style="color:#000"></b-icon>
                         </div>
-                        <span class="nav-link-text ms-1">Contabilidad&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span class="nav-link-text ms-1">Garantías&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         <span class="ms-4" >
-                            <b-icon v-show='actMov' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon v-show='!actMov' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
+                            <b-icon v-show='actGar' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-show='!actGar' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
                         </span>
                     </a>
                     <b-collapse id="collapse-5" > 
                         <b-card>
-                            <b-card-text v-if="'Movimientos' in this.modulos.Movimientos">
-                                <nuxt-link to="/movimientos">Movimientos</nuxt-link>
-                            </b-card-text>
-                            <b-card-text v-if="'TiposMovimientos' in this.modulos.Movimientos">
-                                <nuxt-link to="/tiposmovimientos">Tipos de Movimientos</nuxt-link>
+                            <b-card-text v-if="'Garantías' in this.modulos.Garantías">
+                                <nuxt-link to="/Garantías">Garantías</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>
@@ -147,7 +144,7 @@
     export default{
         data(){
             return{
-                actMov:true,
+                actGar:true,
                 actInv:true,
                 actVent:true,
                 actComp:true,
