@@ -16,8 +16,8 @@
                                 </div>
                                 <div class="d-lg-flex mt-4">
                                     <div>
-                                        <h4>Producto tal</h4>
-                                        <p class="text-sm">Editar producto</p>
+                                        <h4>Nuevo Producto</h4>
+                                        <p class="text-sm">Añadir producto</p>
                                     </div>
                                 </div>
                             </div>
@@ -27,10 +27,12 @@
                                         <div class="col-12 col-md-8 col-lg-6">
                                             <b-form-group 
                                                 label="Nombre" 
-                                                label-for="name-input">
+                                                label-for="name-input" 
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.nombreState">
                                                 <b-form-input  
                                                     id="name-input" class="form-control" type="text" placeholder="Nombre" ref='name_input'
-                                                    v-model="form.nombre">
+                                                    v-model="form.nombre" :state="form.nombreState" required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -39,10 +41,12 @@
                                         <div class="col-12 col-md-8 col-lg-6">
                                             <b-form-group 
                                                 label="Detalle" 
-                                                label-for="detail-input">
+                                                label-for="detail-input" 
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.detalleState">
                                                 <b-form-input  
                                                     id="detail-input" class="form-control" type="text" placeholder="Detalle" ref='detail_input'
-                                                    v-model="form.detalle">
+                                                    v-model="form.detalle" :state="form.detalleState" required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -51,20 +55,24 @@
                                         <div class="col-12 col-md-4 col-lg-3">
                                             <b-form-group 
                                                 label="Marca" 
-                                                label-for="marca-input">
+                                                label-for="marca-input" 
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.marcaState">
                                                 <b-form-input  
                                                     id="marca-input" class="form-control" type="text" placeholder="Marca" ref='marca_input'
-                                                    v-model="form.marca">
+                                                    v-model="form.marca" :state="form.marcaState" required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
                                         <div class="col-12 col-md-4 col-lg-3 mt-2 mt-md-0">
                                             <b-form-group 
                                                 label="Unidad de Medida" 
-                                                label-for="med-input">
+                                                label-for="med-input" 
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.medidaState">
                                                 <b-form-input  
                                                     id="med-input" class="form-control" type="text" placeholder="Unidad de medida" ref='med_input'
-                                                    v-model="form.unidad">
+                                                    v-model="form.medida" :state="form.medidaState" required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -72,10 +80,12 @@
                                     <div class="row mt-2">
                                         <b-form-group 
                                             label="Cantidad" 
-                                            label-for="cantidad-input">
+                                            label-for="cantidad-input" 
+                                            invalid-feedback="Este campo es requerido" 
+                                            :state="form.cantidadState">
                                             <b-form-spinbutton  
                                                 id="cantidad-input" class="form-control" type="text" min='1' placeholder='1' ref='cantidad_input'
-                                                v-model="form.cantidad" inline>
+                                                v-model="form.cantidad" :state="form.cantidadState" required inline>
                                             </b-form-spinbutton>
                                         </b-form-group>
                                     </div>
@@ -83,10 +93,13 @@
                                         <div class="col-12 col-md-8 col-lg-6">
                                             <b-form-group 
                                                 label="Imagen"  
-                                                label-for="imagen">
+                                                label-for="imagen"
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.imagenState">
                                                 <b-form-file
                                                     v-model="form.imagen"
                                                     id='imagen'
+                                                    :state="Boolean(form.imagen)"
                                                     placeholder="Seleccione una imagen o arrastrela aqui..."
                                                     drop-placeholder="Suelte la imagen aqui"
                                                     ></b-form-file>
@@ -96,7 +109,7 @@
                                     <div class="row mt-4">
                                         <div class="col-12 col-md-8 col-lg-6">
                                             <div class="d-flex ms-auto mb-3">
-                                                <a class="btn bg-gradient-primary mb-0"> Actualizar</a>
+                                                <a class="btn bg-gradient-primary mb-0"> Agregar</a>
                                             </div>
                                         </div>
                                     </div>
@@ -124,41 +137,28 @@
             return{
                 form:{
                     nombre:'',
+                    nombreState:'',
                     detalle:'',
+                    detalleState:'',
                     marca:'',
-                    unidad:'',
-                    cantidad:'',
+                    marcaState:'',
+                    medida:'',
+                    medidaState:'',
                     imagen:[],
+                    imagenState:''
                 },
-                producto:[],
-                editar:null,
+                crear: null,
             }
         },
         mounted(){
             this.permisosCrud = getSubmodulos('Inventarios','Productos')
-            if('editar' in this.permisosCrud)
-                this.editar = true
-            if('leer' in this.permisosCrud)
-                this.getProducto()
+            if('crear' in this.permisosCrud)
+                this.crear = true
         },
 
         methods:{
-            async getProducto(productId){
-                await axios.get(`/productos/${productId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
-                }).then(response => {
-                    this.form.nombre = response.data.nombre_producto
-                    this.form.detalle = response.data.detalle_producto
-                    this.form.marca = response.data.marca_producto
-                    this.form.unidad = response.data.unidadMedida_producto
-                    this.form.cantidad = response.data.cantidad_producto
-                    this.form.imagen = response.data.imagen_producto
-                })
-                .catch(e => {
-                     this.$toast.error(e.response.data.detail)
-                })
-            },
-            async editarProducto(productId){
-                if(this.editar){
+            async crearProducto(){
+                if(this.crear){
                     var params = {
                         nombre_producto: this.form.nombre,
                         detalle_producto:this.form.detalle,
@@ -167,15 +167,15 @@
                         cantidad_producto:this.form.cantidad,
                         imagen_producto: this.form.imagen
                     }
-                    await axios.put(`/productos/${productId}`, params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.post('/productos', params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
-                        this.$toast.success('Producto editado con éxito')
+                        this.$toast.success('Producto creado con éxito')
                         this.$router.push('/productos');
                     }).catch (e => {
-                        this.$toast.error(e.response.data.detail)
+                         this.$toast.error(e.response.data.detail)
                     })
                 }else{
-                    this.$toast.error('No tiene permisos para modificar')
+                    this.$toast.error('No tiene permisos para agregar')
                 }
             },
         },

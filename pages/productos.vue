@@ -14,7 +14,7 @@
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
                                         <div class="ms-auto my-auto">
-                                            <a  class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo Producto</a>
+                                            <a href="nuevoProducto.vue" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo Producto</a>
                                         </div>
                                     </div>
                                 </div>
@@ -79,7 +79,10 @@
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones" >
                                                                 <div v-if="editar">
-                                                                    <a class="cursor-pointer">
+                                                                    <nuxt-link :to="{name:'producto-productId',params:{productId: product.id_producto}}">
+                                                                        <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
+                                                                    </nuxt-link>
+                                                                    <a class="cursor-pointer" >
                                                                         <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                     </a>
                                                                 </div>
@@ -152,24 +155,6 @@
                 }).catch (e=> {
                     this.$toast.error(e.response.data.detail)
                 })
-            },
-             
-            async crearProducto(){
-                if(this.crear){
-                    var params = {
-                        nombre_rol: this.form.nombre,
-                        descripcion_rol:this.form.descripcion
-                    }
-                    await axios.post('/productos', params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
-                    }).then(() => {
-                        this.$toast.success('Producto creado con éxito')
-                        this.getProductos()
-                    }).catch (e => {
-                         this.$toast.error(e.response.data.detail)
-                    })
-                }else{
-                    this.$toast.error('No tiene permisos para agregar')
-                }
             },
             paginador(items) {
                 const inicio = (this.pagActual - 1) * this.porPag;
