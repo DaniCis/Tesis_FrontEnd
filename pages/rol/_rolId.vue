@@ -12,10 +12,9 @@
                                     <nuxt-link to='/roles'>
                                          <b-icon class='cursor-pointer' icon='arrow90deg-left' style="width: 1.3em; height: 1.3em"></b-icon> &nbsp;
                                         Regresar a Roles 
-                                        </nuxt-link>
-                                        <br> <br>
+                                    </nuxt-link>
                                 </div>
-                                <div class="d-lg-flex">
+                                <div class="d-lg-flex mt-4">
                                     <div>
                                         <h5>{{this.rol}}</h5>
                                     </div>

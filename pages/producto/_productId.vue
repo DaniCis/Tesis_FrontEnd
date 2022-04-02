@@ -8,16 +8,110 @@
                     <div class="col-12">
                         <div class="card mb-4">
                             <div class="card-header pb-0">
-                                 <div class="d-lg-flex">
+                                <div class='text-sm'>
+                                    <nuxt-link to='/productos'>
+                                         <b-icon class='cursor-pointer' icon='arrow90deg-left' style="width: 1.3em; height: 1.3em"></b-icon> &nbsp;
+                                        Regresar
+                                    </nuxt-link>
+                                </div>
+                                <div class="d-lg-flex mt-4">
                                     <div>
-                                        <h5>Productos</h5>
+                                        <h4>Producto tal</h4>
+                                        <p class="text-sm">Editar producto</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body px-0 pt-0 pb-2">
-                                <b-form>
-                                    <div>
-                                        
+                                <b-form class="ps-4 mt-3">
+                                    <div class="row mt-2">
+                                        <div class="col-12 col-md-8 col-lg-6">
+                                            <b-form-group 
+                                                label="Nombre" 
+                                                label-for="name-input" 
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.nombreState">
+                                                <b-form-input  
+                                                    id="name-input" class="form-control" type="text" placeholder="Nombre" ref='name_input'
+                                                    v-model="form.nombre" :state="form.nombreState" required>
+                                                </b-form-input>
+                                            </b-form-group>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-12 col-md-8 col-lg-6">
+                                            <b-form-group 
+                                                label="Detalle" 
+                                                label-for="detail-input" 
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.detalleState">
+                                                <b-form-input  
+                                                    id="detail-input" class="form-control" type="text" placeholder="Detalle" ref='detail_input'
+                                                    v-model="form.detalle" :state="form.detalleState" required>
+                                                </b-form-input>
+                                            </b-form-group>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-12 col-md-4 col-lg-3">
+                                            <b-form-group 
+                                                label="Marca" 
+                                                label-for="marca-input" 
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.marcaState">
+                                                <b-form-input  
+                                                    id="marca-input" class="form-control" type="text" placeholder="Marca" ref='marca_input'
+                                                    v-model="form.marca" :state="form.marcaState" required>
+                                                </b-form-input>
+                                            </b-form-group>
+                                        </div>
+                                        <div class="col-12 col-md-4 col-lg-3 mt-2 mt-md-0">
+                                            <b-form-group 
+                                                label="Unidad de Medida" 
+                                                label-for="med-input" 
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.medidaState">
+                                                <b-form-input  
+                                                    id="med-input" class="form-control" type="text" placeholder="Unidad de medida" ref='med_input'
+                                                    v-model="form.medida" :state="form.medidaState" required>
+                                                </b-form-input>
+                                            </b-form-group>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <b-form-group 
+                                            label="Cantidad" 
+                                            label-for="cantidad-input" 
+                                            invalid-feedback="Este campo es requerido" 
+                                            :state="form.cantidadState">
+                                            <b-form-spinbutton  
+                                                id="cantidad-input" class="form-control" type="text" min='1' placeholder='1' ref='cantidad_input'
+                                                v-model="form.cantidad" :state="form.cantidadState" required inline>
+                                            </b-form-spinbutton>
+                                        </b-form-group>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-12 col-md-8 col-lg-6">
+                                            <b-form-group 
+                                                label="Imagen"  
+                                                label-for="imagen"
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.imagenState">
+                                                <b-form-file
+                                                    v-model="file1"
+                                                    id='imagen'
+                                                    :state="Boolean(form.imagen)"
+                                                    placeholder="Seleccione una imagen o arrastrela aqui..."
+                                                    drop-placeholder="Suelte la imagen aqui"
+                                                    ></b-form-file>
+                                            </b-form-group>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-12 col-md-8 col-lg-6">
+                                            <div class="d-flex ms-auto mb-3">
+                                                <a class="btn bg-gradient-primary mb-0"> Actualizar</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </b-form>
                             </div>
@@ -42,18 +136,21 @@
         data(){
             return{
                 form:{
-                    nombre,
-                    detalle,
-                    marca,
-                    unidad,
-                    cantidad,
-                    imagen
-                },
-                producto:[]
+                    nombre:'',
+                    nombreState:'',
+                    detalle:'',
+                    detalleState:'',
+                    marca:'',
+                    marcaState:'',
+                    medida:'',
+                    medidaState:'',
+                    imagen:[],
+                    imagenState:''
+                }
             }
         },
         mounted(){
-            getProducto()
+            //getProducto()
         },
 
         methods:{
