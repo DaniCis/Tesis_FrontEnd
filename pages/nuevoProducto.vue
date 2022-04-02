@@ -24,7 +24,7 @@
                             <div class="card-body px-0 pt-0 pb-2">
                                 <b-form class="ps-4 mt-3">
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-8 col-lg-6">
+                                        <div class="col-12 col-md-8 col-lg-5">
                                             <b-form-group 
                                                 label="Nombre" 
                                                 label-for="name-input" 
@@ -38,7 +38,7 @@
                                         </div>
                                     </div>
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-8 col-lg-6">
+                                        <div class="col-12 col-md-8 col-lg-5">
                                             <b-form-group 
                                                 label="Detalle" 
                                                 label-for="detail-input" 
@@ -52,7 +52,7 @@
                                         </div>
                                     </div>
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-4 col-lg-3">
+                                        <div class="col-12 col-md-4 col-lg-2">
                                             <b-form-group 
                                                 label="Marca" 
                                                 label-for="marca-input" 
@@ -64,7 +64,7 @@
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
-                                        <div class="col-12 col-md-4 col-lg-3 mt-2 mt-md-0">
+                                        <div class="col-12 col-md-4 col-lg-2 mt-2 mt-md-0">
                                             <b-form-group 
                                                 label="Unidad de Medida" 
                                                 label-for="med-input" 
@@ -90,7 +90,7 @@
                                         </b-form-group>
                                     </div>
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-8 col-lg-6">
+                                        <div class="col-12 col-md-8 col-lg-5">
                                             <b-form-group 
                                                 label="Imagen"  
                                                 label-for="imagen"
@@ -128,7 +128,7 @@
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
     import { getAccessToken, getSubmodulos } from '~/utils/auth';
-    axios.defaults.baseURL ='http://10.147.17.173:5000';
+    axios.defaults.baseURL ='http://10.147.17.173:5002';
     
     export default{
         components: { Sidebar, Navbar },
@@ -151,9 +151,9 @@
             }
         },
         mounted(){
-            this.permisosCrud = getSubmodulos('Inventarios','Productos')
+            /*this.permisosCrud = getSubmodulos('Inventarios','Productos')
             if('crear' in this.permisosCrud)
-                this.crear = true
+                this.crear = true*/
         },
 
         methods:{

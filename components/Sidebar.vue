@@ -87,12 +87,12 @@
                                 <nuxt-link to="/clientes">Clientes</nuxt-link>
                             </b-card-text>
                             <b-card-text v-if="'Ventas' in this.modulos.Ventas">
-                                <nuxt-link to="/ventas">Facturas</nuxt-link>
+                                <nuxt-link to="/ventas">Ordenes de Ventas</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>
                 </div>
-                <div class="nav-item" v-if="'Inventarios' in this.modulos">
+                <div class="nav-item" v-if="'Inventario' in this.modulos">
                     <a class="nav-link" id="submenuInv" v-b-toggle.collapse-4 @:click="actInv = !actInv">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <b-icon icon='box-seam' style="color:#000"></b-icon>
@@ -105,11 +105,11 @@
                     </a>
                     <b-collapse id="collapse-4"> 
                         <b-card>
-                            <b-card-text v-if="'Items' in this.modulos.Inventarios">
-                                <nuxt-link to="/items">Productos</nuxt-link>
+                            <b-card-text v-if="'Items' in this.modulos.Inventario">
+                                <nuxt-link to="/items">Items</nuxt-link>
                             </b-card-text>
-                            <b-card-text v-if="'Inventarios' in this.modulos.Inventarios">
-                                <nuxt-link to="/inventarios">Bodegas</nuxt-link>
+                            <b-card-text v-if="'Productos' in this.modulos.Inventario">
+                                <nuxt-link to="/Productos">Productos</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>

@@ -6,6 +6,7 @@ export function getAccessToken(){
 export function getDecoded(){
     if(getAccessToken()){
         let token_decoded = jwt_decode(getAccessToken()) 
+        console.log(token_decoded)
         return token_decoded
     }
 }
@@ -35,8 +36,8 @@ export function getModulo(modulo){
         case 'Garantías':
             modulos = menu.Garantías
             break;
-        case 'Inventarios':
-            modulos = menu.Inventarios
+        case 'Inventario':
+            modulos = menu.Inventario
             break;
     }
     return modulos
@@ -69,8 +70,8 @@ export function getSubmodulos(modulo,submodulo){
         case 'Productos':
             submodulos = submodulos.Productos
             break;
-        case 'Item':
-            submodulos = submodulos.Item
+        case 'Items':
+            submodulos = submodulos.Items
             break;
     }
     return submodulos
