@@ -1,7 +1,7 @@
 <template>
     <div class="g-sidenav-show bg-gray-10 vh-completa" id='mainDashboard'> 
         <Sidebar />
-        <Navbar :Modulo='"Inventarios"' :Tabla='"Productos"'/>
+        <Navbar :Modulo='"Inventario"' :Tabla='"Productos"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -16,20 +16,20 @@
                                 </div>
                                 <div class="d-lg-flex mt-4">
                                     <div>
-                                        <h4>Producto tal</h4>
+                                        <h4>Producto {{this.form.nombre}}</h4>
                                         <p class="text-sm">Editar producto</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body px-0 pt-0 pb-2">
-                                <b-form class="ps-4 mt-3">
+                                <b-form class="ps-4 mt-3" @submit="editarProducto" @reset="onReset">
                                     <div class="row mt-2">
                                         <div class="col-12 col-md-8 col-lg-5">
                                             <b-form-group 
                                                 label="Nombre" 
                                                 label-for="name-input">
                                                 <b-form-input  
-                                                    id="name-input" class="form-control" type="text" placeholder="Nombre" ref='name_input'
+                                                    id="name-input" class="form-control" type="text" placeholder="Nombre"
                                                     v-model="form.nombre">
                                                 </b-form-input>
                                             </b-form-group>
@@ -41,19 +41,19 @@
                                                 label="Detalle" 
                                                 label-for="detail-input">
                                                 <b-form-input  
-                                                    id="detail-input" class="form-control" type="text" placeholder="Detalle" ref='detail_input'
+                                                    id="detail-input" class="form-control" type="text" placeholder="Detalle" 
                                                     v-model="form.detalle">
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
                                     </div>
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-4 col-lg-2">
+                                        <div class="col-12 col-md-4 col-lg-3">
                                             <b-form-group 
                                                 label="Marca" 
                                                 label-for="marca-input">
                                                 <b-form-input  
-                                                    id="marca-input" class="form-control" type="text" placeholder="Marca" ref='marca_input'
+                                                    id="marca-input" class="form-control" type="text" placeholder="Marca" 
                                                     v-model="form.marca">
                                                 </b-form-input>
                                             </b-form-group>
@@ -63,21 +63,11 @@
                                                 label="Unidad de Medida" 
                                                 label-for="med-input">
                                                 <b-form-input  
-                                                    id="med-input" class="form-control" type="text" placeholder="Unidad de medida" ref='med_input'
+                                                    id="med-input" class="form-control" type="text" placeholder="Unidad de medida" 
                                                     v-model="form.unidad">
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <b-form-group 
-                                            label="Cantidad" 
-                                            label-for="cantidad-input">
-                                            <b-form-spinbutton  
-                                                id="cantidad-input" class="form-control" type="text" min='1' placeholder='1' ref='cantidad_input'
-                                                v-model="form.cantidad" inline>
-                                            </b-form-spinbutton>
-                                        </b-form-group>
                                     </div>
                                     <div class="row mt-2">
                                         <div class="col-12 col-md-8 col-lg-5">
@@ -89,14 +79,24 @@
                                                     id='imagen'
                                                     placeholder="Seleccione una imagen o arrástrela aquí..."
                                                     drop-placeholder="Suelte la imagen aquí"
+                                                    size='sm'
                                                     ></b-form-file>
                                             </b-form-group>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-12 col-md-8 col-lg-5">
+                                            <label for="tags-basic">Archivos </label>
+                                            <b-form-tags 
+                                                input-id="tags-basic" class='form-control' placeholder="" 
+                                                v-model="form.imagen" disabled>
+                                            </b-form-tags>
                                         </div>
                                     </div>
                                     <div class="row mt-4">
                                         <div class="col-12 col-md-8 col-lg-6">
                                             <div class="d-flex ms-auto mb-3">
-                                                <a class="btn bg-gradient-primary mb-0"> Actualizar</a>
+                                                <b-button type='submit' class="btn bg-gradient-primary mb-0"> Actualizar</b-button>
                                             </div>
                                         </div>
                                     </div>
@@ -127,30 +127,30 @@
                     detalle:'',
                     marca:'',
                     unidad:'',
-                    cantidad:'',
-                    imagen:[],
+                    imagen:['hola','hola3', 'jola'],
                 },
                 producto:[],
                 editar:null,
+                productId:'',
             }
         },
         mounted(){
-            this.permisosCrud = getSubmodulos('Inventarios','Productos')
+            this.productId = this.$route.params.productId
+            this.permisosCrud = getSubmodulos('Inventario','Productos')
             if('editar' in this.permisosCrud)
                 this.editar = true
             if('leer' in this.permisosCrud)
-                this.getProducto()
+                this.getProducto(this.productId)
         },
 
         methods:{
             async getProducto(productId){
-                await axios.get(`/productos/${productId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get(`/producto/${productId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.form.nombre = response.data.nombre_producto
                     this.form.detalle = response.data.detalle_producto
                     this.form.marca = response.data.marca_producto
                     this.form.unidad = response.data.unidadMedida_producto
-                    this.form.cantidad = response.data.cantidad_producto
                     this.form.imagen = response.data.imagen_producto
                 })
                 .catch(e => {
@@ -164,12 +164,12 @@
                         detalle_producto:this.form.detalle,
                         marca_producto:this.form.marca,
                         unidadMedida_producto:this.form.unidad,
-                        cantidad_producto:this.form.cantidad,
                         imagen_producto: this.form.imagen
                     }
-                    await axios.put(`/productos/${productId}`, params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.put(`/producto/${productId}`, params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Producto editado con éxito')
+                        this.onReset()
                         this.$router.push('/productos');
                     }).catch (e => {
                         this.$toast.error(e.response.data.detail)
@@ -178,6 +178,13 @@
                     this.$toast.error('No tiene permisos para modificar')
                 }
             },
+            onReset(){
+                this.form.nombre = ''
+                this.form.detalle = ''
+                this.form.marca =''
+                this.form.unidad =''
+                this.form.imagen= []
+            }
         },
     }
 </script>

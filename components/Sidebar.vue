@@ -65,7 +65,7 @@
                                 <nuxt-link to="/proveedores">Proveedores</nuxt-link>
                             </b-card-text>
                             <b-card-text v-if="'Compras' in this.modulos.Compras">
-                                <nuxt-link to="/compras">Adquisiciones</nuxt-link>
+                                <nuxt-link to="/compras">Orden de compra</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>
@@ -87,7 +87,7 @@
                                 <nuxt-link to="/clientes">Clientes</nuxt-link>
                             </b-card-text>
                             <b-card-text v-if="'Ventas' in this.modulos.Ventas">
-                                <nuxt-link to="/ventas">Ordenes de Ventas</nuxt-link>
+                                <nuxt-link to="/ventas">Orden de Ventas</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>

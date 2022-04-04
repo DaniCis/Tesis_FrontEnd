@@ -1,7 +1,7 @@
 <template>
     <div class="g-sidenav-show bg-gray-10 vh-completa" id='mainDashboard'> 
         <Sidebar />
-        <Navbar :Modulo='"Inventarios"' :Tabla='"Productos"'/>
+        <Navbar :Modulo='"Inventario"' :Tabla='"Productos"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -14,7 +14,9 @@
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
                                         <div class="ms-auto my-auto">
-                                            <a href="nuevoProducto.vue" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo Producto</a>
+                                            <nuxt-link :to="{name:'nuevoProducto'}" class="btn bg-gradient-primary btn-sm mb-0">
+                                            +&nbsp; Nuevo Producto
+                                            </nuxt-link>
                                         </div>
                                     </div>
                                 </div>
@@ -39,12 +41,12 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
-                                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Imagen</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Detalle</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Marca</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Unidad</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Unidad Medida</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Cantidad</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Imagen</th>
                                                         <th class="text-secondary opacity-7"></th>
                                                     </tr>
                                                 </thead>
@@ -57,6 +59,12 @@
                                                     <tr v-for="product in paginador(this.productos)">
                                                         <td>
                                                             <h6 class=" ms-3 mb-2 text-sm">{{product.id_producto}}</h6>
+                                                        </td>
+                                                        <!--<td class="align-middle text-center text-sm">
+                                                            <b-img :src="require(`/${product.nombre_producto}/${product.imagen_producto[0]}`)"></b-img>
+                                                        </td>-->
+                                                        <td>
+                                                            <p>{{product.imagen_producto}}</p>
                                                         </td>
                                                         <td>
                                                             <p class="text-s font-weight-bold mb-0">{{product.nombre_producto}}</p>
@@ -73,18 +81,12 @@
                                                         <td class="align-middle text-center text-sm">
                                                             <p class="text-s font-weight-bold mb-0">{{product.cantidad_producto}}</p>
                                                         </td>
-                                                        <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{product.imagen_producto}}</p>
-                                                        </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones" >
                                                                 <div v-if="editar">
                                                                     <nuxt-link :to="{name:'producto-productId',params:{productId: product.id_producto}}">
                                                                         <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                     </nuxt-link>
-                                                                    <a class="cursor-pointer" >
-                                                                        <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
-                                                                    </a>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -148,6 +150,7 @@
             async getProductos(){
                 await axios.get('/productos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
+                    console.log(response.data)
                     if(response.data !=null)
                         this.productos = response.data
                     else

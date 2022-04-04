@@ -1,7 +1,7 @@
 <template>
     <div class="g-sidenav-show bg-gray-10 vh-completa" id='mainDashboard'> 
         <Sidebar />
-        <Navbar :Modulo='"Inventarios"' :Tabla='"Productos"'/>
+        <Navbar :Modulo='"Inventario"' :Tabla='"Productos"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -22,17 +22,17 @@
                                 </div>
                             </div>
                             <div class="card-body px-0 pt-0 pb-2">
-                                <b-form class="ps-4 mt-3">
+                                <b-form class="ps-4 mt-3" @submit.stop.prevent="handleSubmit()" novalidate>
                                     <div class="row mt-2">
                                         <div class="col-12 col-md-8 col-lg-5">
                                             <b-form-group 
                                                 label="Nombre" 
                                                 label-for="name-input" 
-                                                invalid-feedback="Este campo es requerido" 
+                                                invalid-feedback="Este campo es requerido"
                                                 :state="form.nombreState">
                                                 <b-form-input  
                                                     id="name-input" class="form-control" type="text" placeholder="Nombre" ref='name_input'
-                                                    v-model="form.nombre" :state="form.nombreState" required>
+                                                    v-model="form.nombre"  :state="form.nombreState" required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -52,7 +52,7 @@
                                         </div>
                                     </div>
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-4 col-lg-2">
+                                        <div class="col-12 col-md-4 col-lg-3">
                                             <b-form-group 
                                                 label="Marca" 
                                                 label-for="marca-input" 
@@ -78,18 +78,6 @@
                                         </div>
                                     </div>
                                     <div class="row mt-2">
-                                        <b-form-group 
-                                            label="Cantidad" 
-                                            label-for="cantidad-input" 
-                                            invalid-feedback="Este campo es requerido" 
-                                            :state="form.cantidadState">
-                                            <b-form-spinbutton  
-                                                id="cantidad-input" class="form-control" type="text" min='1' placeholder='1' ref='cantidad_input'
-                                                v-model="form.cantidad" :state="form.cantidadState" required inline>
-                                            </b-form-spinbutton>
-                                        </b-form-group>
-                                    </div>
-                                    <div class="row mt-2">
                                         <div class="col-12 col-md-8 col-lg-5">
                                             <b-form-group 
                                                 label="Imagen"  
@@ -99,6 +87,7 @@
                                                 <b-form-file
                                                     v-model="form.imagen"
                                                     id='imagen'
+                                                    multiple
                                                     :state="Boolean(form.imagen)"
                                                     placeholder="Seleccione una imagen o arrastrela aqui..."
                                                     drop-placeholder="Suelte la imagen aqui"
@@ -109,7 +98,7 @@
                                     <div class="row mt-4">
                                         <div class="col-12 col-md-8 col-lg-6">
                                             <div class="d-flex ms-auto mb-3">
-                                                <a class="btn bg-gradient-primary mb-0"> Agregar</a>
+                                                <b-button class="btn bg-gradient-primary mb-0" type='submit'> Agregar</b-button>
                                             </div>
                                         </div>
                                     </div>
@@ -137,47 +126,89 @@
             return{
                 form:{
                     nombre:'',
-                    nombreState:'',
+                    nombreState:null,
                     detalle:'',
-                    detalleState:'',
+                    detalleState:null,
                     marca:'',
-                    marcaState:'',
+                    marcaState:null,
                     medida:'',
-                    medidaState:'',
+                    medidaState:null,
                     imagen:[],
-                    imagenState:''
                 },
                 crear: null,
             }
         },
         mounted(){
-            /*this.permisosCrud = getSubmodulos('Inventarios','Productos')
+            this.permisosCrud = getSubmodulos('Inventario','Productos')
             if('crear' in this.permisosCrud)
-                this.crear = true*/
+                this.crear = true
         },
-
         methods:{
+            guardarImagen(name){
+                if (process.server) {
+                    var fs = require('fs');
+                    var dir = '/'+ name ;
+                    console.log(dir)
+                    /*if (!fs.existsSync(dir)){
+                        fs.mkdirSync(dir);
+                    }*/
+                }
+            },
             async crearProducto(){
                 if(this.crear){
+                    var filenames = []
+                    const files = this.form.imagen
+                    for (var i = 0; i < files.length; i++) {
+                        filenames.push(files[i].name);  
+                    }
                     var params = {
                         nombre_producto: this.form.nombre,
                         detalle_producto:this.form.detalle,
                         marca_producto:this.form.marca,
-                        unidadMedida_producto:this.form.unidad,
-                        cantidad_producto:this.form.cantidad,
-                        imagen_producto: this.form.imagen
+                        unidadMedida_producto:this.form.medida,
+                        imagen_producto: filenames
                     }
-                    await axios.post('/productos', params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    this.guardarImagen(this.form.nombre)
+                    console.log(params)
+                    /*
+                    await axios.post('/producto', params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Producto creado con éxito')
+                        this.onReset()
                         this.$router.push('/productos');
                     }).catch (e => {
                          this.$toast.error(e.response.data.detail)
-                    })
+                    })*/
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
                 }
             },
+            validarForm() {
+                const valid = this.$refs.name_input.checkValidity()
+                const valid2 = this.$refs.detail_input.checkValidity()
+                const valid3 = this.$refs.marca_input.checkValidity()
+                const valid4 = this.$refs.med_input.checkValidity()
+                this.form.nombreState = valid
+                this.form.detalleState = valid2
+                this.form.marcaState = valid3
+                this.form.medidaState = valid4
+                if(valid == false || valid2 == false || valid3 == false || valid4 == false)
+                    return false
+                else
+                    return true
+            },
+            handleSubmit() {
+                if (!this.validarForm())
+                    return
+                this.crearProducto()
+            },
+            onReset(){
+                this.form.nombre = '',
+                this.form.detalle = '',
+                this.form.marca ='',
+                this.form.unidad =''
+                this.form.imagen=[]
+            }
         },
     }
 </script>

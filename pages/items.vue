@@ -1,7 +1,7 @@
 <template>
     <div class="g-sidenav-show bg-gray-10 vh-completa" id='mainDashboard'> 
         <Sidebar />
-        <Navbar :Modulo='"Inventarios"' :Tabla='"Productos"'/>
+        <Navbar :Modulo='"Inventario"' :Tabla='"Items"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -11,11 +11,6 @@
                                  <div class="d-lg-flex">
                                     <div>
                                         <h5>Items</h5>
-                                    </div>
-                                    <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
-                                        <div class="ms-auto my-auto">
-                                            <a href="nuevoItem.vue" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo Item</a>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -39,12 +34,12 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
-                                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Detalle</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Marca</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Unidad</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Cantidad</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Imagen</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Producto Asociado</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">PVP</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">PVD</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Num Serie</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Descuento</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Estado</th>
                                                         <th class="text-secondary opacity-7"></th>
                                                     </tr>
                                                 </thead>
@@ -62,19 +57,19 @@
                                                             <p class="text-s font-weight-bold mb-0">{{item.nombre_item}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.detalle_item}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">${{item.pvp_item}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.marca_item}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">${{item.pvd_item}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.unidadMedida_item}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{item.numeroSerie_item}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.cantidad_item}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{item.descuento_item}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.imagen_item}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{item.estado_item}}</p>
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones" >
@@ -134,7 +129,7 @@
             }
         },
         async mounted(){
-            this.permisosCrud = getSubmodulos('Inventario','Items')
+            /*this.permisosCrud = getSubmodulos('Inventario','Items')
             if('crear' in this.permisosCrud)
                 this.crear = true
             if('editar' in this.permisosCrud)
@@ -142,12 +137,14 @@
             if('leer' in this.permisosCrud)
                 this.getItems()
             else
-                this.$toast.error('No tiene permiso de lectura')
+                this.$toast.error('No tiene permiso de lectura')*/
+            this.getItems()
         },
         methods:{
             async getItems(){
                 await axios.get('/items',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
+                    console.log(response.data)
                     if(response.data !=null)
                         this.items = response.data
                     else
