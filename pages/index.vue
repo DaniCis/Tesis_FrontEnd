@@ -53,7 +53,6 @@
 <script>
   import axios from 'axios';
   import Notification from '@/components/Notification'
-  axios.defaults.baseURL ='http://10.147.17.173:5001';
   
   export default{
     components:{Notification},

@@ -143,7 +143,6 @@
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
     import { getAccessToken, getSubmodulos } from '~/utils/auth';
-    axios.defaults.baseURL ='http://10.147.17.173:5000';
     
     export default{
         components: { Sidebar, Navbar },
@@ -186,7 +185,7 @@
         },
         methods: {
             async getRoles(){
-                await axios.get('/roles',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get('http://10.147.17.173:5000/roles',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     if(response.data !=null)
                         this.roles = response.data
@@ -197,7 +196,7 @@
                 })
             },
             async getRol(rolId){
-                await axios.get(`/roles/${rolId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get(`http://10.147.17.173:5000/roles/${rolId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.rol = response.data;
                     this.form.nombre = response.data.nombre_rol
@@ -213,7 +212,7 @@
                         nombre_rol: this.form.nombre,
                         descripcion_rol:this.form.descripcion
                     }
-                    await axios.post('/roles', params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.post('http://10.147.17.173:5000/roles', params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Rol creado con éxito')
                         this.getRoles()
@@ -230,7 +229,7 @@
                         nombre_rol: this.form.nombre,
                         descripcion_rol:this.form.descripcion
                     }
-                    await axios.put(`/roles/${rolId}`, params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.put(`http://10.147.17.173:5000/roles/${rolId}`, params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Rol editado con éxito')
                         this.getRoles()
@@ -243,7 +242,7 @@
             },
             async eliminarRol(rolId){
                 if(this.eliminar){
-                    await axios.delete(`/roles/${rolId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.delete(`http://10.147.17.173:5000/roles/${rolId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Rol eliminado correctamente')
                         this.getRoles()

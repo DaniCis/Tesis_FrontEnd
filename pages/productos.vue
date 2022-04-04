@@ -66,7 +66,7 @@
                                                         <td>
                                                             <p>{{product.imagen_producto}}</p>
                                                         </td>
-                                                        <td>
+                                                        <td class="align-middle text-center text-sm">
                                                             <p class="text-s font-weight-bold mb-0">{{product.nombre_producto}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
@@ -119,7 +119,6 @@
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
     import { getAccessToken, getSubmodulos } from '~/utils/auth';
-    axios.defaults.baseURL ='http://10.147.17.173:5002';
     
     export default{
         components: { Sidebar, Navbar },
@@ -148,7 +147,7 @@
         },
         methods:{
             async getProductos(){
-                await axios.get('/productos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get('http://10.147.17.173:5002/productos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     console.log(response.data)
                     if(response.data !=null)

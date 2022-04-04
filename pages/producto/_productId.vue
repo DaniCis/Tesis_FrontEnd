@@ -22,7 +22,7 @@
                                 </div>
                             </div>
                             <div class="card-body px-0 pt-0 pb-2">
-                                <b-form class="ps-4 mt-3" @submit="editarProducto" @reset="onReset">
+                                <b-form class="ps-4 mt-3" >
                                     <div class="row mt-2">
                                         <div class="col-12 col-md-8 col-lg-5">
                                             <b-form-group 
@@ -96,7 +96,7 @@
                                     <div class="row mt-4">
                                         <div class="col-12 col-md-8 col-lg-6">
                                             <div class="d-flex ms-auto mb-3">
-                                                <b-button type='submit' class="btn bg-gradient-primary mb-0"> Actualizar</b-button>
+                                                <b-button @click="editarProducto" class="btn bg-gradient-primary mb-0"> Actualizar</b-button>
                                             </div>
                                         </div>
                                     </div>
@@ -115,7 +115,6 @@
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
     import { getAccessToken, getSubmodulos } from '~/utils/auth';
-    axios.defaults.baseURL ='http://10.147.17.173:5002';
     
     export default{
         components: { Sidebar, Navbar },
@@ -127,7 +126,7 @@
                     detalle:'',
                     marca:'',
                     unidad:'',
-                    imagen:['hola','hola3', 'jola'],
+                    imagen:[],
                 },
                 producto:[],
                 editar:null,
@@ -145,7 +144,7 @@
 
         methods:{
             async getProducto(productId){
-                await axios.get(`/producto/${productId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get(`http://10.147.17.173:5002/producto/${productId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.form.nombre = response.data.nombre_producto
                     this.form.detalle = response.data.detalle_producto
@@ -166,7 +165,7 @@
                         unidadMedida_producto:this.form.unidad,
                         imagen_producto: this.form.imagen
                     }
-                    await axios.put(`/producto/${productId}`, params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.put(`http://10.147.17.173:5002/producto/${productId}`, params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Producto editado con éxito')
                         this.onReset()

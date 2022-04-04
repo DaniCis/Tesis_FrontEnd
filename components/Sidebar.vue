@@ -105,11 +105,11 @@
                     </a>
                     <b-collapse id="collapse-4"> 
                         <b-card>
-                            <b-card-text v-if="'Items' in this.modulos.Inventario">
-                                <nuxt-link to="/items">Items</nuxt-link>
-                            </b-card-text>
                             <b-card-text v-if="'Productos' in this.modulos.Inventario">
-                                <nuxt-link to="/Productos">Productos</nuxt-link>
+                                <nuxt-link to="/productos">Productos</nuxt-link>
+                            </b-card-text>
+                             <b-card-text v-if="'Bodega' in this.modulos.Inventario">
+                                <nuxt-link to="/items">Bodega</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>

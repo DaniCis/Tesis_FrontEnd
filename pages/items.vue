@@ -1,7 +1,7 @@
 <template>
     <div class="g-sidenav-show bg-gray-10 vh-completa" id='mainDashboard'> 
         <Sidebar />
-        <Navbar :Modulo='"Inventario"' :Tabla='"Items"'/>
+        <Navbar :Modulo='"Inventario"' :Tabla='"Bodega"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -69,7 +69,12 @@
                                                             <p class="text-s font-weight-bold mb-0">{{item.descuento_item}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.estado_item}}</p>
+                                                            <div v-if="item.estado_item == 'Disponible'"> 
+                                                                <span class="badge badge-sm bg-gradient-success">Disponible</span>
+                                                            </div>
+                                                            <div v-else>
+                                                                <span class="badge badge-sm bg-gradient-danger">Vendido</span>
+                                                            </div>
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones" >
@@ -77,9 +82,6 @@
                                                                     <nuxt-link :to="{name:'item-itemId',params:{itemId: item.id_item}}">
                                                                         <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                     </nuxt-link>
-                                                                    <a class="cursor-pointer" >
-                                                                        <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
-                                                                    </a>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -112,7 +114,6 @@
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
     import { getAccessToken, getSubmodulos } from '~/utils/auth';
-    axios.defaults.baseURL ='http://10.147.17.173:5002';
     
     export default{
         components: { Sidebar, Navbar },
@@ -129,7 +130,7 @@
             }
         },
         async mounted(){
-            /*this.permisosCrud = getSubmodulos('Inventario','Items')
+            this.permisosCrud = getSubmodulos('Inventario','Bodega')
             if('crear' in this.permisosCrud)
                 this.crear = true
             if('editar' in this.permisosCrud)
@@ -137,12 +138,11 @@
             if('leer' in this.permisosCrud)
                 this.getItems()
             else
-                this.$toast.error('No tiene permiso de lectura')*/
-            this.getItems()
+                this.$toast.error('No tiene permiso de lectura')
         },
         methods:{
             async getItems(){
-                await axios.get('/items',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get('http://10.147.17.173:5002/items',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     console.log(response.data)
                     if(response.data !=null)

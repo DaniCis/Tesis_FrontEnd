@@ -117,7 +117,6 @@
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
     import { getAccessToken, getSubmodulos } from '~/utils/auth';
-    axios.defaults.baseURL ='http://10.147.17.173:5002';
     
     export default{
         components: { Sidebar, Navbar },
@@ -144,16 +143,6 @@
                 this.crear = true
         },
         methods:{
-            guardarImagen(name){
-                if (process.server) {
-                    var fs = require('fs');
-                    var dir = '/'+ name ;
-                    console.log(dir)
-                    /*if (!fs.existsSync(dir)){
-                        fs.mkdirSync(dir);
-                    }*/
-                }
-            },
             async crearProducto(){
                 if(this.crear){
                     var filenames = []
@@ -168,17 +157,15 @@
                         unidadMedida_producto:this.form.medida,
                         imagen_producto: filenames
                     }
-                    this.guardarImagen(this.form.nombre)
                     console.log(params)
-                    /*
-                    await axios.post('/producto', params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.post('http://10.147.17.173:5002/producto', params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Producto creado con éxito')
                         this.onReset()
                         this.$router.push('/productos');
                     }).catch (e => {
                          this.$toast.error(e.response.data.detail)
-                    })*/
+                    })
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
                 }

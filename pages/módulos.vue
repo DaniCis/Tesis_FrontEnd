@@ -117,7 +117,6 @@
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
     import { getAccessToken, getSubmodulos } from '~/utils/auth';
-    axios.defaults.baseURL ='http://10.147.17.173:5000';
     
     export default{
         components: { Sidebar, Navbar },
@@ -158,7 +157,7 @@
         },
         methods: {
             async getModulo(moduloId){
-                await axios.get(`/modulos/${moduloId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                await axios.get(`http://10.147.17.173:5000/modulos/${moduloId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                 }) .then(response => {
                     this.modulo = response.data
                     this.form.nombre = response.data.nombre_modulo
@@ -167,7 +166,7 @@
                 })
             },
             async getModulos(){
-                await axios.get('/modulos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get('http://10.147.17.173:5000/modulos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     if(response.data!=null)
                         this.modulos = response.data;
@@ -179,7 +178,7 @@
             },
             async crearModulo(){
                 if(this.crear){
-                    await axios.post('/modulos', {nombre_modulo: this.form.nombre} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.post('http://10.147.17.173:5000/modulos', {nombre_modulo: this.form.nombre} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Módulo creado con éxito')
                         this.getModulos()
@@ -192,7 +191,7 @@
             },
             async editarModulo(moduloId){
                  if(this.editar){
-                    await axios.put(`/modulos/${moduloId}`, {nombre_modulo: this.form.nombre} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                    await axios.put(`http://10.147.17.173:5000/modulos/${moduloId}`, {nombre_modulo: this.form.nombre} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                     }).then(() => {
                         this.$toast.success('Módulo editado con éxito')
                         this.getModulos()
@@ -205,7 +204,7 @@
             },
             async eliminarModulo(moduloId){
                 if(this.eliminar){
-                    await axios.delete(`/modulos/${moduloId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.delete(`http://10.147.17.173:5000/modulos/${moduloId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Módulo eliminado con éxito')
                         this.getModulos()
