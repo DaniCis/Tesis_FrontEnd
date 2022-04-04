@@ -30,7 +30,7 @@
                                                 label-for="name-input">
                                                 <b-form-input  
                                                     id="name-input" class="form-control" type="text"
-                                                    v-model="form.producto">
+                                                    v-model="form.producto" readonly>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -41,24 +41,18 @@
                                             <b-form-group 
                                                 label="PVP" 
                                                 label-for="pvp-input">
-                                                <b-input-group prepend="$">
-                                                    <b-form-input  
-                                                        id="pvp-input" class="form-control" type="text" v-model="form.pvp"
-                                                        style='height: 42px'>
-                                                    </b-form-input>
-                                                </b-input-group>
+                                                <b-form-input  
+                                                    id="pvp-input" class="form-control" type="text" v-model="form.pvp">
+                                                </b-form-input>
                                             </b-form-group>
                                         </div>
                                         <div class="col-12 col-md-3 col-lg-2">
                                             <b-form-group 
                                                 label="PVD" 
                                                 label-for="pvd-input">
-                                                <b-input-group prepend="$">
-                                                    <b-form-input  
-                                                        id="pvd-input" class="form-control" type="text" v-model="form.pvd"
-                                                        style='height: 42px'>
-                                                    </b-form-input>
-                                                </b-input-group>
+                                                <b-form-input  
+                                                    id="pvd-input" class="form-control" type="text" v-model="form.pvd">
+                                                </b-form-input>
                                             </b-form-group>
                                         </div>
                                     </div>
@@ -77,17 +71,19 @@
                                             <b-form-group 
                                                 label="Descuento" 
                                                 label-for="des-input">
-                                                <b-form-input  
-                                                    id="des-input" class="form-control" type="text" v-model="form.descuento"
-                                                    style='height: 42px'>
-                                                </b-form-input>
+                                                <b-input-group prepend="%">
+                                                    <b-form-input  
+                                                        id="des-input" class="form-control" type="text" v-model="form.descuento"
+                                                        style='height: 42px'>
+                                                    </b-form-input>
+                                                </b-input-group>
                                             </b-form-group>
                                         </div>
                                     </div>
                                     <div class="row mt-4">
                                         <div class="col-12 col-md-8 col-lg-6">
                                             <div class="d-flex ms-auto mb-3">
-                                                <b-button  @click="editarItem" class="btn bg-gradient-primary mb-0">Actualizar</b-button>
+                                                <b-button  @click="editarItem(form.id)" class="btn bg-gradient-primary mb-0">Actualizar</b-button>
                                             </div>
                                         </div>
                                     </div>
@@ -138,9 +134,8 @@
             async getItem(itemId){
                 await axios.get(`http://10.147.17.173:5002/item/${itemId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
-                    console.log(response.data)
                     this.form.id = response.data.id_item
-                    this.form.producto = response.data.nombre_item
+                    this.form.producto = response.data.nombre_producto
                     this.form.pvp = response.data.pvp_item
                     this.form.pvd = response.data.pvd_item
                     this.form.numeroSerie = response.data.numeroSerie_item
@@ -153,20 +148,19 @@
             async editarItem(itemId){
                 if(this.editar){
                     var params = {
-                        pvp_item: parseFloat(this.form.pvp),
-                        pvd_item:parseFloat(this.form.pvd),
+                        pvp_item: this.form.pvp,
+                        pvd_item:this.form.pvd,
                         numeroSerie_item:this.form.numeroSerie,
                         descuento_item: parseFloat(this.form.descuento)
                     }
-                    console.log(params)
-                    /*await axios.put(`http://10.147.17.173:5002/item/${itemId}`, params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.put(`http://10.147.17.173:5002/item/${itemId}`, params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Item editado con éxito')
                         this.$router.push('/items');
                         this.onReset()
                     }).catch (e => {
                         this.$toast.error(e.response.data.detail)
-                    })*/
+                    })
                 }else{
                     this.$toast.error('No tiene permisos para modificar')
                 }

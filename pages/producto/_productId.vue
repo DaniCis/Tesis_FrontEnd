@@ -96,7 +96,7 @@
                                     <div class="row mt-4">
                                         <div class="col-12 col-md-8 col-lg-6">
                                             <div class="d-flex ms-auto mb-3">
-                                                <b-button @click="editarProducto" class="btn bg-gradient-primary mb-0"> Actualizar</b-button>
+                                                <b-button @click="editarProducto(form.id)" class="btn bg-gradient-primary mb-0"> Actualizar</b-button>
                                             </div>
                                         </div>
                                     </div>
@@ -146,6 +146,7 @@
             async getProducto(productId){
                 await axios.get(`http://10.147.17.173:5002/producto/${productId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
+                    this.form.id = response.data.id_producto
                     this.form.nombre = response.data.nombre_producto
                     this.form.detalle = response.data.detalle_producto
                     this.form.marca = response.data.marca_producto

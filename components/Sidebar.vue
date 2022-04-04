@@ -128,7 +128,7 @@
                     <b-collapse id="collapse-5" > 
                         <b-card>
                             <b-card-text v-if="'Garantías' in this.modulos.Garantías">
-                                <nuxt-link to="/Garantías">Garantías</nuxt-link>
+                                <nuxt-link to="/garantías">Garantías</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>

@@ -1,7 +1,7 @@
 <template>
     <div class="g-sidenav-show bg-gray-10 vh-completa" id='mainDashboard'> 
         <Sidebar />
-        <Navbar :Modulo='"Inventario"' :Tabla='"Bodega"'/>
+        <Navbar :Modulo='"Garantías"' :Tabla='"Bodega"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -10,7 +10,14 @@
                             <div class="card-header pb-0">
                                  <div class="d-lg-flex">
                                     <div>
-                                        <h5>Items</h5>
+                                        <h5>Garantías</h5>
+                                    </div>
+                                    <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
+                                        <div class="ms-auto my-auto">
+                                            <nuxt-link :to="{name:'nuevaGarantía'}" class="btn bg-gradient-primary btn-sm mb-0">
+                                            +&nbsp; Nueva Garantía
+                                            </nuxt-link>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -34,12 +41,10 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Producto Asociado</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">PVP</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">PVD</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Num Serie</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Descuento</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Estado</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Item</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Cliente</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Fecha de Entrada</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Detalle</th>
                                                         <th class="text-secondary opacity-7"></th>
                                                     </tr>
                                                 </thead>
@@ -49,32 +54,21 @@
                                                             <h6 class="ms-3 mb-2 text-sm text-center">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
-                                                    <tr v-for="item in paginador(this.items)">
+                                                    <tr v-for="garantia in paginador(this.garantias)">
                                                         <td>
-                                                            <h6 class=" ms-3 mb-2 text-sm">{{item.id_item}}</h6>
+                                                            <h6 class=" ms-3 mb-2 text-sm">{{garantia.id_garantia}}</h6>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.nombre_producto}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{garantia.inventario.id_item}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.pvp_item}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{garantia.clientes.id_cliente}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.pvd_item}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{garantia.fechaEntrada_garantia}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.numeroSerie_item}}</p>
-                                                        </td>
-                                                        <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">%{{item.descuento_item}}</p>
-                                                        </td>
-                                                        <td class="align-middle text-center text-sm">
-                                                            <div v-if="item.estado_item == 'Disponible'"> 
-                                                                <span class="badge badge-sm bg-gradient-success">Disponible</span>
-                                                            </div>
-                                                            <div v-else>
-                                                                <span class="badge badge-sm bg-gradient-danger">Vendido</span>
-                                                            </div>
+                                                            <p class="text-s font-weight-bold mb-0">{{garantia.detalle_garantia}}</p>
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones" >
@@ -93,7 +87,7 @@
                                             <nav class="dataTable-pagination">
                                                 <b-pagination
                                                 v-model="pagActual"
-                                                :total-rows="this.items.length"
+                                                :total-rows="this.garantias.length"
                                                 :per-page="porPag"
                                                 ></b-pagination>
                                             </nav>
@@ -109,19 +103,20 @@
     </div>
 </template>
 
-<script> 
+<script>
     import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
     import { getAccessToken, getSubmodulos } from '~/utils/auth';
-    
+
     export default{
         components: { Sidebar, Navbar },
         middleware: 'authenticated',
         data(){
             return{
                 permisosCrud:[],
-                items:[],
+                garantias:[],
+                crear:null,
                 editar:null,
                 error:false,
                 pagActual:1,
@@ -129,20 +124,23 @@
             }
         },
         async mounted(){
-            this.permisosCrud = getSubmodulos('Inventario','Bodega')
+            this.permisosCrud = getSubmodulos('Garantías','Garantías')
+            if('crear' in this.permisosCrud)
+                this.crear = true
             if('editar' in this.permisosCrud)
                 this.editar = true
             if('leer' in this.permisosCrud)
-                this.getItems()
+                this.getGarantias()
             else
                 this.$toast.error('No tiene permiso de lectura')
         },
         methods:{
-            async getItems(){
-                await axios.get('http://10.147.17.173:5002/items',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+            async getGarantias(){
+                await axios.get('http://10.147.17.173:5002/garantias',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
+                    console.log(response.data)
                     if(response.data !=null)
-                        this.items = response.data
+                        this.garantias = response.data
                     else
                         this.error=true
                 }).catch (e=> {
@@ -158,6 +156,6 @@
                 return items.slice(inicio, final);
             }
         },
-    }
 
+    }
 </script>

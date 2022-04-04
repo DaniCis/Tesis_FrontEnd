@@ -51,11 +51,7 @@
 </template>
 
 <script>
-  import axios from 'axios';
-  import Notification from '@/components/Notification'
-  
   export default{
-    components:{Notification},
     data(){
         return{
             form: {
