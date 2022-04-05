@@ -82,15 +82,16 @@
                                             <b-form-group 
                                                 label="Imagen"  
                                                 label-for="imagen"
-                                                invalid-feedback="Este campo es requerido" 
-                                                :state="form.imagenState">
+                                                invalid-feedback="Este campo es requerido">
                                                 <b-form-file
                                                     v-model="form.imagen"
                                                     id='imagen'
                                                     multiple
+                                                    accept='image/*'
+                                                    @change='onChange'
                                                     :state="Boolean(form.imagen)"
-                                                    placeholder="Seleccione una imagen o arrastrela aqui..."
-                                                    drop-placeholder="Suelte la imagen aqui"
+                                                    placeholder="Seleccione una imagen o arrástrela aquí..."
+                                                    drop-placeholder="Suelte la imagen aquí"
                                                     ></b-form-file>
                                             </b-form-group>
                                         </div>
@@ -132,7 +133,7 @@
                     marcaState:null,
                     medida:'',
                     medidaState:null,
-                    imagen:[],
+                    imagen:null,
                 },
                 crear: null,
             }
@@ -143,22 +144,29 @@
                 this.crear = true
         },
         methods:{
+            onChange(e){
+                this.form.imagen = e.target.files
+                console.log(this.form.imagen)
+            },
             async crearProducto(){
                 if(this.crear){
-                    var filenames = []
+                    /*var filenames = []
                     const files = this.form.imagen
                     for (var i = 0; i < files.length; i++) {
                         filenames.push(files[i].name);  
+                    }*/
+                    const formData = new FormData()
+                    formData.append('nombre_producto',this.form.nombre)
+                    formData.append('detalle_producto',this.form.detalle)
+                    formData.append('marca_producto',this.form.marca)
+                    formData.append('unidadMedida_producto',this.form.medida)
+                    formData.append('imagen_producto','prueba')
+                    formData.append('files',this.form.imagen)
+                    for (var value of formData.values()) {
+                         console.log(value);
                     }
-                    var params = {
-                        nombre_producto: this.form.nombre,
-                        detalle_producto:this.form.detalle,
-                        marca_producto:this.form.marca,
-                        unidadMedida_producto:this.form.medida,
-                        imagen_producto: filenames
-                    }
-                    console.log(params)
-                    await axios.post('http://10.147.17.173:5002/producto', params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
+
+                    await axios.post('http://10.147.17.173:5002/producto', formData, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Producto creado con éxito')
                         this.onReset()

@@ -69,7 +69,7 @@
           formData.append('username',this.form.user);
           formData.append('password',this.form.password);
           await this.$auth.loginWith('local', {
-              data: formData
+            data: formData
           }).then((response) => {
               if(response != null && response != undefined){
                   this.user=''

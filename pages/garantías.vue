@@ -14,9 +14,7 @@
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
                                         <div class="ms-auto my-auto">
-                                            <nuxt-link :to="{name:'nuevaGarantía'}" class="btn bg-gradient-primary btn-sm mb-0">
-                                            +&nbsp; Nueva Garantía
-                                            </nuxt-link>
+                                            <a @click="openModal(null, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo usuario</a>
                                         </div>
                                     </div>
                                 </div>
@@ -73,9 +71,14 @@
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones" >
                                                                 <div v-if="editar">
-                                                                    <nuxt-link :to="{name:'item-itemId',params:{itemId: item.id_item}}">
+                                                                    <a class="cursor-pointer" @click="openModal(garantia.id_garantia, 'editar')">
                                                                         <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
-                                                                    </nuxt-link>
+                                                                    </a>
+                                                                </div>
+                                                                <div v-if="eliminar">
+                                                                    <a class="trash cursor-pointer"  @click='showModalDelete(garantia.id_garantia)'>
+                                                                        <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                                    </a>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -94,6 +97,36 @@
                                         </div>
                                     </div>
                                 </div>
+                                <b-modal id="garantia-modal" :title="title"  cancel-title='Cancelar' :ok-title="titleBtn" @ok="handleOk($event,editId)">
+                                    <b-form @submit.stop.prevent="handleSubmit(editId)">
+                                        <div class="row mt-2">
+                                            <div class="col-12 col-md-8">
+                                                <b-form-group v-if="titleBtn =='Agregar'"
+                                                    label="Producto Asociado" 
+                                                    label-for="product-select" 
+                                                    invalid-feedback="Seleccione un producto" 
+                                                    :state="form.productoState">
+                                                    <select 
+                                                        id="product-select" v-model="form.producto" class="form-select" ref='product_select' :state="form.productoState" required>
+                                                        <option disabled :value='null'> Seleccione</option>
+                                                        <option v-for="product in this.productos" :value="product.id_producto">
+                                                            {{product.nombre_producto}}
+                                                        </option>
+                                                    </select>
+                                                </b-form-group>
+                                                <b-form-group v-else
+                                                    label="Producto Asociado" 
+                                                    label-for="product-select" >
+                                                   <select id="product-select" v-model="form.producto" class="form-select" ref='product_select' :state="form.productoState">
+                                                        <option v-for="product in this.productos" :value="product.id_producto">
+                                                            {{product.nombre_producto}}
+                                                        </option>
+                                                    </select>                                         
+                                                </b-form-group>
+                                            </div>
+                                        </div>
+                                    </b-form>
+                                </b-modal>
                             </div>
                         </div>
                     </div>
@@ -118,7 +151,12 @@
                 garantias:[],
                 crear:null,
                 editar:null,
+                eliminar:null,
+                editId:null,
                 error:false,
+                confirm: '',
+                title:'',
+                titleBtn:'',
                 pagActual:1,
                 porPag:10,
             }
@@ -129,6 +167,8 @@
                 this.crear = true
             if('editar' in this.permisosCrud)
                 this.editar = true
+            if('eliminar' in this.permisosCrud)
+                this.eliminar = true
             if('leer' in this.permisosCrud)
                 this.getGarantias()
             else
@@ -144,6 +184,78 @@
                     else
                         this.error=true
                 }).catch (e=> {
+                    this.$toast.error(e.response.data.detail)
+                })
+            },
+            async getGarantia(garantiaId){
+                
+            },
+            async crearGarantia(){
+
+            },
+            async editarGarantia(garantiaId){
+
+            },
+            async eliminarGarantia(garantiaId){
+
+            },
+            validarForm(){
+
+            },
+            handleOk(bvModalEvt, garantiaId){
+                bvModalEvt.preventDefault()
+                this.handleSubmit(garantiaId)
+            },
+            handleSubmit(garantiaId) {
+                if (!this.validarForm())
+                    return
+                if(this.titleBtn == 'Agregar')
+                    this.crearGarantia()
+                else
+                    this.editarGarantia(garantiaId)
+                this.$nextTick(() => {
+                    this.closeModal('garantia-modal')
+                })
+            },
+            onReset(){
+
+            },
+            closeModal(name){
+                this.$bvModal.hide(name)
+            },
+            openModal(garantiaId, action){
+                this.$bvModal.show('garantia-modal')
+                this.onReset()
+                this.getProductos()
+                this.getClientes()
+                if(action == 'editar'){
+                    this.getGarantia(garantiaId)
+                    this.editId = garantiaId
+                    this.title = 'Editar Garantía'
+                    this.titleBtn = 'Actualizar'
+                }else{
+                    this.title='Añadir Nueva Garantía'
+                    this.titleBtn = 'Agregar'
+                }
+            },
+            showModalDelete(garantiaId){
+                this.confirm = ''
+                this.$bvModal.msgBoxConfirm('¿Está seguro que desea eliminar este registro?', {
+                    title: 'Confirmar',
+                    size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'danger',
+                    okTitle: 'Si',
+                    cancelTitle: 'No',
+                    footerClass: 'p-2',
+                    hideHeaderClose: false,
+                    centered: true
+                }).then(value => {
+                    this.confirm = value
+                    if(this.confirm == true){
+                        this.eliminarGarantia(garantiaId)
+                    }
+                }).catch( e=>{
                     this.$toast.error(e.response.data.detail)
                 })
             },
