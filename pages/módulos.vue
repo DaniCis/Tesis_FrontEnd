@@ -38,22 +38,22 @@
                                             <table class="table table-flush dataTable-table">
                                                 <thead>
                                                     <tr>
-                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
-                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
+                                                    <th class="text-uppercase  text-secondary text-xs font-weight-bolder opacity-7">ID</th>
+                                                    <th class="text-uppercase  text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
                                                     <th class="text-secondary opacity-7"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr v-if="error">
                                                         <td colspan="3">
-                                                            <h6 class="ms-3 mb-2 text-sm text-center">No existen registros</h6> 
+                                                            <h6 class="ms-3 mb-2 text-sm text-center mt-4">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
                                                     <tr v-for="modulo in paginador(this.modulos)">
                                                         <td>
                                                             <h6 class=" ms-3 mb-2 text-sm">{{modulo.id_modulo}}</h6>
                                                         </td>
-                                                        <td>
+                                                        <td class="align-middle text-sm">
                                                             <p class="text-s font-weight-bold mb-0">{{modulo.nombre_modulo}}</p>
                                                         </td>
                                                         <td class="align-middle">

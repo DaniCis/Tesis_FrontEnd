@@ -45,8 +45,8 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr v-if="error">
-                                                        <td colspan="4">
-                                                            <h6 class="ms-3 mb-2 text-sm text-center">No existen registros</h6> 
+                                                        <td colspan="7" class="text-center align">
+                                                            <h6 class="ms-3 mb-2 text-sm text-center mt-4">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
                                                     <tr v-for="item in paginador(this.items)">

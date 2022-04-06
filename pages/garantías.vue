@@ -14,7 +14,7 @@
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
                                         <div class="ms-auto my-auto">
-                                            <a @click="openModal(null, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo usuario</a>
+                                            <a @click="openModal(null, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nueva Garantía</a>
                                         </div>
                                     </div>
                                 </div>
@@ -188,16 +188,61 @@
                 })
             },
             async getGarantia(garantiaId){
-                
+                await axios.get(`http://10.147.17.173:5002/garantia/${garantiaId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                }) .then(response => {
+                    this.user = response.data
+                    this.form.nombre = response.data
+                    this.form.rol = response.data
+                }) .catch(e => {
+                    this.$toast.error(e.response.data.detail)
+                })
             },
             async crearGarantia(){
-
+                if(this.crear){
+                    var params = {
+                        nombre_usuario: this.form.nombre,
+                        password_usuario: this.form.password,
+                        roles_id_rol:this.form.rol
+                    }
+                    await axios.post('http://10.147.17.173:5002/garantia', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
+                        this.$toast.success('Garantía creado con éxito')
+                        this.getGarantias()
+                    }).catch (e => {
+                        this.$toast.error(e.response.data.detail)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para agregar')
+                }
             },
             async editarGarantia(garantiaId){
+                if(this.editar){
+                    var params ={
 
+                    }
+                    await axios.put(`http://10.147.17.173:5002/garantia/${garantiaId}/editarRol`, params ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                    }).then(() => {
+                        this.$toast.success('Garantía editado con éxito')
+                        this.getGarantias()
+                    }).catch (e => {
+                        this.$toast.error(e.response.data.detail)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para modificar')
+                }
             },
             async eliminarGarantia(garantiaId){
-
+                if(this.eliminar){
+                    await axios.delete(`http://10.147.17.173:5002/garantia/${garantiaId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
+                        this.$toast.success('Garantía eliminado con éxito')
+                        this.getGarantias()
+                    }).catch (e => {
+                        this.$toast.error(e.response.data.detail)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para eliminar')
+                }
             },
             validarForm(){
 

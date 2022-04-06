@@ -39,7 +39,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
-                                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Rol</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Estado</th>
                                                         <th class="text-secondary opacity-7"></th>
@@ -48,14 +48,14 @@
                                                 <tbody>
                                                     <tr v-if="error">
                                                         <td colspan="4">
-                                                            <h6 class="ms-3 mb-2 text-sm text-center">No existen registros</h6> 
+                                                            <h6 class="ms-3 mb-2 text-sm text-center mt-4">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
                                                     <tr v-for="user in paginador(this.usuarios)">
                                                         <td>
                                                             <h6 class=" ms-3 mb-2 text-sm">{{user.id_usuario}}</h6>
                                                         </td>
-                                                        <td>
+                                                        <td class="align-middle text-center text-sm">
                                                             <p class="text-s font-weight-bold mb-0">{{user.nombre_usuario}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">

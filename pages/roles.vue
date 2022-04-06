@@ -39,7 +39,7 @@
                                                 <thead>
                                                     <tr>
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Id</th>
-                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
+                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
                                                     <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Descripción</th>
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2"></th>
                                                     <th class="text-secondary opacity-7"></th>
@@ -48,14 +48,14 @@
                                                 <tbody>
                                                     <tr v-if="error">
                                                         <td colspan="4">
-                                                            <h6 class="ms-3 mb-2 text-sm text-center">No existen registros</h6> 
+                                                            <h6 class="ms-3 mb-2 text-sm text-center mt-4">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
                                                     <tr v-for="rol in paginador(this.roles)">
                                                         <td>
                                                             <h6 class=" ms-3 mb-2 text-sm">{{rol.id_rol}}</h6>
                                                         </td>
-                                                        <td>
+                                                        <td class="align-middle text-center text-sm">
                                                             <p class="text-sm font-weight-bold mb-0">{{rol.nombre_rol}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">

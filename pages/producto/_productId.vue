@@ -16,83 +16,92 @@
                                 </div>
                                 <div class="d-lg-flex mt-4">
                                     <div>
-                                        <h4>Producto {{this.form.nombre}}</h4>
+                                        <h4>Producto {{this.nombre}}</h4>
                                         <p class="text-sm">Editar producto</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body px-0 pt-0 pb-2">
                                 <b-form class="ps-4 mt-3" >
-                                    <div class="row mt-2">
-                                        <div class="col-12 col-md-8 col-lg-5">
-                                            <b-form-group 
-                                                label="Nombre" 
-                                                label-for="name-input">
-                                                <b-form-input  
-                                                    id="name-input" class="form-control" type="text" placeholder="Nombre"
-                                                    v-model="form.nombre">
-                                                </b-form-input>
-                                            </b-form-group>
+                                    <div class="row">
+                                        <div class="col-12 col-lg-6">
+                                            <div class="row mt-2">
+                                                <div class="col-12 col-md-10 ">
+                                                    <b-form-group 
+                                                        label="Nombre" 
+                                                        label-for="name-input">
+                                                        <b-form-input  
+                                                            id="name-input" class="form-control" type="text" placeholder="Nombre"
+                                                            v-model="form.nombre">
+                                                        </b-form-input>
+                                                    </b-form-group>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-12 col-md-10 ">
+                                                    <b-form-group 
+                                                        label="Detalle" 
+                                                        label-for="detail-input">
+                                                        <b-form-input  
+                                                            id="detail-input" class="form-control" type="text" placeholder="Detalle" 
+                                                            v-model="form.detalle">
+                                                        </b-form-input>
+                                                    </b-form-group>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-12 col-md-5 ">
+                                                    <b-form-group 
+                                                        label="Marca" 
+                                                        label-for="marca-input">
+                                                        <b-form-input  
+                                                            id="marca-input" class="form-control" type="text" placeholder="Marca" 
+                                                            v-model="form.marca">
+                                                        </b-form-input>
+                                                    </b-form-group>
+                                                </div>
+                                                <div class="col-12 col-md-5 mt-2 mt-md-0">
+                                                    <b-form-group 
+                                                        label="Unidad de Medida" 
+                                                        label-for="med-input">
+                                                        <b-form-input  
+                                                            id="med-input" class="form-control" type="text" placeholder="Unidad de medida" 
+                                                            v-model="form.unidad">
+                                                        </b-form-input>
+                                                    </b-form-group>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-12 col-md-10">
+                                                    <b-form-group 
+                                                        label="Nueva Imagen"  
+                                                        label-for="imagen">
+                                                        <b-form-file
+                                                            id='imagen'
+                                                            multiple
+                                                            accept='image/*'
+                                                            @change='onChange'
+                                                            placeholder="Seleccione una imagen o arrástrela aquí..."
+                                                            drop-placeholder="Suelte la imagen aquí"
+                                                            size='sm'
+                                                            ></b-form-file>
+                                                    </b-form-group>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col-12 col-md-8 col-lg-5">
-                                            <b-form-group 
-                                                label="Detalle" 
-                                                label-for="detail-input">
-                                                <b-form-input  
-                                                    id="detail-input" class="form-control" type="text" placeholder="Detalle" 
-                                                    v-model="form.detalle">
-                                                </b-form-input>
-                                            </b-form-group>
+                                        <div class="col-12 col-lg-6">
+                                            <p>Imágenes</p>
+                                            <div v-for="imagen in this.imagenes">
+                                                <div>
+                                                    <b-img thumbnail style='height:150px; width: auto; margin-right: 12px;' 
+                                                        :src="`http://10.147.17.173:5002/productos/images/${form.id}/${imagen}`"></b-img>
+                                                    <a class="trash cursor-pointer"  @click='showModalDelete(imagen)'>
+                                                        <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                    </a>
+                                                </div>
+                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col-12 col-md-4 col-lg-3">
-                                            <b-form-group 
-                                                label="Marca" 
-                                                label-for="marca-input">
-                                                <b-form-input  
-                                                    id="marca-input" class="form-control" type="text" placeholder="Marca" 
-                                                    v-model="form.marca">
-                                                </b-form-input>
-                                            </b-form-group>
-                                        </div>
-                                        <div class="col-12 col-md-4 col-lg-2 mt-2 mt-md-0">
-                                            <b-form-group 
-                                                label="Unidad de Medida" 
-                                                label-for="med-input">
-                                                <b-form-input  
-                                                    id="med-input" class="form-control" type="text" placeholder="Unidad de medida" 
-                                                    v-model="form.unidad">
-                                                </b-form-input>
-                                            </b-form-group>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col-12 col-md-8 col-lg-5">
-                                            <b-form-group 
-                                                label="Imagen"  
-                                                label-for="imagen">
-                                                <b-form-file
-                                                    v-model="form.imagen"
-                                                    id='imagen'
-                                                    placeholder="Seleccione una imagen o arrástrela aquí..."
-                                                    drop-placeholder="Suelte la imagen aquí"
-                                                    size='sm'
-                                                    ></b-form-file>
-                                            </b-form-group>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col-12 col-md-8 col-lg-5">
-                                            <label for="tags-basic">Archivos </label>
-                                            <b-form-tags 
-                                                input-id="tags-basic" class='form-control' placeholder="" 
-                                                v-model="form.imagen" disabled>
-                                            </b-form-tags>
-                                        </div>
-                                    </div>
+                                    </div>    
                                     <div class="row mt-4">
                                         <div class="col-12 col-md-8 col-lg-6">
                                             <div class="d-flex ms-auto mb-3">
@@ -126,11 +135,14 @@
                     detalle:'',
                     marca:'',
                     unidad:'',
-                    imagen:[],
                 },
+                imagen:null,
+                imagenes:[],
                 producto:[],
                 editar:null,
                 productId:'',
+                confirm: '',
+                nombre:''
             }
         },
         mounted(){
@@ -141,39 +153,54 @@
             if('leer' in this.permisosCrud)
                 this.getProducto(this.productId)
         },
-
         methods:{
             async getProducto(productId){
                 await axios.get(`http://10.147.17.173:5002/producto/${productId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.form.id = response.data.id_producto
+                    this.nombre = response.data.nombre_producto
                     this.form.nombre = response.data.nombre_producto
                     this.form.detalle = response.data.detalle_producto
                     this.form.marca = response.data.marca_producto
                     this.form.unidad = response.data.unidadMedida_producto
-                    this.form.imagen = response.data.imagen_producto
+                    this.imagenes = response.data.imagen_producto
                 })
                 .catch(e => {
                      this.$toast.error(e.response.data.detail)
                 })
             },
+            onChange(e){
+                this.imagen = e.target.files
+            },
             async editarProducto(productId){
                 if(this.editar){
-                    var params = {
-                        nombre_producto: this.form.nombre,
-                        detalle_producto:this.form.detalle,
-                        marca_producto:this.form.marca,
-                        unidadMedida_producto:this.form.unidad,
-                        imagen_producto: this.form.imagen
+                    console.log(this.imagenes)
+                    if(this.imagenes.length == 0)
+                        this.$toast.error('Por favor añada una imagen antes de continuar.')
+                    else{
+                        const formData = new FormData()
+                        if(this.imagen!= null){
+                            for (let i = 0; i < this.imagen.length; i++){
+                            formData.append('files',this.imagen[i])
+                            }
+                        }
+                        
+                        formData.append('nombre_producto',this.form.nombre)
+                        formData.append('detalle_producto',this.form.detalle)
+                        formData.append('marca_producto',this.form.marca)
+                        formData.append('unidadMedida_producto',this.form.unidad)
+                        formData.append('imagen_producto',this.imagenes)
+
+
+                        await axios.put(`http://10.147.17.173:5002/producto/${productId}`, formData, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                        }).then(() => {
+                            this.$toast.success('Producto editado con éxito')
+                            this.onReset()
+                            this.$router.push('/productos');
+                        }).catch (e => {
+                            this.$toast.error(e.response.data.detail)
+                        })
                     }
-                    await axios.put(`http://10.147.17.173:5002/producto/${productId}`, params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
-                    }).then(() => {
-                        this.$toast.success('Producto editado con éxito')
-                        this.onReset()
-                        this.$router.push('/productos');
-                    }).catch (e => {
-                        this.$toast.error(e.response.data.detail)
-                    })
                 }else{
                     this.$toast.error('No tiene permisos para modificar')
                 }
@@ -183,8 +210,34 @@
                 this.form.detalle = ''
                 this.form.marca =''
                 this.form.unidad =''
-                this.form.imagen= []
-            }
+            },
+            removeItemFromArr (arr, item ) {
+                var i = arr.indexOf(item );
+                if ( i !== -1 ) {
+                    arr.splice( i, 1 );
+                }
+            },
+            showModalDelete(imagen){
+                this.confirm = ''
+                this.$bvModal.msgBoxConfirm('¿Está seguro que desea eliminar esta imagen?', {
+                    title: 'Confirmar',
+                    size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'danger',
+                    okTitle: 'Si',
+                    cancelTitle: 'No',
+                    footerClass: 'p-2',
+                    hideHeaderClose: false,
+                    centered: true
+                }).then(value => {
+                    this.confirm = value
+                    if(this.confirm == true){
+                        this.removeItemFromArr(this.imagenes, imagen );
+                    }
+                }).catch( e=>{
+                    this.$toast.error(e.response.data.detail)
+                })
+            },
         },
     }
 </script>

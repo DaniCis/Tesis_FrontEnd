@@ -71,7 +71,7 @@
                                                 invalid-feedback="Este campo es requerido" 
                                                 :state="form.medidaState">
                                                 <b-form-input  
-                                                    id="med-input" class="form-control" type="text" placeholder="Unidad de medida" ref='med_input'
+                                                    id="med-input" class="form-control" type="text" placeholder="Unidad medida" ref='med_input'
                                                     v-model="form.medida" :state="form.medidaState" required>
                                                 </b-form-input>
                                             </b-form-group>
@@ -84,12 +84,11 @@
                                                 label-for="imagen"
                                                 invalid-feedback="Este campo es requerido">
                                                 <b-form-file
-                                                    v-model="form.imagen"
                                                     id='imagen'
                                                     multiple
                                                     accept='image/*'
                                                     @change='onChange'
-                                                    :state="Boolean(form.imagen)"
+                                                    :state="Boolean(imagen)"
                                                     placeholder="Seleccione una imagen o arrástrela aquí..."
                                                     drop-placeholder="Suelte la imagen aquí"
                                                     ></b-form-file>
@@ -133,8 +132,8 @@
                     marcaState:null,
                     medida:'',
                     medidaState:null,
-                    imagen:null,
                 },
+                imagen: null,
                 crear: null,
             }
         },
@@ -145,28 +144,23 @@
         },
         methods:{
             onChange(e){
-                this.form.imagen = e.target.files
-                console.log(this.form.imagen)
+                this.imagen = e.target.files
             },
             async crearProducto(){
                 if(this.crear){
-                    /*var filenames = []
-                    const files = this.form.imagen
-                    for (var i = 0; i < files.length; i++) {
-                        filenames.push(files[i].name);  
-                    }*/
                     const formData = new FormData()
+                    for (let i = 0; i < this.imagen.length; i++){
+                        formData.append('files',this.imagen[i])
+                    }
                     formData.append('nombre_producto',this.form.nombre)
                     formData.append('detalle_producto',this.form.detalle)
                     formData.append('marca_producto',this.form.marca)
                     formData.append('unidadMedida_producto',this.form.medida)
-                    formData.append('imagen_producto','prueba')
-                    formData.append('files',this.form.imagen)
-                    for (var value of formData.values()) {
-                         console.log(value);
-                    }
-
-                    await axios.post('http://10.147.17.173:5002/producto', formData, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                     
+                    
+                    await axios.post('http://10.147.17.173:5002/producto', formData, { headers:{ 
+                        Authorization: 'Bearer ' + getAccessToken() ,
+                        'Content-Type': 'multipart/form-data'}
                     }).then(() => {
                         this.$toast.success('Producto creado con éxito')
                         this.onReset()
@@ -202,7 +196,6 @@
                 this.form.detalle = '',
                 this.form.marca ='',
                 this.form.unidad =''
-                this.form.imagen=[]
             }
         },
     }
