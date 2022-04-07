@@ -174,9 +174,10 @@
             },
             async editarProducto(productId){
                 if(this.editar){
-                    console.log(this.imagenes)
-                    if(this.imagenes.length == 0)
+                    console.log(this.imagenes )
+                    if(this.imagenes.length == 0 && this.imagen == null){
                         this.$toast.error('Por favor añada una imagen antes de continuar.')
+                    } 
                     else{
                         const formData = new FormData()
                         if(this.imagen!= null){
@@ -184,13 +185,16 @@
                             formData.append('files',this.imagen[i])
                             }
                         }
-                        
+
                         formData.append('nombre_producto',this.form.nombre)
                         formData.append('detalle_producto',this.form.detalle)
                         formData.append('marca_producto',this.form.marca)
                         formData.append('unidadMedida_producto',this.form.unidad)
-                        formData.append('imagen_producto',this.imagenes)
-
+                        if( this.imagenes.length != 0){
+                            for (let i = 0; i < this.imagenes.length; i++){
+                                formData.append('imagen_producto',this.imagenes[i])
+                            }
+                        }
 
                         await axios.put(`http://10.147.17.173:5002/producto/${productId}`, formData, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
                         }).then(() => {
