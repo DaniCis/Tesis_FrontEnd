@@ -50,7 +50,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr v-if="error">
-                                                        <td colspan="4">
+                                                        <td colspan="5">
                                                             <h6 class="ms-3 mb-2 text-sm text-center">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
@@ -76,6 +76,11 @@
                                                                     <nuxt-link :to="{name:'proveedor-proveedorId',params:{proveedorId: proveedor.id_proveedor}}">
                                                                         <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                     </nuxt-link>
+                                                                </div>
+                                                                <div v-if="eliminar">
+                                                                    <a class="trash cursor-pointer"  @click='showModalDelete(user.id_usuario)'>
+                                                                        <b-icon class="icon" icon='arrow-down-up' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                                    </a>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -114,8 +119,14 @@
         middleware: 'authenticated',
         data(){
             return{
+                permisosCrud:[],
+                proveedores:[],
                 crear:null,
                 editar:null,
+                elimnar:null,
+                error:false,
+                pagActual:1,
+                porPag:10,
             }
         },
         async mounted(){
@@ -124,6 +135,8 @@
                 this.crear = true
             if('editar' in this.permisosCrud)
                 this.editar = true
+            if('elimnar' in this.permisosCrud)
+                this.eliminar = true
             if('leer' in this.permisosCrud)
                 this.getProveedores()
             else
@@ -131,8 +144,58 @@
         },
         methods:{
             async getProveedores(){
-
+                await axios.get('http://10.147.17.173:5003/proveedores',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then(response => {
+                    if(response.data !=null)
+                        this.proveedores = response.data
+                    else
+                        this.error=true
+                }).catch (e=> {
+                    this.$toast.error(e.response.data.detail)
+                })
             },
+            async eliminarProveedor(proveedorId){
+                if(this.eliminar){
+                    await axios.delete(`http://10.147.17.173:5000/usuario/${proveedorId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
+                        this.$toast.success('Proveedor eliminado con éxito')
+                        this.getProveedores()
+                    }).catch (e => {
+                        this.$toast.error(e.response.data.detail)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para eliminar')
+                }
+            },
+            showModalDelete(proveedorId){
+                this.confirm = ''
+                this.$bvModal.msgBoxConfirm('¿Está seguro que desea cambiar el estado del usuario?', {
+                    title: 'Confirmar',
+                    size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'danger',
+                    okTitle: 'Si',
+                    cancelTitle: 'No',
+                    footerClass: 'p-2',
+                    hideHeaderClose: false,
+                    centered: true
+                }).then(value => {
+                    this.confirm = value
+                    if(this.confirm == true){
+                        this.eliminarProveedor(proveedorId)
+                    }
+                }).catch( e=>{
+                    this.$toast.error(e.response.data.detail)
+                })
+            },
+            paginador(items) {
+                const inicio = (this.pagActual - 1) * this.porPag;
+                const final =
+                    inicio + this.porPag > items.length
+                    ? items.length
+                    : inicio  + this.porPag;
+                return items.slice(inicio, final);
+            }
         }
     }
 </script>

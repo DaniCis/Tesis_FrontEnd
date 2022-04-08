@@ -67,21 +67,21 @@
                                                             <div class="form-check">
                                                                 <input v-if="permiso.crear_autorizacion == true" class="form-check-input" type="checkbox" id="check1" disabled checked>
                                                                 <input v-else class="form-check-input" type="checkbox" disabled id="check1" >
-                                                                <label class="form-check-label" for="check1">Crear</label>
+                                                                <label class="form-check-label" for="check1">Registrar</label>
                                                             </div>
                                                         </td>
                                                         <td class="align-middle text-md">
                                                             <div class="form-check">
                                                                 <input v-if="permiso.leer_autorizacion == true" class="form-check-input" type="checkbox" disabled id="check2" checked>
                                                                 <input v-else class="form-check-input" type="checkbox" disabled id="check2">
-                                                                <label class="form-check-label" for="check2">Leer</label>
+                                                                <label class="form-check-label" for="check2">Visualizar</label>
                                                             </div>
                                                         </td>
                                                         <td class="align-middle text-md">
                                                             <div class="form-check">
                                                                 <input v-if="permiso.editar_autorizacion == true" class="form-check-input" type="checkbox" disabled id="check3" checked>
                                                                 <input v-else class="form-check-input" type="checkbox" disabled id="check3">
-                                                                <label class="form-check-label" for="check3">Editar</label>
+                                                                <label class="form-check-label" for="check3">Modificar</label>
                                                             </div>
                                                         </td>
                                                         <td class="align-middle text-md">
@@ -152,13 +152,13 @@
                                             <div class="col-12 col-md-10">
                                                 <b-form-group label='Operaciones' label-for='group-check'>
                                                     <b-form-checkbox inline value=true unchecked-value=false v-model="form.crear">
-                                                        Crear
+                                                        Registrar
                                                     </b-form-checkbox>
                                                     <b-form-checkbox inline value=true unchecked-value=false v-model="form.leer">
-                                                        Leer
+                                                        Ver
                                                     </b-form-checkbox>
                                                     <b-form-checkbox inline value=true unchecked-value=false v-model="form.editar">
-                                                        Editar
+                                                        Modificar
                                                     </b-form-checkbox>
                                                     <b-form-checkbox inline value=true unchecked-value=false v-model="form.eliminar">
                                                         Eliminar
@@ -238,6 +238,7 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+
             async getPermiso(permisoId){
                 await axios.get(`http://10.147.17.173:5000/permiso/${permisoId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                 }) .then(response => {
@@ -252,6 +253,7 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+
             async getPermisos(rolId){
                 this.error = false,
                 await axios.get(`http://10.147.17.173:5000/permisos/${rolId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
@@ -266,6 +268,7 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+
             async crearPermiso(){
                 if(this.crear){
                     var params = {
@@ -287,6 +290,7 @@
                     this.$toast.error('No tiene permisos para agregar')
                 }
             },
+
             async editarPermiso(permisoId){
                 if(this.editar){
                     var params = {
@@ -308,6 +312,7 @@
                     this.$toast.error('No tiene permisos para modificar')
                 }
             },
+
             async eliminarPermiso(permisoId){
                 if(this.eliminar){
                     await axios.delete(`http://10.147.17.173:5000/permiso/${permisoId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
@@ -321,18 +326,21 @@
                     this.$toast.error('No tiene permisos para eliminar')
                 }
             },
+
             verificarCheck(check){
                 if(check =='')
                     return false
                 else
                     return true
             },
+
             verificarCheck2(check){
                 if(check == 'false')
                     return false
                 else
                     return true
             },
+
             validarForm() {
                 const valid = this.$refs.submod_select.checkValidity()
                 this.form.subState = valid
@@ -341,10 +349,12 @@
                 else
                     return true
             },
+
             handleOk(bvModalEvt, permisoId){
                 bvModalEvt.preventDefault()
                 this.handleSubmit(permisoId)
             },
+
             handleSubmit(permisoId) {
                 if (!this.validarForm())
                     return
@@ -356,6 +366,7 @@
                     this.closeModal()
                 })
             },
+
             onReset(){
                 this.form.submodulo = ''
                 this.form.leer =''
@@ -364,9 +375,11 @@
                 this.form.eliminar =''
                 this.form.subState = null
             },
+
             closeModal(){
                 this.$bvModal.hide('permission-modal')
             },
+
             openModal(permisoId, action){
                 this.$bvModal.show('permission-modal')
                 this.onReset()
@@ -381,6 +394,7 @@
                     this.titleBtn = 'Agregar'
                 }
             },
+
             showModalDelete(permisoId){
                 this.confirm = ''
                 this.$bvModal.msgBoxConfirm('¿Está seguro que desea eliminar este registro?', {
@@ -402,6 +416,7 @@
                     this.$toast.error(e.response.data.detail)
                 })
             }, 
+
             paginador(items) {
                 const inicio = (this.pagActual - 1) * this.porPag;
                 const final =

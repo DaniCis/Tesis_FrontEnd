@@ -52,7 +52,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr v-if="error">
-                                                        <td colspan="" class="text-center">
+                                                        <td colspan="7" class="text-center align-middle">
                                                             <h6 class="ms-3 mb-2 text-sm text-center mt-4">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
@@ -61,7 +61,7 @@
                                                             <h6 class=" ms-3 mb-2 text-sm">{{product.id_producto}}</h6>
                                                         </td>
                                                         <td  class="align-middle text-center text-sm">
-                                                           <b-img thumbnail style='height:70px; width: auto' :src="`http://10.147.17.173:5002/productos/images/${product.id_producto}/${product.imagen_producto[0]}`"></b-img>
+                                                           <b-img thumbnail :src="`http://10.147.17.173:5002/productos/images_small/${product.id_producto}/${product.imagen_producto[0]}`"></b-img>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <p class="text-s font-weight-bold mb-0">{{product.nombre_producto}}</p>
@@ -147,7 +147,6 @@
             async getProductos(){
                 await axios.get('http://10.147.17.173:5002/productos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
-                    console.log(response.data)
                     if(response.data !=null)
                         this.productos = response.data
                     else
@@ -164,7 +163,7 @@
                     : inicio  + this.porPag;
                 return items.slice(inicio, final);
             }
-        },
+        }
     }
 
 </script>

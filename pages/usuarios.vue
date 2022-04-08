@@ -78,7 +78,7 @@
                                                                 </div>
                                                                 <div v-if="eliminar">
                                                                     <a class="trash cursor-pointer"  @click='showModalDelete(user.id_usuario)'>
-                                                                        <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                                        <b-icon class="icon" icon='arrow-down-up' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
                                                                     </a>
                                                                 </div>
                                                             </div>
@@ -272,9 +272,9 @@
             async getUsuarios(){
                 await axios.get('http://10.147.17.173:5000/usuarios',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
-                    if(response.data !=null)
+                    if(response.data !=null){
                         this.usuarios = response.data
-                    else
+                    }else
                         this.error = true
                 }) .catch(e => {
                     this.$toast.error(e.response.data.detail)
@@ -337,7 +337,7 @@
                 if(this.eliminar){
                     await axios.delete(`http://10.147.17.173:5000/usuario/${usuarioId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
-                        this.$toast.success('Usuario eliminado con éxito')
+                        this.$toast.success('Estado editado con éxito')
                         this.getUsuarios()
                     }).catch (e => {
                         this.$toast.error(e.response.data.detail)
@@ -425,7 +425,7 @@
             },
             showModalDelete(usuarioId){
                 this.confirm = ''
-                this.$bvModal.msgBoxConfirm('¿Está seguro que desea eliminar este registro?', {
+                this.$bvModal.msgBoxConfirm('¿Está seguro que desea cambiar el estado del usuario?', {
                     title: 'Confirmar',
                     size: 'sm',
                     buttonSize: 'sm',
