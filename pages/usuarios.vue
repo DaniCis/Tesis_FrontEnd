@@ -14,7 +14,7 @@
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
                                         <div class="ms-auto my-auto">
-                                            <a @click="openModal(null, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo usuario</a>
+                                            <a @click="openModal(null, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Nuevo Usuario</a>
                                         </div>
                                     </div>
                                 </div>
@@ -230,7 +230,6 @@
                 },
                 roles:[],
                 permisosCrud:[],
-                user:[],
                 usuarios:[],
                 show:true,
                 show2:true,
@@ -239,7 +238,7 @@
                 crear:null,
                 editar: null,
                 eliminar:null,
-                error:null,
+                error:false,
                 confirm: '',
                 title:'',
                 titleBtn:'',
@@ -269,6 +268,7 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+
             async getUsuarios(){
                 await axios.get('http://10.147.17.173:5000/usuarios',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
@@ -280,16 +280,18 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+
+
             async getUser(usuarioId){
                 await axios.get(`http://10.147.17.173:5000/usuario/${usuarioId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                 }) .then(response => {
-                    this.user = response.data
                     this.form.nombre = response.data.nombre_usuario
                     this.form.rol = response.data.roles_id_rol
                 }) .catch(e => {
                     this.$toast.error(e.response.data.detail)
                 })
             },
+
             async crearUsuario(){
                 if(this.crear){
                     var params = {
@@ -308,6 +310,7 @@
                     this.$toast.error('No tiene permisos para agregar')
                 }
             },
+
             async editarRol(usuarioId){
                 if(this.editar){
                     await axios.put(`http://10.147.17.173:5000/usuario/${usuarioId}/editarRol`, {roles_id_rol: this.form.rol} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
@@ -321,6 +324,7 @@
                     this.$toast.error('No tiene permisos para modificar')
                 }
             },
+
             async editarPassword(usuarioId){
                 if(this.editar){
                     await axios.put(`http://10.147.17.173:5000/usuario/${usuarioId}/editarPassword`, {password_usuario: this.form.password} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
@@ -333,6 +337,7 @@
                     this.$toast.error('No tiene permisos para modificar')
                 }
             },
+
             async eliminarUsuario(usuarioId){
                 if(this.eliminar){
                     await axios.delete(`http://10.147.17.173:5000/usuario/${usuarioId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
@@ -346,6 +351,7 @@
                     this.$toast.error('No tiene permisos para eliminar')
                 }
             },
+
             validarForm() {
                 const valid = this.$refs.name_input.checkValidity()
                 const valid3 = this.$refs.rol_select.checkValidity()
@@ -365,19 +371,23 @@
                         return true
                 }
             },
+
             validarPass(){
                 const valid = this.$refs.pass2_input.checkValidity()
                 this.form.pass2State = valid
                 return valid
             },
+
             handleOk(bvModalEvt, usuarioId){
                 bvModalEvt.preventDefault()
                 this.handleSubmit(usuarioId)
             },
+
             handleOk2(bvModalEvt, usuarioId){
                 bvModalEvt.preventDefault()
                 this.handleSubmit2(usuarioId)
             },
+
             handleSubmit(usuarioId) {
                 if (!this.validarForm())
                     return
@@ -389,6 +399,7 @@
                     this.closeModal('user-modal')
                 })
             },
+
             handleSubmit2(usuarioId){
                 if(!this.validarPass())
                     return
@@ -397,6 +408,7 @@
                     this.closeModal('modal-multi')
                 })
             },
+
             onReset(){
                 this.form.nombre = ''
                 this.form.password = ''
@@ -409,6 +421,7 @@
             closeModal(name){
                 this.$bvModal.hide(name)
             },
+
             openModal(usuarioId, action){
                 this.$bvModal.show('user-modal')
                 this.onReset()
@@ -423,6 +436,7 @@
                     this.titleBtn = 'Agregar'
                 }
             },
+
             showModalDelete(usuarioId){
                 this.confirm = ''
                 this.$bvModal.msgBoxConfirm('¿Está seguro que desea cambiar el estado del usuario?', {
@@ -444,6 +458,7 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+
             password_show_hide(id) {
                 var input = document.getElementById(id);
                 if(id=='password')
@@ -456,6 +471,7 @@
                     input.type = "password";
                 }
             },
+
             paginador(items) {
                 const inicio = (this.pagActual - 1) * this.porPag;
                 const final =

@@ -165,6 +165,7 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+            
             async getModulos(){
                 await axios.get('http://10.147.17.173:5000/modulos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
@@ -176,6 +177,7 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+
             async crearModulo(){
                 if(this.crear){
                     await axios.post('http://10.147.17.173:5000/modulos', {nombre_modulo: this.form.nombre} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
@@ -189,6 +191,7 @@
                     this.$toast.error('No tiene permisos para agregar')
                 }
             },
+
             async editarModulo(moduloId){
                  if(this.editar){
                     await axios.put(`http://10.147.17.173:5000/modulos/${moduloId}`, {nombre_modulo: this.form.nombre} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
@@ -202,6 +205,7 @@
                     this.$toast.error('No tiene permisos para modificar')
                 }
             },
+
             async eliminarModulo(moduloId){
                 if(this.eliminar){
                     await axios.delete(`http://10.147.17.173:5000/modulos/${moduloId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
@@ -215,15 +219,18 @@
                     this.$toast.error('No tiene permisos para eliminar')
                 }
             },
+
             validarForm() {
                 const valid = this.$refs.name_input.checkValidity()
                 this.form.nameState = valid
                 return valid
             },
+
             handleOk(bvModalEvt,moduloId){
                 bvModalEvt.preventDefault()
                 this.handleSubmit(moduloId)
             },
+
             handleSubmit(moduloId) {
                 if (!this.validarForm())
                     return
@@ -235,13 +242,16 @@
                     this.closeModal()
                 })
             },
+
             onReset(){
                 this.form.nombre = '',
                 this.form.nameState = null
             },
+
             closeModal(){
                 this.$bvModal.hide('module-modal')
             },
+
             openModal(moduloId, action){
                 this.$bvModal.show('module-modal')
                 this.onReset()
@@ -255,6 +265,7 @@
                     this.titleBtn = 'Agregar'
                 }
             },
+
             showModalDelete(moduloId){
                 this.confirm = ''
                 this.$bvModal.msgBoxConfirm('¿Está seguro que desea eliminar este registro?', {
@@ -276,6 +287,7 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },  
+
             paginador(items) {
                 const inicio = (this.pagActual - 1) * this.porPag;
                 const final =

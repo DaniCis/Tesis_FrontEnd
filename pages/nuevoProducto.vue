@@ -194,7 +194,11 @@
                 this.form.nombre = '',
                 this.form.detalle = '',
                 this.form.marca ='',
-                this.form.unidad =''
+                this.form.unidad ='',
+                this.form.nombreState = null,
+                this.form.detalleState = null,
+                this.form.marcaState = null,
+                this.form.medidaState = null
             }
         },
     }

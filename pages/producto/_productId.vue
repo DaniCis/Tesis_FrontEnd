@@ -16,13 +16,13 @@
                                 </div>
                                 <div class="d-lg-flex mt-4">
                                     <div>
-                                        <h4>Producto {{this.nombre}}</h4>
+                                        <h4>{{this.nombre}}</h4>
                                         <p class="text-sm">Editar producto</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body px-0 pt-0 pb-2">
-                                <b-form class="ps-4 mt-3" >
+                                <b-form class="ps-4 mt-3 pe-4" >
                                     <div class="row">
                                         <div class="col-12 col-lg-6">
                                             <div class="row mt-2">
@@ -89,8 +89,23 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-lg-6">
+                                        <div class="col-12 col-lg-6 mt-3 mt-lg-0">
                                             <p>Imágenes</p>
+                                            <b-carousel
+                                                v-model="slide"
+                                                :interval='3000'
+                                                controls
+                                                indicators
+                                            >
+                                                <div v-for="imagen in this.imagenes">
+                                                    <b-carousel-slide style="height: 46vh;"
+                                                     :img-src="`http://10.147.17.173:5002/productos/images/${form.id}/${imagen}`">
+                                                        <a class="trash cursor-pointer"  @click='showModalDelete(imagen)'>
+                                                            <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                        </a>
+                                                    </b-carousel-slide>
+                                                </div>
+                                            </b-carousel><!--
                                             <div v-for="imagen in this.imagenes">
                                                 <div>
                                                     <b-img thumbnail style='height:150px; width: auto; margin-right: 12px;' 
@@ -99,7 +114,7 @@
                                                         <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
                                                     </a>
                                                 </div>
-                                             </div>
+                                             </div>-->
                                         </div>
                                     </div>    
                                     <div class="row mt-4">
@@ -142,7 +157,8 @@
                 editar:null,
                 productId:'',
                 confirm: '',
-                nombre:''
+                nombre:'',
+                slide: 0,
             }
         },
         mounted(){
@@ -154,6 +170,7 @@
                 this.getProducto(this.productId)
         },
         methods:{
+
             async getProducto(productId){
                 await axios.get(`http://10.147.17.173:5002/producto/${productId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
@@ -164,6 +181,7 @@
                     this.form.marca = response.data.marca_producto
                     this.form.unidad = response.data.unidadMedida_producto
                     this.imagenes = response.data.imagen_producto
+                    console.log(this.imagenes)
                 })
                 .catch(e => {
                      this.$toast.error(e.response.data.detail)

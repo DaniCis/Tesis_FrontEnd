@@ -25048,7 +25048,19 @@ pre[class*="language-"] {
   color: #f71ac3;
 }
 
+.carousel{
+  width: 40%!important;
+  height: auto!important;
+}
 
+.carousel-indicators li {
+  background-color: #343a40!important;
+}
 
+@media(max-width:576px){
+  .carousel-item{
+    height: 32vh!important;
+  }
+}
 
 /*# sourceMappingURL=dashboard-free.css.map */

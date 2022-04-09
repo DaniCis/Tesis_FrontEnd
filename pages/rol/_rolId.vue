@@ -74,7 +74,7 @@
                                                             <div class="form-check">
                                                                 <input v-if="permiso.leer_autorizacion == true" class="form-check-input" type="checkbox" disabled id="check2" checked>
                                                                 <input v-else class="form-check-input" type="checkbox" disabled id="check2">
-                                                                <label class="form-check-label" for="check2">Visualizar</label>
+                                                                <label class="form-check-label" for="check2">Ver</label>
                                                             </div>
                                                         </td>
                                                         <td class="align-middle text-md">

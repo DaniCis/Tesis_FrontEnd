@@ -195,6 +195,7 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+
             async getRol(rolId){
                 await axios.get(`http://10.147.17.173:5000/roles/${rolId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
@@ -206,6 +207,7 @@
                      this.$toast.error(e.response.data.detail)
                 })
             },
+
             async crearRol(){
                 if(this.crear){
                     var params = {
@@ -223,6 +225,7 @@
                     this.$toast.error('No tiene permisos para agregar')
                 }
             },
+
             async editarRol(rolId){
                 if(this.editar){
                     var params = {
@@ -240,6 +243,7 @@
                     this.$toast.error('No tiene permisos para modificar')
                 }
             },
+
             async eliminarRol(rolId){
                 if(this.eliminar){
                     await axios.delete(`http://10.147.17.173:5000/roles/${rolId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
@@ -253,6 +257,7 @@
                     this.$toast.error('No tiene permisos para eliminar')
                 }
             },
+
             validarForm() {
                 const valid = this.$refs.name_input.checkValidity()
                 const valid2 = this.$refs.des_input.checkValidity()
@@ -263,10 +268,12 @@
                 else
                     return true
             },
+
             handleOk(bvModalEvt,rolId){
                 bvModalEvt.preventDefault()
                 this.handleSubmit(rolId)
             },
+
             handleSubmit(rolId) {
                 if (!this.validarForm())
                     return
@@ -278,15 +285,18 @@
                     this.closeModal()
                 })
             },
+
             onReset(){
                 this.form.nombre = ''
                 this.form.descripcion = ''
                 this.form.nameState = null
                 this.form.desState = null
             },
+
             closeModal(){
                 this.$bvModal.hide('rol-modal')
             },
+
             openModal(rolId, action){
                 this.$bvModal.show('rol-modal')
                 this.onReset()
@@ -300,6 +310,7 @@
                     this.titleBtn = 'Agregar'
                 }
             },
+
             showModalDelete(rolId){
                 this.confirm = ''
                 this.$bvModal.msgBoxConfirm('¿Está seguro que desea eliminar este registro?', {
@@ -321,6 +332,7 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+            
             paginador(items) {
                 const inicio = (this.pagActual - 1) * this.porPag;
                 const final =
