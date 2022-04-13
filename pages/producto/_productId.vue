@@ -91,30 +91,19 @@
                                         </div>
                                         <div class="col-12 col-lg-6 mt-3 mt-lg-0">
                                             <p>Imágenes</p>
-                                            <b-carousel
-                                                v-model="slide"
-                                                :interval='3000'
-                                                controls
-                                                indicators
-                                            >
-                                                <div v-for="imagen in this.imagenes">
-                                                    <b-carousel-slide style="height: 46vh;"
-                                                     :img-src="`http://10.147.17.173:5002/productos/images/${form.id}/${imagen}`">
-                                                        <a class="trash cursor-pointer"  @click='showModalDelete(imagen)'>
-                                                            <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
-                                                        </a>
-                                                    </b-carousel-slide>
-                                                </div>
-                                            </b-carousel><!--
-                                            <div v-for="imagen in this.imagenes">
-                                                <div>
-                                                    <b-img thumbnail style='height:150px; width: auto; margin-right: 12px;' 
-                                                        :src="`http://10.147.17.173:5002/productos/images/${form.id}/${imagen}`"></b-img>
-                                                    <a class="trash cursor-pointer"  @click='showModalDelete(imagen)'>
-                                                        <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                            <vueper-slides class="no-shadow ex--center-mode" fixed-height="350px" :touchable="false" 
+                                            arrows-outside bullets-outside fractions>
+                                                <vueper-slide 
+                                                v-for="imagen in this.imagenes" 
+                                                :key="imagen"
+                                                :image="`http://10.147.17.173:5002/productos/images/${form.id}/${imagen}`">
+                                                <template #content>
+                                                    <a class="trash cursor-pointer vueperslide__content-wrapper"  @click='showModalDelete(imagen)'>
+                                                        <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #f81212;"></b-icon>
                                                     </a>
-                                                </div>
-                                             </div>-->
+                                                </template>
+                                                </vueper-slide>
+                                            </vueper-slides>
                                         </div>
                                     </div>    
                                     <div class="row mt-4">
@@ -138,10 +127,12 @@
     import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
+    import 'vueperslides/dist/vueperslides.css'
+    import { VueperSlides, VueperSlide } from 'vueperslides'
     import { getAccessToken, getSubmodulos } from '~/utils/auth';
     
     export default{
-        components: { Sidebar, Navbar },
+        components: { Sidebar, Navbar, VueperSlides, VueperSlide},
         middleware: 'authenticated',
         data(){
             return{
@@ -172,7 +163,6 @@
                 this.$toast.error('No tiene permiso de lectura')
         },
         methods:{
-
             async getProducto(productId){
                 await axios.get(`http://10.147.17.173:5002/producto/${productId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {

@@ -20,7 +20,7 @@
     "vue-server-renderer": "^2.6.14",
     "vue-template-compiler": "^2.6.14",
     "vue-toastification": "^1.7.14",
+    "vueperslides": "^2.15.2",
     "webpack": "^4.46.0"
-  },
-  "devDependencies": {}
+  }
 }
