@@ -64,8 +64,8 @@
                             <b-card-text v-if="'Proveedores' in this.modulos.Compras">
                                 <nuxt-link to="/proveedores">Proveedores</nuxt-link>
                             </b-card-text>
-                            <b-card-text v-if="'Compras' in this.modulos.Compras">
-                                <nuxt-link to="/compras">Orden de compra</nuxt-link>
+                            <b-card-text v-if="'OrdenCompra' in this.modulos.Compras">
+                                <nuxt-link to="/compras">Orden de Compra</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>

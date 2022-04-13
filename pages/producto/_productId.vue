@@ -168,6 +168,8 @@
                 this.editar = true
             if('leer' in this.permisosCrud)
                 this.getProducto(this.productId)
+            else
+                this.$toast.error('No tiene permiso de lectura')
         },
         methods:{
 

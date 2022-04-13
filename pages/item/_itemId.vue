@@ -128,8 +128,9 @@
                 this.editar = true
             if('leer' in this.permisosCrud)
                 this.getItem(this.itemId)
+            else
+                this.$toast.error('No tiene permiso de lectura')
         },
-
         methods:{
             async getItem(itemId){
                 await axios.get(`http://10.147.17.173:5002/item/${itemId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
