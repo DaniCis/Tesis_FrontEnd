@@ -41,8 +41,8 @@
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Id</th>
                                                     <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
                                                     <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Descripción</th>
-                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2"></th>
-                                                    <th class="text-secondary opacity-7"></th>
+                                                    <th></th>
+                                                    <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

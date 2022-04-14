@@ -47,7 +47,7 @@
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Marca</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Unidad Medida</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Cantidad</th>
-                                                        <th class="text-secondary opacity-7"></th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

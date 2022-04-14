@@ -16,13 +16,42 @@
                                 </div>
                                 <div class="d-lg-flex mt-4">
                                     <div>
-                                        <h4>Orden de Compra this.form.id</h4>
-                                        <p class="text-sm">Editar orden</p>
+                                        <h4>Orden de Compra {{this.compraId}}</h4>
+                                        <p class="text-sm">Detalles</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body px-0 pt-0 pb-2">
-                                
+                                <b-form class="ps-4 mt-3">
+                                    
+
+                                </b-form>
+                                <div class="table-responsive p-0">
+                                    <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                        <div class="dataTable-container">
+                                            <table class="table table-flush dataTable-table">
+                                                <thead>
+                                                    <tr>
+                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Id</th>
+                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2"> # de Factura</th>
+                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Fecha</th>
+                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Proveedor</th>
+                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Total</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="align-middle text-center text-sm">
+                                                            <p class="text-sm font-weight-bold mb-0">hola</p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div> 
                             </div>
                         </div>
                     </div>

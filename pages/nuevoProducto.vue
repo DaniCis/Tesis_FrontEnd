@@ -146,6 +146,7 @@
             onChange(e){
                 this.imagen = e.target.files
             },
+            
             async crearProducto(){
                 if(this.crear){
                     const formData = new FormData()
@@ -171,6 +172,7 @@
                     this.$toast.error('No tiene permisos para agregar')
                 }
             },
+
             validarForm() {
                 const valid = this.$refs.name_input.checkValidity()
                 const valid2 = this.$refs.detail_input.checkValidity()
@@ -185,11 +187,13 @@
                 else
                     return true
             },
+
             handleSubmit() {
                 if (!this.validarForm())
                     return
                 this.crearProducto()
             },
+
             onReset(){
                 this.form.nombre = '',
                 this.form.detalle = '',

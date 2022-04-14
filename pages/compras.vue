@@ -14,7 +14,7 @@
                                     </div>
                                     <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
                                         <div class="ms-auto my-auto">
-                                            <nuxt-link :to="{name:'nuevoProducto'}" class="btn bg-gradient-primary btn-sm mb-0">
+                                            <nuxt-link :to="{name:'nuevaCompra'}" class="btn bg-gradient-primary btn-sm mb-0">
                                             +&nbsp; Nueva Orden de Compra
                                             </nuxt-link>
                                         </div>
@@ -46,7 +46,7 @@
                                                     <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Proveedor</th>
                                                     <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Total</th>
                                                     <th></th>
-                                                    <th class="text-secondary opacity-7"></th>
+                                                    <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

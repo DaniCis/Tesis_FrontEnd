@@ -40,7 +40,7 @@
                                                     <tr>
                                                     <th class="text-uppercase  text-secondary text-xs font-weight-bolder opacity-7">ID</th>
                                                     <th class="text-uppercase  text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
-                                                    <th class="text-secondary opacity-7"></th>
+                                                    <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
