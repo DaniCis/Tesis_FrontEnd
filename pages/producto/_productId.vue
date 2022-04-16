@@ -60,16 +60,6 @@
                                                         </b-form-input>
                                                     </b-form-group>
                                                 </div>
-                                                <div class="col-12 col-md-5 mt-2 mt-md-0">
-                                                    <b-form-group 
-                                                        label="Unidad de Medida" 
-                                                        label-for="med-input">
-                                                        <b-form-input  
-                                                            id="med-input" class="form-control" type="text" placeholder="Unidad de medida" 
-                                                            v-model="form.unidad">
-                                                        </b-form-input>
-                                                    </b-form-group>
-                                                </div>
                                             </div>
                                             <div class="row mt-2">
                                                 <div class="col-12 col-md-10">
@@ -171,7 +161,6 @@
                     this.form.nombre = response.data.nombre_producto
                     this.form.detalle = response.data.detalle_producto
                     this.form.marca = response.data.marca_producto
-                    this.form.unidad = response.data.unidadMedida_producto
                     this.imagenes = response.data.imagen_producto
                     console.log(this.imagenes)
                 })
@@ -179,9 +168,11 @@
                      this.$toast.error(e.response.data.detail)
                 })
             },
+            
             onChange(e){
                 this.imagen = e.target.files
             },
+            
             async editarProducto(productId){
                 if(this.editar){
                     console.log(this.imagenes )
@@ -199,7 +190,6 @@
                         formData.append('nombre_producto',this.form.nombre)
                         formData.append('detalle_producto',this.form.detalle)
                         formData.append('marca_producto',this.form.marca)
-                        formData.append('unidadMedida_producto',this.form.unidad)
                         if( this.imagenes.length != 0){
                             for (let i = 0; i < this.imagenes.length; i++){
                                 formData.append('imagen_producto',this.imagenes[i])
@@ -219,18 +209,20 @@
                     this.$toast.error('No tiene permisos para modificar')
                 }
             },
+
             onReset(){
                 this.form.nombre = ''
                 this.form.detalle = ''
                 this.form.marca =''
-                this.form.unidad =''
             },
+
             removeItemFromArr (arr, item ) {
                 var i = arr.indexOf(item );
                 if ( i !== -1 ) {
                     arr.splice( i, 1 );
                 }
             },
+
             showModalDelete(imagen){
                 this.confirm = ''
                 this.$bvModal.msgBoxConfirm('¿Está seguro que desea eliminar esta imagen?', {

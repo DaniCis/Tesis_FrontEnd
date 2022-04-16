@@ -64,18 +64,6 @@
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
-                                        <div class="col-12 col-md-4 col-lg-2 mt-2 mt-md-0">
-                                            <b-form-group 
-                                                label="Unidad de Medida" 
-                                                label-for="med-input" 
-                                                invalid-feedback="Este campo es requerido" 
-                                                :state="form.medidaState">
-                                                <b-form-input  
-                                                    id="med-input" class="form-control" type="text" placeholder="Unidad medida" ref='med_input'
-                                                    v-model="form.medida" :state="form.medidaState" required>
-                                                </b-form-input>
-                                            </b-form-group>
-                                        </div>
                                     </div>
                                     <div class="row mt-2">
                                         <div class="col-12 col-md-8 col-lg-5">
@@ -130,8 +118,6 @@
                     detalleState:null,
                     marca:'',
                     marcaState:null,
-                    medida:'',
-                    medidaState:null,
                 },
                 imagen: null,
                 crear: null,
@@ -156,7 +142,6 @@
                     formData.append('nombre_producto',this.form.nombre)
                     formData.append('detalle_producto',this.form.detalle)
                     formData.append('marca_producto',this.form.marca)
-                    formData.append('unidadMedida_producto',this.form.medida)
                      
                     await axios.post('http://10.147.17.173:5002/producto', formData, { headers:{ 
                         Authorization: 'Bearer ' + getAccessToken() ,
@@ -177,12 +162,10 @@
                 const valid = this.$refs.name_input.checkValidity()
                 const valid2 = this.$refs.detail_input.checkValidity()
                 const valid3 = this.$refs.marca_input.checkValidity()
-                const valid4 = this.$refs.med_input.checkValidity()
                 this.form.nombreState = valid
                 this.form.detalleState = valid2
                 this.form.marcaState = valid3
-                this.form.medidaState = valid4
-                if(valid == false || valid2 == false || valid3 == false || valid4 == false)
+                if(valid == false || valid2 == false || valid3 == false)
                     return false
                 else
                     return true
@@ -198,11 +181,9 @@
                 this.form.nombre = '',
                 this.form.detalle = '',
                 this.form.marca ='',
-                this.form.unidad ='',
                 this.form.nombreState = null,
                 this.form.detalleState = null,
-                this.form.marcaState = null,
-                this.form.medidaState = null
+                this.form.marcaState = null
             }
         },
     }

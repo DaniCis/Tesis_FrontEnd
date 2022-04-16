@@ -17,7 +17,7 @@
                                 <div class="d-lg-flex mt-4">
                                     <div>
                                         <h4>Orden de Compra #{{this.compraId}}</h4>
-                                        <p class="text-sm">Editar</p>
+                                        <p class="text-sm">Detalles</p>
                                     </div>
                                 </div>
                             </div>
@@ -25,35 +25,16 @@
                                 <b-form class="ps-4 mt-3 pe-4">
                                     <div class="row mt-2">
                                         <div class="col-12 col-md-8 col-lg-3">
-                                            <b-form-group 
-                                                label="Fecha" 
-                                                label-for="fecha-input">
-                                                <b-form-datepicker style="height: 38px;"
-                                                id="fecha-input" locale="es" placeholder="Fecha" v-model='form.fecha'></b-form-datepicker>
-                                            </b-form-group>
+                                            <label>Fecha</label>
+                                            <span class="text-sm ps-4">{{this.form.fecha}}</span>
                                         </div>
                                         <div class="col-12 col-md-8 col-lg-3">
-                                            <b-form-group 
-                                                label="Número de Factura" 
-                                                label-for="factura-input">
-                                                <b-form-input  
-                                                    id="factura-input" class="form-control" type="text" placeholder="Factura"
-                                                    v-model="form.numeroFactura">
-                                                </b-form-input>
-                                            </b-form-group>
+                                            <label>Número de Factura</label>
+                                            <span class="text-sm ps-4">{{this.form.numeroFactura}}</span>
                                         </div>
                                         <div class="col-12 col-md-8 col-lg-3">
-                                            <b-form-group 
-                                                label="Proveedor" 
-                                                label-for="proveedor-input">
-                                                <select 
-                                                    id="proveedor-input" v-model="form.nombreProveedor" class="form-select" ref='proveedor_select' required>
-                                                    <option disabled :value='null'> Seleccione</option>
-                                                     <option v-for="proveedor in this.proveedores" :value="proveedor.id_proveedor">
-                                                        {{proveedor.nombre_proveedor}}
-                                                    </option>
-                                                </select>
-                                            </b-form-group>
+                                            <label>Proveedor</label>
+                                            <span class="text-sm ps-4">{{this.form.nombreProveedor}}</span>
                                         </div>
                                     </div>                          
                                     <div class="table-responsive p-0 mt-4">
@@ -68,7 +49,6 @@
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Precio Unit</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Desct.</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Precio Total</th>
-                                                            <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -90,13 +70,6 @@
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">{{detalle.precio_detalleCompra}}</p>
-                                                            </td>
-                                                            <td class="align-middle">
-                                                                <div class="contenedorAcciones">
-                                                                    <a class="cursor-pointer" @click="openModal(detalle.id_detalleCompra)">
-                                                                        <b-icon class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
-                                                                    </a>
-                                                                </div>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -127,55 +100,8 @@
                                             <label class="col-5">Total</label>
                                             <span class="text-sm col-4">{{this.form.total}}</span>
                                         </div>
-                                    </div> 
-                                    <div class="row mt-4">
-                                        <div class="col-12 col-md-8 col-lg-6">
-                                            <div class="d-flex ms-auto mb-3">
-                                                <b-button class="btn bg-gradient-primary mb-0" type='submit'> Actualizar</b-button>
-                                            </div>
-                                        </div>
-                                    </div>                
+                                    </div>              
                                 </b-form>
-                                <b-modal id="detalle-modal" title='Editar Detalle' cancel-title='Cancelar' ok-title='Actualizar' @ok="handleOk($event)">
-                                    <b-form @submit.stop.prevent="handleSubmit()">
-                                        <div class="row mt-2">
-                                            <div class="col-12 col-md-8">
-                                                <b-form-group 
-                                                    label="Producto" 
-                                                    label-for="producto-select">
-                                                    <b-form-input list="input-list3"  v-model='detalle.producto' id="producto-select"></b-form-input>
-                                                    <datalist id="input-list3">
-                                                        <option v-for="producto in this.productos" :value="producto.id_producto">
-                                                            {{producto.nombre_producto}}
-                                                        </option>
-                                                    </datalist>
-                                                </b-form-group>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-12 col-md-8">
-                                                <b-form-group 
-                                                    label="Precio Unitario" 
-                                                    label-for="precioUnit-input">
-                                                    <b-form-input 
-                                                        id="precioUnit-input" class="form-control" type="text" v-model="detalle.precioUnit">
-                                                    </b-form-input>
-                                                </b-form-group>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-12 col-md-8">
-                                                <b-form-group 
-                                                    label="Descuento" 
-                                                    label-for="desct-input">
-                                                    <b-form-input 
-                                                        id="desct-input" class="form-control" type="text" v-model="detalle.desct">
-                                                    </b-form-input>
-                                                </b-form-group>
-                                            </div>
-                                        </div>
-                                    </b-form>
-                                </b-modal>
                             </div>
                         </div>
                     </div>
@@ -204,25 +130,16 @@
                     subtotal:'',
                     descuento:'',
                 },
-                detalle:{
-                    producto:'',
-                    precioUnit:'',
-                    desct:'',
-                },
                 permisosCrud:[],
                 compras:[],
-                proveedores:[],
                 detalles:[],
-                productos:[],
                 editar:null,
                 iva:null,
                 compraId:'',
             }
         },
         async mounted(){
-            this.compraId = this.$route.params.compraId
-            this.getProveedores()
-            this.getProductos()
+            this.compraId = this.$route.params.detalleId
             this.permisosCrud = getSubmodulos('Compras','OrdenCompra')
             if('editar' in this.permisosCrud)
                 this.editar = true
@@ -232,14 +149,9 @@
                 this.$toast.error('No tiene permiso de lectura')
         },    
         methods:{
-
             calcularIva(subtotal, descuento){
                 this.iva = parseFloat(subtotal.slice(1)) - parseFloat(descuento.slice(1))
                 this.iva = (this.iva*0.12).toFixed(2)
-            },
-
-            calcularPrecioTotal(cantidad, precio){
-                this.form.total = 1
             },
 
             async getCompra(compraId){
@@ -258,51 +170,6 @@
                 .catch(e => {
                      this.$toast.error(e.response.data.detail)
                 })
-            },
-
-            async getProveedores(){
-                await axios.get(`http://10.147.17.173:5003/proveedoresHabilitados`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
-                }).then(response => {
-                    this.proveedores = response.data
-                })
-                .catch(e => {
-                    this.$toast.error(e.response.data.detail)
-                })
-            },
-
-            async getProductos(){
-                await axios.get(`http://10.147.17.173:5002/productosHabilitados`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
-                }).then(response => {
-                    this.productos = response.data
-                })
-                .catch(e => {
-                    this.$toast.error(e.response.data.detail)
-                })
-            },
-
-            async editarDetalle(detalleId){
-
-                this.calcularPrecioTotal()
-            },
-
-            handleOk(bvModalEvt){
-                bvModalEvt.preventDefault()
-                this.handleSubmit()
-            },
-
-            handleSubmit() {
-                this.$nextTick(() => {
-                    this.closeModal()
-                })
-            },
-            
-            closeModal(){
-                this.$bvModal.hide('detalle-modal')
-            },
-
-            openModal(detalleId){
-                this.$bvModal.show('detalle-modal')
-                this.editarDetalle(detalleId)
             },
         }
     }

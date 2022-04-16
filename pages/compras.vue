@@ -63,28 +63,26 @@
                                                             <p class="text-sm font-weight-bold mb-0">{{compra.numeroFactura_compra}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{compra.fecha_compra}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{compra.fecha_compra}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{compra.nombre_proveedor}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{compra.nombre_proveedor}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{compra.total_compra}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{compra.total_compra}}</p>
                                                         </td>
-                                                        <td class="align-middle text-sm">
-                                                            <div>
-                                                                <nuxt-link :to="{name:'compra-compraId',params:{compraId: compra.id_compra}}">
+                                                        <td class="text-sm">
+                                                            <div class="mb-0">
+                                                                <nuxt-link :to="{name:'detalle-detalleId',params:{detalleId: compra.id_compra}}">
                                                                     Ver detalles
                                                                 </nuxt-link>
                                                             </div>
                                                         </td>
-                                                        <td class="align-middle">
+                                                        <td class="align-middle"  v-if="editar">
                                                             <div class="contenedorAcciones">
-                                                                <div v-if="editar">
-                                                                    <nuxt-link :to="{name:'compra-compraId',params:{compraId: compra.id_compra}}">
-                                                                        <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
-                                                                    </nuxt-link>
-                                                                </div>
+                                                                <nuxt-link :to="{name:'compra-compraId',params:{compraId: compra.id_compra}}">
+                                                                    <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
+                                                                </nuxt-link>
                                                             </div>
                                                         </td>
                                                     </tr>

@@ -45,7 +45,6 @@
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Detalle</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Marca</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Unidad Medida</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Cantidad</th>
                                                         <th></th>
                                                     </tr>
@@ -71,9 +70,6 @@
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <p class="text-s font-weight-bold mb-0">{{product.marca_producto}}</p>
-                                                        </td>
-                                                        <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{product.unidadMedida_producto}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <p class="text-s font-weight-bold mb-0">{{product.cantidad_producto}}</p>
@@ -165,5 +161,4 @@
             }
         }
     }
-
 </script>

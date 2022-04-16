@@ -22,46 +22,51 @@
                                 </div>
                             </div>
                             <div class="card-body px-0 pt-0 pb-2">
-                                <b-form class="ps-4 mt-3 pe-4">
+                                <b-form class="ps-4 mt-3 pe-4" @submit.stop.prevent="handleSubmit2()">
                                     <div class="row mt-2">
                                         <div class="col-12 col-md-8 col-lg-3">
                                             <b-form-group 
                                                 label="Fecha" 
-                                                label-for="fecha-input">
+                                                label-for="fecha-input"
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.fechaState">
                                                 <b-form-datepicker style="height: 38px;"
-                                                id="fecha-input" locale="es" placeholder="Seleccione una fecha"></b-form-datepicker>
+                                                id="fecha-input" locale="es" placeholder="Seleccione una fecha" v-model='form.fecha'></b-form-datepicker>
                                             </b-form-group>
                                         </div>
                                         <div class="col-12 col-md-8 col-lg-3">
                                             <b-form-group 
                                                 label="Número de Factura" 
-                                                label-for="factura-input">
+                                                label-for="factura-input"
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.facturaState">
                                                 <b-form-input  
-                                                    id="factura-input" class="form-control" type="text" placeholder="Factura"
-                                                >
+                                                    id="factura-input" class="form-control" type="text" placeholder="Factura" v-model='form.numeroFactura'>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
                                         <div class="col-12 col-md-8 col-lg-3">
                                             <b-form-group 
                                                 label="Proveedor" 
-                                                label-for="proveedor-input">
-                                                <b-form-input list="input-list" id="proveedor-input" placeholder="Seleccione un Proveedor"></b-form-input>
-                                                <datalist id="input-list">
-                                                    <option value="San Francisco"></option>
-                                                    <option value="New York"></option>
-                                                    <option value="Seattle"></option>
-                                                    <option value="Los Angeles"></option>
-                                                </datalist>
+                                                label-for="proveedor-input"
+                                                invalid-feedback="Seleccione un proveedor" 
+                                                :state="form.proveedorState">
+                                                <select 
+                                                    id="proveedor-input" v-model="form.nombreProveedor" class="form-select" ref='proveedor_select'  required>
+                                                    <option disabled :value='null'> Seleccione</option>
+                                                     <option v-for="proveedor in this.proveedores" :value="proveedor.id_proveedor">
+                                                        {{proveedor.nombre_proveedor}}
+                                                    </option>
+                                                </select>
                                             </b-form-group>
                                         </div>
                                     </div>    
                                     <div class="d-lg-flex">
+                                        <div class="ms-auto my-auto mt-lg-0 mt-2">
                                             <div class="ms-auto my-auto">
-                                                <nuxt-link :to="{name:'nuevaCompra'}" class="btn bg-gradient-primary btn-sm mb-0">
-                                                +&nbsp; Agregar productos
-                                                </nuxt-link>
+                                                <a @click="openModal()" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Agregar productos</a>
                                             </div>
+                                        </div>
                                     </div>                            
                                     <div class="table-responsive p-0 mt-4">
                                         <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
@@ -70,44 +75,33 @@
                                                     <thead>
                                                         <tr>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Producto</th>
-                                                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">PVP</th>
-                                                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">PVD</th>
-                                                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Num Serie</th>
-                                                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Desct.</th>
-                                                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Precio Unit</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Cant.</th>
-                                                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Precio</th>
+                                                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Precio Unit</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Desct.</th>
+                                                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Precio Total</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
+                                                        <tr v-if="this.detalles.length == 0">
+                                                            <td colspan="10">
+                                                                <h6 class="ms-3 mb-2 text-sm text-center mt-4">Sin Productos </h6> 
+                                                            </td> 
+                                                        </tr>
+                                                        <tr v-else v-for="detalle in this.detalles">
                                                             <td class="align-middle text-center text-sm">
-                                                                <p class="text-sm font-weight-bold mb-0">hola</p>
+                                                                <p class="text-sm font-weight-bold mb-0">{{detalle.productos_id_producto}}</p>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
-                                                                <p class="text-sm font-weight-bold mb-0">hola</p>
+                                                                <p class="text-sm font-weight-bold mb-0">{{detalle.cantidad_detalleCompra}}</p>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
-                                                                <p class="text-sm font-weight-bold mb-0">hola</p>
+                                                                <p class="text-sm font-weight-bold mb-0">${{detalle.precioUnitario_detalleCompra}}</p>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
-                                                                <p class="text-sm font-weight-bold mb-0">hola</p>
+                                                                <p class="text-sm font-weight-bold mb-0">%{{detalle.descuentoPorcentaje_detalleCompra}}</p>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
-                                                                <p class="text-sm font-weight-bold mb-0">hola</p>
-                                                            </td>
-                                                            <td class="align-middle text-center text-sm">
-                                                                <p class="text-sm font-weight-bold mb-0">hola</p>
-                                                            </td>
-                                                            <td class="align-middle text-center text-sm">
-                                                                <p class="text-sm font-weight-bold mb-0">hola</p>
-                                                            </td>
-                                                            <td class="align-middle text-center text-sm">
-                                                                <p class="text-sm font-weight-bold mb-0">hola</p>
-                                                            </td>
-                                                            <td class="align-middle text-center text-sm">
-                                                                <p class="text-sm font-weight-bold mb-0">hola</p>
+                                                                <p class="text-sm font-weight-bold mb-0">${{detalle.precio_detalleCompra}}</p>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -115,38 +109,157 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mt-4 d-lg-flex pe-4">
-                                        <div class="col-12 col-md-8 col-lg-2 ms-auto my-auto">
-                                            <b-form-group 
-                                                label="Subtotal" 
-                                                label-for="subtotal-input">
-                                                <b-form-input  
-                                                    id="subtotal-input" class="form-control" type="text" placeholder="Subtotal">
-                                                </b-form-input>
-                                            </b-form-group>
-                                        </div>
-                                        <div class="col-12 col-md-8 col-lg-2">
-                                            <b-form-group 
-                                                label="Descuento" 
-                                                label-for="descuento-input">
-                                                <b-form-input  
-                                                    id="descuento-input" class="form-control" type="text" placeholder="Descuento">
-                                                </b-form-input>
-                                            </b-form-group>
+                                    <div class="row mt-3 d-lg-flex pe-4">
+                                        <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
+                                            <label class="col-5">Subtotal</label>
+                                            <span class="col-4 text-sm">${{this.form.subtotal}}</span>
                                         </div>
                                     </div>
                                     <div class="row mt-1 d-lg-flex pe-4">
-                                        <div class="col-12 col-md-8 col-lg-2 ms-auto my-auto">
-                                            <b-form-group 
-                                                label="Total" 
-                                                label-for="total-input">
-                                                <b-form-input  
-                                                    id="total-input" class="form-control" type="text" placeholder="Total">
-                                                </b-form-input>
-                                            </b-form-group>
+                                        <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
+                                            <label class="col-5">Descuento</label>
+                                            <span class="text-sm col-4">${{this.form.descuento}}</span>
                                         </div>
-                                    </div>              
+                                    </div>
+                                    <div class="row mt-1 d-lg-flex pe-4">
+                                        <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
+                                            <label class="col-5">IVA %12</label>
+                                            <span class="text-sm col-4">${{this.iva}}</span>
+                                        </div>
+                                    </div>  
+                                    <div class="row mt-1 d-lg-flex pe-4">
+                                        <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
+                                            <label class="col-5">Total</label>
+                                            <span class="text-sm col-4">${{this.form.total}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-12 col-md-8 col-lg-6">
+                                            <div class="d-flex ms-auto mb-3">
+                                                <b-button class="btn bg-gradient-primary mb-0" type='submit'> Agregar</b-button>
+                                            </div>
+                                        </div>
+                                    </div>                                      
                                 </b-form>
+                                <b-modal id="detalle-modal" size="xl" title='Añadir productos' cancel-title='Cancelar' ok-title='Agregar' @ok="handleOk($event)">
+                                    <b-form @submit.stop.prevent="handleSubmit()">
+                                        <div class="row">
+                                            <div class="col-12 col-lg-6">
+                                                <b-card style="border: 1px solid rgba(0, 0, 0, 0.125);" class="header-detalle" sub-title="Detalle">
+                                                    <div class="row mt-3">
+                                                        <div class="col-12 col-md-10">
+                                                            <b-form-group 
+                                                                label="Producto" 
+                                                                label-for="producto-select">
+                                                                <select 
+                                                                    id="producto-select" v-model="detalle.producto" class="form-select" ref='product_select'  required>
+                                                                    <option disabled :value='null'> Seleccione</option>
+                                                                    <option v-for="producto in this.productos" :value="producto.id_producto">
+                                                                        {{producto.nombre_producto}}
+                                                                    </option>
+                                                                </select>
+                                                            </b-form-group>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-12 col-md-5">
+                                                            <b-form-group 
+                                                                label="Cantidad" 
+                                                                label-for="cant-input">
+                                                                <b-form-input @change='mostrarInput($event)' required
+                                                                    id="cant-input" class="form-control" type="number" min='1' v-model="detalle.cantidad">
+                                                                </b-form-input>
+                                                            </b-form-group>
+                                                        </div>
+                                                        <div class="col-12 col-md-5">
+                                                            <b-form-group 
+                                                                label="Precio Unitario" 
+                                                                label-for="precioUnit-input">
+                                                                <b-form-input @change="calcularPrecioTotal()" required
+                                                                    id="precioUnit-input" class="form-control" type="number" min='1' v-model="detalle.precioUnit">
+                                                                </b-form-input>
+                                                            </b-form-group>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-12 col-md-5">
+                                                            <b-form-group 
+                                                                label="Descuento" 
+                                                                label-for="desct-input">
+                                                                <b-form-input required
+                                                                    id="desct-input" class="form-control" type="number" min='1' v-model="detalle.desct">
+                                                                </b-form-input>
+                                                            </b-form-group>
+                                                        </div>
+                                                        <div class="col-12 col-md-5">
+                                                            <b-form-group 
+                                                                label="Precio Total" 
+                                                                label-for="precioTotal-input">
+                                                                <b-form-input 
+                                                                    id="precioTotal-input" class="form-control" readonly type="text" v-model="detalle.precioTotal">
+                                                                </b-form-input>
+                                                            </b-form-group>
+                                                        </div>
+                                                    </div>
+                                                </b-card>
+                                            </div>
+                                            <div class="col-12 col-lg-6">
+                                                <b-card style="border: 1px solid rgba(0, 0, 0, 0.125);" sub-title='Item'>
+                                                    <div class="row mt-3">
+                                                        <div class="col-12 col-md-5">
+                                                            <b-form-group 
+                                                                label="PVP" 
+                                                                label-for="pvp-input">
+                                                                <b-form-input required
+                                                                    id="pvp-input" class="form-control" type="number" min='1' v-model="detalle.pvp">
+                                                                </b-form-input>
+                                                            </b-form-group>
+                                                        </div>
+                                                        <div class="col-12 col-md-5">
+                                                            <b-form-group 
+                                                                label="PVD" 
+                                                                label-for="pvd-input">
+                                                                <b-form-input required
+                                                                    id="pvd-input" class="form-control" type="number" min='1' v-model="detalle.pvd">
+                                                                </b-form-input>
+                                                            </b-form-group>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-12 col-md-5">
+                                                            <b-form-group 
+                                                                label="Descuento" 
+                                                                label-for="desctItem-input">
+                                                                <b-form-input required
+                                                                    id="desctItem-input" class="form-control" min='1' type="number" v-model="detalle.desctItem">
+                                                                </b-form-input>
+                                                            </b-form-group>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2" >
+                                                        <div class="col-12 col-md-5">
+                                                            <div v-if="parseInt(this.numCant) == 1">
+                                                                <label>Número de Serie</label>
+                                                                <b-form-input 
+                                                                    id="num-input" class="form-control" type="text" v-model="detalle.serie.num[0]">
+                                                                </b-form-input>
+                                                            </div>
+                                                            <div v-else>
+                                                                <label>Números de Series</label>
+                                                                <div v-for="i in parseInt(this.numCant)" style="display: flex">
+                                                                    <span style="margin-right: 1rem; margin-top: 1rem;" class="text-sm">{{i}}</span>
+                                                                    <b-form-input 
+                                                                        id="num-input" class="form-control mt-2" type="text" v-model="detalle.serie.num[i]">
+                                                                    </b-form-input>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </b-card>
+                                            </div>
+                                        </div>
+                                    </b-form>
+                                </b-modal>
                             </div>
                         </div>
                     </div>
@@ -167,16 +280,185 @@
         middleware: 'authenticated',
         data(){
             return{
+                form:{
+                    fecha:'',
+                    fechaState:null,
+                    numeroFactura:'',
+                    facturaState:null,
+                    nombreProveedor:'',
+                    proveedorState:null,
+                    total:null,
+                    subtotal:null,
+                    descuento:null,
+                },
+                detalle:{
+                    producto:'',
+                    pvp:'',
+                    pvd:'',
+                    serie:{
+                        num:[],
+                    },
+                    desctItem:'',
+                    cantidad:'',
+                    precioTotal:'',
+                    precioUnit:'',
+                    desct:'',
+                },
+                proveedores:[],
+                productos:[],
+                detalles:[],
+                precios:[],
                 crear:null,
+                iva:null,
+                numCant:1,
             }
         },
         async mounted(){
+            this.getProveedores()
+            this.getProductos()
             this.permisosCrud = getSubmodulos('Compras','OrdenCompra')
             if('crear' in this.permisosCrud)
                 this.crear = true
         },
         methods:{
+            calcularPrecioTotal(){
+                this.detalle.precioTotal = (parseInt(this.detalle.cantidad) * parseFloat(this.detalle.precioUnit)).toFixed(2)
+            },
+            
+            agregarPrecios(){
+                this.precios=[]
+                for (var i = 0; i < this.detalles.length; i++) {
+                    const precio = this.detalles[i].precio_detalleCompra
+                    this.precios.push((parseFloat(precio)).toFixed(2))
+                }
+            },
+            
+            calcularSubtotal(){  
+                this.form.subtotal = null
+                for (var i = 0; i < this.precios.length; i++) {
+                    this.form.subtotal += parseFloat(this.precios[i])
+                }
+            },
 
+            calcularDescuento(){
+                
+            },
+
+            calcularIva(){
+                this.iva = this.form.subtotal - this.form.descuento
+                this.iva = (this.iva*0.12).toFixed(2)
+            },
+
+            calcularTotal(){
+                this.form.total = this.form.subtotal - this.form.descuento + this.form.iva
+            },
+
+            async crearCompra(){
+
+            },
+
+            async getProveedores(){
+                await axios.get(`http://10.147.17.173:5003/proveedoresHabilitados`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then(response => {
+                    this.proveedores = response.data
+                })
+                .catch(e => {
+                    this.$toast.error(e.response.data.detail)
+                })
+            },
+
+            async getProductos(){
+                await axios.get(`http://10.147.17.173:5002/productosHabilitados`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then(response => {
+                    this.productos = response.data
+                })
+                .catch(e => {
+                    this.$toast.error(e.response.data.detail)
+                })
+            },
+
+            crearDetalles(){
+                var detalle = {
+                    'productos_id_producto':this.detalle.producto,
+                    'pvp_item': (parseFloat(this.detalle.pvp)).toFixed(2),
+                    'pvd_item': (parseFloat(this.detalle.pvd)).toFixed(2),
+                    'descuento_item': parseInt(this.detalle.desctItem),
+                    'precioUnitario_detalleCompra': (parseFloat(this.detalle.precioUnit)).toFixed(2),
+                    'cantidad_detalleCompra': parseInt(this.detalle.cantidad),
+                    'precio_detalleCompra': (parseFloat(this.detalle.precioTotal)).toFixed(2),
+                    'descuentoPorcentaje_detalleCompra': parseInt(this.detalle.desct),
+                    'numeroSerie_item': this.detalle.serie
+                }   
+                this.detalles.push(detalle)
+                this.agregarPrecios()
+                this.calcularSubtotal()
+            },
+
+            mostrarInput(event){
+                this.numCant = event
+            },
+
+            validarCompra() {
+                const valid = this.$refs.name_input.checkValidity()
+                const valid3 = this.$refs.rol_select.checkValidity()
+                this.form.nameState = valid
+                this.form.rolState = valid3
+                if(valid == false || valid2 == false || valid3 == false )
+                    return false
+                else
+                    return true
+            },
+            validarDetalle() {
+                const valid = this.$refs.name_input.checkValidity()
+                const valid3 = this.$refs.rol_select.checkValidity()
+                this.form.nameState = valid
+                this.form.rolState = valid3
+                if(valid == false || valid2 == false || valid3 == false )
+                    return false
+                else
+                    return true
+            },
+
+            handleOk(bvModalEvt){
+                bvModalEvt.preventDefault()
+                this.handleSubmit()
+            },
+
+            handleSubmit() {
+                /*if (!this.validarForm())
+                    return*/
+                this.crearDetalles()
+                this.$nextTick(() => {
+                    this.closeModal()
+                })
+            },
+
+            handleSubmit2() {
+                if (!this.validarCompra())
+                    return
+                this.crearCompra()
+            },
+            
+            onReset(){
+                this.detalle.pvp= ''
+                this.detalle.pvd= ''
+                this.detalle.numSerie= ''
+                this.detalle.desctItem= ''
+                this.detalle.cantidad= 1
+                this.detalle.precioTotal= ''
+                this.detalle.precioUnit= ''
+                this.detalle.desct= ''
+                this.numCant = 1
+            },
+
+            closeModal(){
+                this.$bvModal.hide('detalle-modal')
+            },
+
+            openModal(){
+                this.$bvModal.show('detalle-modal')
+                this.onReset()
+            },
         },
     }
 </script>

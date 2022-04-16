@@ -25077,6 +25077,9 @@ pre[class*="language-"] {
   background-color: #343a40!important;
 }
 
+.card-subtitle{
+  border-bottom:  1px solid rgba(0, 0, 0, 0.125);
+}
 @media(max-width:576px){
   .carousel-item{
     height: 32vh!important;
