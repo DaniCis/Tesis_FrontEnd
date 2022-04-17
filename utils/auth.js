@@ -67,6 +67,9 @@ export function getSubmodulos(modulo,submodulo){
         case 'Clientes':
             submodulos = submodulos.Clientes
             break;
+        case 'Ventas':
+            submodulos = submodulos.Ventas
+            break;
         case 'Productos':
             submodulos = submodulos.Productos
             break;
@@ -75,7 +78,7 @@ export function getSubmodulos(modulo,submodulo){
             break;
         case 'OrdenCompra':
             submodulos = submodulos.OrdenCompra
-            break;
+            break;  
     }
     return submodulos
 }

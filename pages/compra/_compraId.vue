@@ -22,7 +22,7 @@
                                 </div>
                             </div>
                             <div class="card-body px-0 pt-0 pb-2">
-                                <b-form class="ps-4 mt-3 pe-4">
+                                <b-form class="ps-4 mt-3 pe-4" @submit.stop.prevent="handleSubmit2()">
                                     <div class="row mt-2">
                                         <div class="col-12 col-md-8 col-lg-3">
                                             <b-form-group 
@@ -48,8 +48,7 @@
                                                 label-for="proveedor-input">
                                                 <select 
                                                     id="proveedor-input" v-model="form.nombreProveedor" class="form-select" ref='proveedor_select' required>
-                                                    <option disabled :value='null'> Seleccione</option>
-                                                     <option v-for="proveedor in this.proveedores" :value="proveedor.id_proveedor">
+                                                   <option v-for="proveedor in this.proveedores" :value="proveedor.id_proveedor">
                                                         {{proveedor.nombre_proveedor}}
                                                     </option>
                                                 </select>
@@ -158,7 +157,7 @@
                                                     label="Precio Unitario" 
                                                     label-for="precioUnit-input">
                                                     <b-form-input 
-                                                        id="precioUnit-input" class="form-control" type="text" v-model="detalle.precioUnit">
+                                                        id="precioUnit-input" class="form-control" type="number" step='any' v-model="detalle.precioUnit">
                                                     </b-form-input>
                                                 </b-form-group>
                                             </div>
@@ -169,7 +168,7 @@
                                                     label="Descuento" 
                                                     label-for="desct-input">
                                                     <b-form-input 
-                                                        id="desct-input" class="form-control" type="text" v-model="detalle.desct">
+                                                        id="desct-input" class="form-control" type="number" v-model="detalle.desct">
                                                     </b-form-input>
                                                 </b-form-group>
                                             </div>
@@ -198,11 +197,11 @@
             return{
                 form:{
                     fecha:'',
-                    numeroFactura:'',
+                    numeroFactura:null,
                     nombreProveedor:'',
-                    total:'',
-                    subtotal:'',
-                    descuento:'',
+                    total:null,
+                    subtotal:null,
+                    descuento:null,
                 },
                 detalle:{
                     producto:'',
@@ -213,8 +212,12 @@
                 compras:[],
                 proveedores:[],
                 detalles:[],
+                detallesEdit:[],
                 productos:[],
+                precios:[],
+                descuentos:[],
                 editar:null,
+                noEditado:true,
                 iva:null,
                 compraId:'',
             }
@@ -232,14 +235,9 @@
                 this.$toast.error('No tiene permiso de lectura')
         },    
         methods:{
-
-            calcularIva(subtotal, descuento){
-                this.iva = parseFloat(subtotal.slice(1)) - parseFloat(descuento.slice(1))
+            calcularIva(){
+                this.iva = parseFloat(this.form.subtotal.slice(1)) - parseFloat(this.form.descuento.slice(1))
                 this.iva = (this.iva*0.12).toFixed(2)
-            },
-
-            calcularPrecioTotal(cantidad, precio){
-                this.form.total = 1
             },
 
             async getCompra(compraId){
@@ -251,13 +249,38 @@
                     this.form.total = this.compras.total_compra
                     this.form.subtotal = this.compras.subtotal_compra
                     this.form.descuento = this.compras.descuento_compra
-                    this.form.nombreProveedor = response.data[0].nombre_proveedor
+                    this.form.nombreProveedor = this.compras.proveedores_id_proveedor
                     this.detalles = this.compras.detalle_compra
-                    this.calcularIva(this.form.subtotal,this.form.descuento)
+                    this.calcularIva()
                 })
                 .catch(e => {
                      this.$toast.error(e.response.data.detail)
                 })
+            },
+
+            async editarCompra(compraId){
+                if(this.editar){
+                    var params = {
+                        fecha_compra: this.form.fecha,
+                        numeroFactura_compra: parseInt(this.form.numeroFactura),
+                        subtotal_compra:parseFloat(this.form.subtotal),
+                        descuento_compra: parseFloat(this.form.descuento),
+                        total_compra: this.form.total,
+                        proveedores_id_proveedor: this.form.nombreProveedor,
+                        detalle_compra: this.detalles,
+                    }
+                    console.log(params)
+                    /*
+                    await axios.put(`http://10.147.17.173:5003/compra/${compraId}`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
+                        this.$toast.success('Compra creada con éxito')
+                        this.$router.push('/compras');
+                    }).catch (e => {
+                        this.$toast.error(e.response.data.detail)
+                    })*/
+                }else{
+                    this.$toast.error('No tiene permisos para agregar')
+                }
             },
 
             async getProveedores(){
@@ -280,9 +303,27 @@
                 })
             },
 
-            async editarDetalle(detalleId){
+            async getDetalle(detalleId){
+                await axios.get(`http://10.147.17.173:5003/detalle_compra/${detalleId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                }) .then(response => {
+                    this.detalle.producto = response.data.nombre_producto
+                    this.detalle.precioUnit = response.data.precioUnitario_detalleCompra.slice(1)
+                    this.detalle.desct = response.data.descuentoPorcentaje_detalleCompra
+                }) .catch(e => {
+                    this.$toast.error(e.response.data.detail)
+                })
+            },
 
-                this.calcularPrecioTotal()
+            editarDetalle(){
+                var detalle = {
+                    id_detalleCompra: 1,
+                    productos_id_producto: this.detalle.producto,
+                    precioUnitario_detalleCompra: (parseFloat(this.detalle.precioUnit)).toFixed(2),
+                    precio_detalleCompra: (parseFloat(this.detalle.precioTotal)).toFixed(2),
+                    descuentoPorcentaje_detalleCompra: parseInt(this.detalle.desct),
+                }
+                this.detalles.push(detalle)
+
             },
 
             handleOk(bvModalEvt){
@@ -291,9 +332,15 @@
             },
 
             handleSubmit() {
+                this.noEditado = false
+                this.editarDetalle()
                 this.$nextTick(() => {
                     this.closeModal()
                 })
+            },
+
+            handleSubmit2() {
+                this.editarCompra(this.compraId)
             },
             
             closeModal(){
@@ -302,7 +349,7 @@
 
             openModal(detalleId){
                 this.$bvModal.show('detalle-modal')
-                this.editarDetalle(detalleId)
+                this.getDetalle(detalleId)
             },
         }
     }

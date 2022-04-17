@@ -22,7 +22,7 @@
                                 </div>
                             </div>
                             <div class="card-body px-0 pt-0 pb-2">
-                                <b-form class="ps-4 mt-3 pe-4" @submit.stop.prevent="handleSubmit2()">
+                                <b-form class="ps-4 mt-3 pe-4" @submit.stop.prevent="handleSubmit2()" novalidate>
                                     <div class="row mt-2">
                                         <div class="col-12 col-md-8 col-lg-3">
                                             <b-form-group 
@@ -30,7 +30,7 @@
                                                 label-for="fecha-input"
                                                 invalid-feedback="Este campo es requerido" 
                                                 :state="form.fechaState">
-                                                <b-form-datepicker style="height: 38px;"
+                                                <b-form-datepicker style="height: 38px;" :state="form.fechaState" required ref='fecha_input'
                                                 id="fecha-input" locale="es" placeholder="Seleccione una fecha" v-model='form.fecha'></b-form-datepicker>
                                             </b-form-group>
                                         </div>
@@ -40,8 +40,8 @@
                                                 label-for="factura-input"
                                                 invalid-feedback="Este campo es requerido" 
                                                 :state="form.facturaState">
-                                                <b-form-input  
-                                                    id="factura-input" class="form-control" type="text" placeholder="Factura" v-model='form.numeroFactura'>
+                                                <b-form-input  required  :state="form.facturaState" ref="factura_input"
+                                                    id="factura-input" class="form-control" type="number" placeholder="Factura" v-model='form.numeroFactura'>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -52,7 +52,7 @@
                                                 invalid-feedback="Seleccione un proveedor" 
                                                 :state="form.proveedorState">
                                                 <select 
-                                                    id="proveedor-input" v-model="form.nombreProveedor" class="form-select" ref='proveedor_select'  required>
+                                                    id="proveedor-input" v-model="form.nombreProveedor" class="form-select" ref='proveedor_select' :state="form.proveedorState" required>
                                                     <option disabled :value='null'> Seleccione</option>
                                                      <option v-for="proveedor in this.proveedores" :value="proveedor.id_proveedor">
                                                         {{proveedor.nombre_proveedor}}
@@ -74,6 +74,7 @@
                                                 <table class="table table-flush dataTable-table">
                                                     <thead>
                                                         <tr>
+                                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Producto</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Cant.</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Precio Unit</th>
@@ -87,9 +88,12 @@
                                                                 <h6 class="ms-3 mb-2 text-sm text-center mt-4">Sin Productos </h6> 
                                                             </td> 
                                                         </tr>
-                                                        <tr v-else v-for="detalle in this.detalles">
+                                                        <tr v-else v-for="(detalle,i) in this.detalles">
+                                                         <td>
+                                                                <h6 class=" ms-3 mb-2 text-sm">{{i+1}}</h6>
+                                                            </td>
                                                             <td class="align-middle text-center text-sm">
-                                                                <p class="text-sm font-weight-bold mb-0">{{detalle.productos_id_producto}}</p>
+                                                                <p class="text-sm font-weight-bold mb-0">{{detalle.nombre_producto}}</p>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">{{detalle.cantidad_detalleCompra}}</p>
@@ -150,11 +154,13 @@
                                                         <div class="col-12 col-md-10">
                                                             <b-form-group 
                                                                 label="Producto" 
-                                                                label-for="producto-select">
+                                                                label-for="producto-select"
+                                                                invalid-feedback="Seleccione un producto" 
+                                                                :state="detalle.productoState">
                                                                 <select 
-                                                                    id="producto-select" v-model="detalle.producto" class="form-select" ref='product_select'  required>
+                                                                    id="producto-select" v-model="detalle.producto" class="form-select" :state="detalle.productoState" ref='producto_select' required>
                                                                     <option disabled :value='null'> Seleccione</option>
-                                                                    <option v-for="producto in this.productos" :value="producto.id_producto">
+                                                                    <option v-for="producto in this.productos" :value="{id: producto.id_producto, nombre:producto.nombre_producto}">
                                                                         {{producto.nombre_producto}}
                                                                     </option>
                                                                 </select>
@@ -165,18 +171,20 @@
                                                         <div class="col-12 col-md-5">
                                                             <b-form-group 
                                                                 label="Cantidad" 
-                                                                label-for="cant-input">
-                                                                <b-form-input @change='mostrarInput($event)' required
-                                                                    id="cant-input" class="form-control" type="number" min='1' v-model="detalle.cantidad">
+                                                                label-for="cant-input"
+                                                                invalid-feedback="Este campo es requerido" 
+                                                                :state="detalle.cantidadState">
+                                                                <b-form-input @change='mostrarInput($event)' required :state="detalle.cantidadState" ref="cant_input" id="cant-input" class="form-control" type="number" min='1' v-model="detalle.cantidad">
                                                                 </b-form-input>
                                                             </b-form-group>
                                                         </div>
                                                         <div class="col-12 col-md-5">
                                                             <b-form-group 
                                                                 label="Precio Unitario" 
-                                                                label-for="precioUnit-input">
-                                                                <b-form-input @change="calcularPrecioTotal()" required
-                                                                    id="precioUnit-input" class="form-control" type="number" min='1' v-model="detalle.precioUnit">
+                                                                label-for="precioUnit-input"
+                                                                invalid-feedback="Este campo es requerido" 
+                                                                :state="detalle.precioUnitState">
+                                                                <b-form-input @change="calcularPrecioTotal()" required ref="precioUnit_input" :state="detalle.precioUnitState" id="precioUnit-input" class="form-control" type="number" min='1' step="any" v-model="detalle.precioUnit">
                                                                 </b-form-input>
                                                             </b-form-group>
                                                         </div>
@@ -185,8 +193,10 @@
                                                         <div class="col-12 col-md-5">
                                                             <b-form-group 
                                                                 label="Descuento" 
-                                                                label-for="desct-input">
-                                                                <b-form-input required
+                                                                label-for="desct-input"
+                                                                invalid-feedback="Este campo es requerido" 
+                                                                :state="detalle.desctState">
+                                                                <b-form-input required  :state="detalle.desctState"  ref="desct_input"
                                                                     id="desct-input" class="form-control" type="number" min='1' v-model="detalle.desct">
                                                                 </b-form-input>
                                                             </b-form-group>
@@ -209,8 +219,10 @@
                                                         <div class="col-12 col-md-5">
                                                             <b-form-group 
                                                                 label="PVP" 
-                                                                label-for="pvp-input">
-                                                                <b-form-input required
+                                                                label-for="pvp-input"
+                                                                invalid-feedback="Este campo es requerido" 
+                                                                :state="detalle.pvpState">
+                                                                <b-form-input required :state="detalle.pvpState" ref="pvp_input" step="any"
                                                                     id="pvp-input" class="form-control" type="number" min='1' v-model="detalle.pvp">
                                                                 </b-form-input>
                                                             </b-form-group>
@@ -218,8 +230,10 @@
                                                         <div class="col-12 col-md-5">
                                                             <b-form-group 
                                                                 label="PVD" 
-                                                                label-for="pvd-input">
-                                                                <b-form-input required
+                                                                label-for="pvd-input"
+                                                                invalid-feedback="Este campo es requerido" 
+                                                                :state="detalle.pvdState">
+                                                                <b-form-input required :state="detalle.pvdState" ref="pvd_input" step="any"
                                                                     id="pvd-input" class="form-control" type="number" min='1' v-model="detalle.pvd">
                                                                 </b-form-input>
                                                             </b-form-group>
@@ -229,8 +243,10 @@
                                                         <div class="col-12 col-md-5">
                                                             <b-form-group 
                                                                 label="Descuento" 
-                                                                label-for="desctItem-input">
-                                                                <b-form-input required
+                                                                label-for="desctItem-input"
+                                                                invalid-feedback="Este campo es requerido" 
+                                                                :state="detalle.desctItemState">
+                                                                <b-form-input required :state="detalle.desctItemState" ref="desctItem_input"
                                                                     id="desctItem-input" class="form-control" min='1' type="number" v-model="detalle.desctItem">
                                                                 </b-form-input>
                                                             </b-form-group>
@@ -240,17 +256,24 @@
                                                         <div class="col-12 col-md-5">
                                                             <div v-if="parseInt(this.numCant) == 1">
                                                                 <label>Número de Serie</label>
-                                                                <b-form-input 
+                                                                <b-form-group
+                                                                    invalid-feedback="Este campo es requerido" >
+                                                                    <b-form-input required 
                                                                     id="num-input" class="form-control" type="text" v-model="detalle.serie.num[0]">
-                                                                </b-form-input>
+                                                                    </b-form-input>
+                                                                </b-form-group>
                                                             </div>
                                                             <div v-else>
                                                                 <label>Números de Series</label>
                                                                 <div v-for="i in parseInt(this.numCant)" style="display: flex">
-                                                                    <span style="margin-right: 1rem; margin-top: 1rem;" class="text-sm">{{i}}</span>
-                                                                    <b-form-input 
-                                                                        id="num-input" class="form-control mt-2" type="text" v-model="detalle.serie.num[i]">
-                                                                    </b-form-input>
+                                                                    <span style="margin-right: 1rem; margin-top: 0.8rem;" class="text-sm">{{i}}</span>
+                                                                    <b-form-group
+                                                                        invalid-feedback="Este campo es requerido" 
+                                                                        :state="detalle.serieState.numState[i]">
+                                                                        <b-form-input required :state="detalle.serieState.numState[i]"
+                                                                            id="num-input" class="form-control mt-1" type="text" v-model="detalle.serie.num[i]">
+                                                                        </b-form-input>
+                                                                    </b-form-group>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -293,21 +316,29 @@
                 },
                 detalle:{
                     producto:'',
+                    productoState:null,
                     pvp:'',
+                    pvpState:null,
                     pvd:'',
+                    pvdState:null,
                     serie:{
                         num:[],
                     },
                     desctItem:'',
+                    desctItemState:null,
                     cantidad:'',
+                    cantidadState:null,
                     precioTotal:'',
                     precioUnit:'',
+                    precioUnitState:null,
                     desct:'',
+                    desctState:null
                 },
                 proveedores:[],
                 productos:[],
                 detalles:[],
                 precios:[],
+                descuentos:[],
                 crear:null,
                 iva:null,
                 numCant:1,
@@ -335,26 +366,63 @@
             
             calcularSubtotal(){  
                 this.form.subtotal = null
-                for (var i = 0; i < this.precios.length; i++) {
-                    this.form.subtotal += parseFloat(this.precios[i])
-                }
+                for (var i = 0; i < this.precios.length; i++) 
+                    this.form.subtotal += parseFloat(this.precios[i])       
+                this.form.subtotal = this.form.subtotal.toFixed(2)
             },
 
-            calcularDescuento(){
-                
+            calcularDescuentoInd(){
+                this.descuentos = []
+                for (var i = 0; i < this.detalles.length; i++) {
+                    const desctInd = (parseFloat(this.detalles[i].descuentoPorcentaje_detalleCompra))/100
+                    const desct = parseFloat(this.detalles[i].precio_detalleCompra) * desctInd.toFixed(2)
+                    this.descuentos.push((parseFloat(desct)).toFixed(2))
+                }
+            },
+            
+            calcularDescuentoTotal(){
+                this.form.descuento = null
+                for (var i = 0; i < this.descuentos.length; i++)
+                    this.form.descuento += parseFloat(this.descuentos[i])
+                this.form.descuento = this.form.descuento.toFixed(2)
             },
 
             calcularIva(){
-                this.iva = this.form.subtotal - this.form.descuento
-                this.iva = (this.iva*0.12).toFixed(2)
+                this.iva = (this.form.subtotal - this.form.descuento)
+                this.iva = parseFloat((this.iva*0.12).toFixed(2))
             },
 
             calcularTotal(){
-                this.form.total = this.form.subtotal - this.form.descuento + this.form.iva
+                this.form.total = null
+                this.form.total = (this.form.subtotal - this.form.descuento) + this.iva
             },
 
             async crearCompra(){
-
+                if(this.crear){
+                    if(this.detalles.length ==0){
+                        this.$toast.error('Debe agregar productos para registar una compra')
+                    }else{
+                        var params = {
+                            fecha_compra: this.form.fecha,
+                            numeroFactura_compra: parseInt(this.form.numeroFactura),
+                            subtotal_compra:parseFloat(this.form.subtotal),
+                            descuento_compra: parseFloat(this.form.descuento),
+                            total_compra: this.form.total,
+                            proveedores_id_proveedor: this.form.nombreProveedor,
+                            detalle_compra: this.detalles,
+                        }
+                        console.log(params)
+                        await axios.post('http://10.147.17.173:5003/compra', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                        }).then(() => {
+                            this.$toast.success('Compra creada con éxito')
+                            this.$router.push('/compras');
+                        }).catch (e => {
+                            this.$toast.error(e.response.data.detail)
+                        })
+                    }
+                }else{
+                    this.$toast.error('No tiene permisos para agregar')
+                }
             },
 
             async getProveedores(){
@@ -379,19 +447,24 @@
 
             crearDetalles(){
                 var detalle = {
-                    'productos_id_producto':this.detalle.producto,
-                    'pvp_item': (parseFloat(this.detalle.pvp)).toFixed(2),
-                    'pvd_item': (parseFloat(this.detalle.pvd)).toFixed(2),
-                    'descuento_item': parseInt(this.detalle.desctItem),
-                    'precioUnitario_detalleCompra': (parseFloat(this.detalle.precioUnit)).toFixed(2),
-                    'cantidad_detalleCompra': parseInt(this.detalle.cantidad),
-                    'precio_detalleCompra': (parseFloat(this.detalle.precioTotal)).toFixed(2),
-                    'descuentoPorcentaje_detalleCompra': parseInt(this.detalle.desct),
-                    'numeroSerie_item': this.detalle.serie
-                }   
+                    productos_id_producto: this.detalle.producto.id,
+                    //nombre_producto:this.detalle.producto.nombre,
+                    pvp_item: (parseFloat(this.detalle.pvp)).toFixed(2),
+                    pvd_item: (parseFloat(this.detalle.pvd)).toFixed(2),
+                    descuento_item: parseInt(this.detalle.desctItem),
+                    precioUnitario_detalleCompra: (parseFloat(this.detalle.precioUnit)).toFixed(2),
+                    cantidad_detalleCompra: parseInt(this.detalle.cantidad),
+                    precio_detalleCompra: (parseFloat(this.detalle.precioTotal)).toFixed(2),
+                    descuentoPorcentaje_detalleCompra: parseInt(this.detalle.desct),
+                    numeroSerie_item: this.detalle.serie.num
+                }
                 this.detalles.push(detalle)
                 this.agregarPrecios()
                 this.calcularSubtotal()
+                this.calcularDescuentoInd()
+                this.calcularDescuentoTotal()
+                this.calcularIva()
+                this.calcularTotal()
             },
 
             mostrarInput(event){
@@ -399,24 +472,55 @@
             },
 
             validarCompra() {
-                const valid = this.$refs.name_input.checkValidity()
-                const valid3 = this.$refs.rol_select.checkValidity()
-                this.form.nameState = valid
-                this.form.rolState = valid3
-                if(valid == false || valid2 == false || valid3 == false )
+                var valid1 = true
+                if(this.form.fecha == '')
+                    valid1 = false
+                const valid2 = this.$refs.factura_input.checkValidity()
+                const valid3 = this.$refs.proveedor_select.checkValidity()
+                this.form.fechaState = valid1
+                this.form.facturaState = valid2
+                this.form.proveedorState = valid3
+                if( valid1 == false || valid2 == false || valid3 == false )
                     return false
                 else
                     return true
             },
+
             validarDetalle() {
-                const valid = this.$refs.name_input.checkValidity()
-                const valid3 = this.$refs.rol_select.checkValidity()
-                this.form.nameState = valid
-                this.form.rolState = valid3
-                if(valid == false || valid2 == false || valid3 == false )
+                const valid = this.$refs.producto_select.checkValidity()
+                const valid1 = this.$refs.cant_input.checkValidity()
+                const valid2 = this.$refs.precioUnit_input.checkValidity()
+                const valid3 = this.$refs.desct_input.checkValidity()
+                const valid4 = this.$refs.pvp_input.checkValidity()
+                const valid5 = this.$refs.pvd_input.checkValidity()
+                const valid6 = this.$refs.desctItem_input.checkValidity()
+                this.detalle.productoState = valid
+                this.detalle.cantidadState = valid1
+                this.detalle.precioUnitState = valid2
+                this.detalle.desctState = valid3
+                this.detalle.pvpState = valid4
+                this.detalle.pvdState = valid5
+                this.detalle.desctItemState = valid6
+                if(valid == false || valid1 == false || valid2 == false || valid3 == false || valid4 == false || valid5 == false || valid6 == false)
                     return false
                 else
                     return true
+            },
+
+            validarInputs(){
+                console.log(this.detalle.serie.num.length)
+                if(this.detalle.serie.num.length == []){
+                    this.$toast.error('Ingrese todos los números de serie.')
+                    return false
+                }
+                else if(this.detalle.serie.num.length == 1 && this.numCant ==1 ){
+                    return true
+                }else if(this.detalle.serie.num.length - 1 == this.numCant)
+                    return true
+                else{
+                    this.$toast.error('Ingrese todos los números de serie.')
+                    return false
+                }
             },
 
             handleOk(bvModalEvt){
@@ -425,8 +529,10 @@
             },
 
             handleSubmit() {
-                /*if (!this.validarForm())
-                    return*/
+                if (!this.validarDetalle())
+                    return
+                if(!this.validarInputs())
+                    return
                 this.crearDetalles()
                 this.$nextTick(() => {
                     this.closeModal()
@@ -441,14 +547,22 @@
             
             onReset(){
                 this.detalle.pvp= ''
+                this.detalle.pvpState= null
                 this.detalle.pvd= ''
+                this.detalle.pvdState= null
                 this.detalle.numSerie= ''
                 this.detalle.desctItem= ''
+                this.detalle.desctItemState= null
                 this.detalle.cantidad= 1
+                this.detalle.cantidadState = null
                 this.detalle.precioTotal= ''
                 this.detalle.precioUnit= ''
+                this.detalle.precioUnitState= null
                 this.detalle.desct= ''
+                this.detalle.desctState= null
                 this.numCant = 1
+                this.detalle.productoState = null
+                this.detalle.serie.num =[]
             },
 
             closeModal(){

@@ -162,7 +162,6 @@
                     this.form.detalle = response.data.detalle_producto
                     this.form.marca = response.data.marca_producto
                     this.imagenes = response.data.imagen_producto
-                    console.log(this.imagenes)
                 })
                 .catch(e => {
                      this.$toast.error(e.response.data.detail)

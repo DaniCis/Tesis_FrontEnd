@@ -1,7 +1,7 @@
 <template>
     <div class="g-sidenav-show bg-gray-10 vh-completa" id='mainDashboard'> 
         <Sidebar />
-        <Navbar :Modulo='"Inventario"' :Tabla='"Bodega"'/>
+        <Navbar :Modulo='"Ventas"' :Tabla='"Clientes"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -10,7 +10,14 @@
                             <div class="card-header pb-0">
                                  <div class="d-lg-flex">
                                     <div>
-                                        <h5>Items</h5>
+                                        <h5>Clientes</h5>
+                                    </div>
+                                    <div class="ms-auto my-auto mt-lg-0 mt-4" v-if="crear">
+                                        <div class="ms-auto my-auto">
+                                            <nuxt-link :to="{name:'nuevoCliente'}" class="btn bg-gradient-primary btn-sm mb-0">
+                                            +&nbsp; Nuevo Cliente
+                                            </nuxt-link>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -34,52 +41,47 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Producto Asociado</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">PVP</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">PVD</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Num Serie</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Descuento</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Estado</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Tipo Ident.</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Num Ident.</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Nombre</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Dirección</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Teléfono</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Correo</th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr v-if="error">
-                                                        <td colspan="7" class="text-center align">
+                                                        <td colspan="7" class="text-center align-middle">
                                                             <h6 class="ms-3 mb-2 text-sm text-center mt-4">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
-                                                    <tr v-for="item in paginador(this.items)">
+                                                    <tr v-for="cliente in paginador(this.clientes)">
                                                         <td>
-                                                            <h6 class=" ms-3 mb-2 text-sm">{{item.id_item}}</h6>
+                                                            <h6 class=" ms-3 mb-2 text-sm">{{cliente.id_cliente}}</h6>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.nombre_producto}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{cliente.identificacion_cliente}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.pvp_item}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{cliente.tipoIdentificacion_cliente}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.pvd_item}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{cliente.nombre_cliente}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.numeroSerie_item}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{cliente.direccion_cliente}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">%{{item.descuento_item}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{cliente.telefono_cliente}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <div v-if="item.estado_item == 'Disponible'"> 
-                                                                <span class="badge badge-sm bg-gradient-success">Disponible</span>
-                                                            </div>
-                                                            <div v-else>
-                                                                <span class="badge badge-sm bg-gradient-danger">Vendido</span>
-                                                            </div>
+                                                            <p class="text-s font-weight-bold mb-0">{{cliente.correo_cliente}}</p>
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones" >
                                                                 <div v-if="editar">
-                                                                    <nuxt-link :to="{name:'item-itemId',params:{itemId: item.id_item}}">
+                                                                    <nuxt-link :to="{name:'cliente-clienteId',params:{clienteId: cliente.id_cliente}}">
                                                                         <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                     </nuxt-link>
                                                                 </div>
@@ -93,7 +95,7 @@
                                             <nav class="dataTable-pagination">
                                                 <b-pagination
                                                 v-model="pagActual"
-                                                :total-rows="this.items.length"
+                                                :total-rows="this.clientes.length"
                                                 :per-page="porPag"
                                                 ></b-pagination>
                                             </nav>
@@ -109,8 +111,8 @@
     </div>
 </template>
 
-<script> 
-    import axios from 'axios';
+<script>
+import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
     import { getAccessToken, getSubmodulos } from '~/utils/auth';
@@ -121,34 +123,38 @@
         data(){
             return{
                 permisosCrud:[],
-                items:[],
+                clientes:[],
+                crear:null,
                 editar:null,
                 error:false,
                 pagActual:1,
-                porPag:20,
+                porPag:10,
             }
         },
         async mounted(){
-            this.permisosCrud = getSubmodulos('Inventario','Bodega')
+            this.permisosCrud = getSubmodulos('Ventas','Clientes')
+            if('crear' in this.permisosCrud)
+                this.crear = true
             if('editar' in this.permisosCrud)
                 this.editar = true
             if('leer' in this.permisosCrud)
-                this.getItems()
+                this.getClientes()
             else
                 this.$toast.error('No tiene permiso de lectura')
         },
         methods:{
-            async getItems(){
-                await axios.get('http://10.147.17.173:5002/items',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+            async getClientes(){
+                await axios.get('http://10.147.17.173:5004/clientes',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     if(response.data !=null)
-                        this.items = response.data
+                        this.clientes = response.data
                     else
                         this.error=true
                 }).catch (e=> {
                     this.$toast.error(e.response.data.detail)
                 })
             },
+
             paginador(items) {
                 const inicio = (this.pagActual - 1) * this.porPag;
                 const final =
