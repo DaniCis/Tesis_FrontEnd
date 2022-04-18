@@ -61,10 +61,15 @@
                                                             <h6 class=" ms-3 mb-2 text-sm">{{cliente.id_cliente}}</h6>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{cliente.identificacion_cliente}}</p>
+                                                            <div v-if="cliente.tipoIdentificacion_cliente == 'Cedula'" >
+                                                                <p class="text-s font-weight-bold mb-0">Cédula</p>
+                                                            </div>
+                                                            <div v-else>
+                                                                <p class="text-s font-weight-bold mb-0">RUC</p>
+                                                            </div>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{cliente.tipoIdentificacion_cliente}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">{{cliente.identificacion_cliente}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <p class="text-s font-weight-bold mb-0">{{cliente.nombre_cliente}}</p>
@@ -84,6 +89,11 @@
                                                                     <nuxt-link :to="{name:'cliente-clienteId',params:{clienteId: cliente.id_cliente}}">
                                                                         <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                     </nuxt-link>
+                                                                </div>
+                                                                <div v-if="eliminar">
+                                                                    <a class="trash cursor-pointer"  @click='showModalDelete(cliente.id_cliente)'>
+                                                                        <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                                    </a>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -126,9 +136,11 @@ import axios from 'axios';
                 clientes:[],
                 crear:null,
                 editar:null,
+                eliminar:null,
                 error:false,
                 pagActual:1,
                 porPag:10,
+                confirm: '',
             }
         },
         async mounted(){
@@ -137,6 +149,8 @@ import axios from 'axios';
                 this.crear = true
             if('editar' in this.permisosCrud)
                 this.editar = true
+            if('eliminar' in this.permisosCrud)
+                this.eliminar = true
             if('leer' in this.permisosCrud)
                 this.getClientes()
             else
@@ -151,6 +165,42 @@ import axios from 'axios';
                     else
                         this.error=true
                 }).catch (e=> {
+                    this.$toast.error(e.response.data.detail)
+                })
+            },
+
+            async eliminarCliente(clienteId){
+                if(this.eliminar){
+                    await axios.delete(`http://10.147.17.173:5004/clientes/${clienteId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
+                        this.$toast.success('Cliente eliminado con éxito')
+                        this.getClientes()
+                    }).catch (e => {
+                        this.$toast.error(e.response.data.detail)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para eliminar')
+                }
+            },
+
+            showModalDelete(clienteId){
+                this.confirm = ''
+                this.$bvModal.msgBoxConfirm('¿Está seguro que desea cambiar el estado del usuario?', {
+                    title: 'Confirmar',
+                    size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'danger',
+                    okTitle: 'Si',
+                    cancelTitle: 'No',
+                    footerClass: 'p-2',
+                    hideHeaderClose: false,
+                    centered: true
+                }).then(value => {
+                    this.confirm = value
+                    if(this.confirm == true){
+                        this.eliminarCliente(clienteId)
+                    }
+                }).catch( e=>{
                     this.$toast.error(e.response.data.detail)
                 })
             },

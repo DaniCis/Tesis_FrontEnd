@@ -48,11 +48,11 @@
                                         <div class="col-12 col-md-8 col-lg-3">
                                             <b-form-group 
                                                 label="Proveedor" 
-                                                label-for="proveedor-input"
+                                                label-for="proveedor-select"
                                                 invalid-feedback="Seleccione un proveedor" 
                                                 :state="form.proveedorState">
                                                 <select 
-                                                    id="proveedor-input" v-model="form.nombreProveedor" class="form-select" ref='proveedor_select' :state="form.proveedorState" required>
+                                                    id="proveedor-select" v-model="form.nombreProveedor" class="form-select" ref='proveedor_select' :state="form.proveedorState" required >
                                                     <option disabled :value='null'> Seleccione</option>
                                                      <option v-for="proveedor in this.proveedores" :value="proveedor.id_proveedor">
                                                         {{proveedor.nombre_proveedor}}
@@ -113,25 +113,25 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mt-3 d-lg-flex pe-4">
+                                    <div class="row d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
                                             <label class="col-5">Subtotal</label>
                                             <span class="col-4 text-sm">${{this.form.subtotal}}</span>
                                         </div>
                                     </div>
-                                    <div class="row mt-1 d-lg-flex pe-4">
+                                    <div class="row d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
                                             <label class="col-5">Descuento</label>
                                             <span class="text-sm col-4">${{this.form.descuento}}</span>
                                         </div>
                                     </div>
-                                    <div class="row mt-1 d-lg-flex pe-4">
+                                    <div class="row d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
                                             <label class="col-5">IVA %12</label>
                                             <span class="text-sm col-4">${{this.iva}}</span>
                                         </div>
                                     </div>  
-                                    <div class="row mt-1 d-lg-flex pe-4">
+                                    <div class="row d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
                                             <label class="col-5">Total</label>
                                             <span class="text-sm col-4">${{this.form.total}}</span>
@@ -256,9 +256,8 @@
                                                         <div class="col-12 col-md-5">
                                                             <div v-if="parseInt(this.numCant) == 1">
                                                                 <label>Número de Serie</label>
-                                                                <b-form-group
-                                                                    invalid-feedback="Este campo es requerido" >
-                                                                    <b-form-input required 
+                                                                <b-form-group >
+                                                                    <b-form-input 
                                                                     id="num-input" class="form-control" type="text" v-model="detalle.serie.num[0]">
                                                                     </b-form-input>
                                                                 </b-form-group>
@@ -267,10 +266,8 @@
                                                                 <label>Números de Series</label>
                                                                 <div v-for="i in parseInt(this.numCant)" style="display: flex">
                                                                     <span style="margin-right: 1rem; margin-top: 0.8rem;" class="text-sm">{{i}}</span>
-                                                                    <b-form-group
-                                                                        invalid-feedback="Este campo es requerido" 
-                                                                        :state="detalle.serieState.numState[i]">
-                                                                        <b-form-input required :state="detalle.serieState.numState[i]"
+                                                                    <b-form-group >
+                                                                        <b-form-input  
                                                                             id="num-input" class="form-control mt-1" type="text" v-model="detalle.serie.num[i]">
                                                                         </b-form-input>
                                                                     </b-form-group>
@@ -337,6 +334,7 @@
                 proveedores:[],
                 productos:[],
                 detalles:[],
+                detallesCopia:[],
                 precios:[],
                 descuentos:[],
                 crear:null,
@@ -352,6 +350,79 @@
                 this.crear = true
         },
         methods:{
+            async crearCompra(){
+                if(this.crear){
+                    if(this.detalles.length ==0){
+                        this.$toast.error('Debe agregar productos para registar una compra')
+                    }else{
+                        this.detallesCopia = JSON.parse(JSON.stringify(this.detalles));
+                        for (var i = 0; i < this.detalles.length; i++) {   
+                            delete this.detallesCopia[i].nombre_producto
+                        }
+                        var params = {
+                            fecha_compra: this.form.fecha,
+                            numeroFactura_compra: parseInt(this.form.numeroFactura),
+                            subtotal_compra:parseFloat(this.form.subtotal),
+                            descuento_compra: parseFloat(this.form.descuento),
+                            total_compra: this.form.total,
+                            proveedores_id_proveedor: this.form.nombreProveedor,
+                            detalle_compra: this.detallesCopia,
+                        }
+                        await axios.post('http://10.147.17.173:5003/compra', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                        }).then(() => {
+                            this.$toast.success('Compra creada con éxito')
+                            this.$router.push('/compras');
+                        }).catch (e => {
+                            this.$toast.error(e.response.data.detail)
+                        })
+                    }
+                }else{
+                    this.$toast.error('No tiene permisos para agregar')
+                }
+            },
+
+            async getProveedores(){
+                await axios.get(`http://10.147.17.173:5003/proveedoresHabilitados`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then(response => {
+                    this.proveedores = response.data
+                })
+                .catch(e => {
+                    this.$toast.error(e.response.data.detail)
+                })
+            },
+
+            async getProductos(){
+                await axios.get(`http://10.147.17.173:5002/productosHabilitados`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then(response => {
+                    this.productos = response.data
+                })
+                .catch(e => {
+                    this.$toast.error(e.response.data.detail)
+                })
+            },
+
+            crearDetalles(){
+                var detalle = {
+                    productos_id_producto: this.detalle.producto.id,
+                    nombre_producto:this.detalle.producto.nombre,
+                    pvp_item: (parseFloat(this.detalle.pvp)).toFixed(2),
+                    pvd_item: (parseFloat(this.detalle.pvd)).toFixed(2),
+                    descuento_item: parseInt(this.detalle.desctItem),
+                    precioUnitario_detalleCompra: (parseFloat(this.detalle.precioUnit)).toFixed(2),
+                    cantidad_detalleCompra: parseInt(this.detalle.cantidad),
+                    precio_detalleCompra: (parseFloat(this.detalle.precioTotal)).toFixed(2),
+                    descuentoPorcentaje_detalleCompra: parseInt(this.detalle.desct),
+                    numeroSerie_item: this.detalle.serie.num
+                }
+                this.detalles.push(detalle)
+                this.agregarPrecios()
+                this.calcularSubtotal()
+                this.calcularDescuentoInd()
+                this.calcularDescuentoTotal()
+                this.calcularIva()
+                this.calcularTotal()
+            },
+
             calcularPrecioTotal(){
                 this.detalle.precioTotal = (parseInt(this.detalle.cantidad) * parseFloat(this.detalle.precioUnit)).toFixed(2)
             },
@@ -397,78 +468,9 @@
                 this.form.total = (this.form.subtotal - this.form.descuento) + this.iva
             },
 
-            async crearCompra(){
-                if(this.crear){
-                    if(this.detalles.length ==0){
-                        this.$toast.error('Debe agregar productos para registar una compra')
-                    }else{
-                        var params = {
-                            fecha_compra: this.form.fecha,
-                            numeroFactura_compra: parseInt(this.form.numeroFactura),
-                            subtotal_compra:parseFloat(this.form.subtotal),
-                            descuento_compra: parseFloat(this.form.descuento),
-                            total_compra: this.form.total,
-                            proveedores_id_proveedor: this.form.nombreProveedor,
-                            detalle_compra: this.detalles,
-                        }
-                        console.log(params)
-                        await axios.post('http://10.147.17.173:5003/compra', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
-                        }).then(() => {
-                            this.$toast.success('Compra creada con éxito')
-                            this.$router.push('/compras');
-                        }).catch (e => {
-                            this.$toast.error(e.response.data.detail)
-                        })
-                    }
-                }else{
-                    this.$toast.error('No tiene permisos para agregar')
-                }
-            },
-
-            async getProveedores(){
-                await axios.get(`http://10.147.17.173:5003/proveedoresHabilitados`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
-                }).then(response => {
-                    this.proveedores = response.data
-                })
-                .catch(e => {
-                    this.$toast.error(e.response.data.detail)
-                })
-            },
-
-            async getProductos(){
-                await axios.get(`http://10.147.17.173:5002/productosHabilitados`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
-                }).then(response => {
-                    this.productos = response.data
-                })
-                .catch(e => {
-                    this.$toast.error(e.response.data.detail)
-                })
-            },
-
-            crearDetalles(){
-                var detalle = {
-                    productos_id_producto: this.detalle.producto.id,
-                    //nombre_producto:this.detalle.producto.nombre,
-                    pvp_item: (parseFloat(this.detalle.pvp)).toFixed(2),
-                    pvd_item: (parseFloat(this.detalle.pvd)).toFixed(2),
-                    descuento_item: parseInt(this.detalle.desctItem),
-                    precioUnitario_detalleCompra: (parseFloat(this.detalle.precioUnit)).toFixed(2),
-                    cantidad_detalleCompra: parseInt(this.detalle.cantidad),
-                    precio_detalleCompra: (parseFloat(this.detalle.precioTotal)).toFixed(2),
-                    descuentoPorcentaje_detalleCompra: parseInt(this.detalle.desct),
-                    numeroSerie_item: this.detalle.serie.num
-                }
-                this.detalles.push(detalle)
-                this.agregarPrecios()
-                this.calcularSubtotal()
-                this.calcularDescuentoInd()
-                this.calcularDescuentoTotal()
-                this.calcularIva()
-                this.calcularTotal()
-            },
-
             mostrarInput(event){
                 this.numCant = event
+                this.calcularPrecioTotal()
             },
 
             validarCompra() {
@@ -508,7 +510,6 @@
             },
 
             validarInputs(){
-                console.log(this.detalle.serie.num.length)
                 if(this.detalle.serie.num.length == []){
                     this.$toast.error('Ingrese todos los números de serie.')
                     return false

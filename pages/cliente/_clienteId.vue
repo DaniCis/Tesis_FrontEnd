@@ -16,23 +16,22 @@
                                 </div>
                                 <div class="d-lg-flex mt-4">
                                     <div>
-                                        <h4>this.form.nombre</h4>
+                                        <h4>{{this.nombre}}</h4>
                                         <p class="text-sm">Editar Cliente</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body px-0 pt-0 pb-2">
-                                <b-form class="ps-4 mt-3" @submit.stop.prevent="handleSubmit()">
+                                <b-form class="ps-4 mt-3">
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-4 col-lg-2">
+                                        <div class="col-12 col-md-4 col-lg-3">
                                             <b-form-group 
                                                 label="Tipo de Identificación" 
                                                 label-for="tipo-select">
                                                 <select 
                                                     id="tipo-select" v-model="form.tipo" class="form-select">
-                                                    <option disabled :value='null'> Seleccione</option>
-                                                    <option>Cédula</option>
-                                                    <option>RUC</option>
+                                                    <option value="Cedula">Cédula</option>
+                                                    <option value='RUC'>RUC</option>
                                                 </select>
                                             </b-form-group>
                                         </div>
@@ -47,7 +46,7 @@
                                         </div>
                                     </div>
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-5 col-lg-4">
+                                        <div class="col-12 col-md-5 col-lg-3">
                                             <b-form-group 
                                                 label="Nombre" 
                                                 label-for="nombre-input">
@@ -56,9 +55,7 @@
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col-12 col-md-5 col-lg-4">
+                                        <div class="col-12 col-md-5 col-lg-3">
                                             <b-form-group 
                                                 label="Dirección" 
                                                 label-for="dir-input">
@@ -69,7 +66,7 @@
                                         </div>
                                     </div>
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-4 col-lg-2">
+                                        <div class="col-12 col-md-4 col-lg-3">
                                             <b-form-group 
                                                 label="Teléfono" 
                                                 label-for="telf-input">
@@ -91,7 +88,7 @@
                                     <div class="row mt-4">
                                         <div class="col-12 col-md-8 col-lg-6">
                                             <div class="d-flex ms-auto mb-3">
-                                                <b-button class="btn bg-gradient-primary mb-0" type='submit'> Agregar</b-button>
+                                                <b-button  @click="editarCliente(form.id)" class="btn bg-gradient-primary mb-0">Actualizar</b-button>
                                             </div>
                                         </div>
                                     </div>
@@ -117,6 +114,7 @@
         data(){
             return{
                 form:{
+                    id:'',
                     tipo:'',
                     ident:'',
                     nombre:'',
@@ -124,6 +122,7 @@
                     telefono:'',
                     correo:'',
                 },
+                nombre:'',
                 editar: null,
                 clienteId:''
             }
@@ -139,23 +138,36 @@
                 this.$toast.error('No tiene permiso de lectura')
         },
         methods:{
-            async editarCliente(){
+            async editarCliente(clienteId){
                 if(this.editar){
                     var params = {
-
+                        identificacion_cliente: this.form.ident,
+                        tipoIdentificacion_cliente: this.form.tipo,
+                        nombre_cliente: this.form.nombre,
+                        direccion_cliente: this.form.direccion,
+                        telefono_cliente: this.form.telefono,
+                        correo_cliente: this.form.correo
                     }
-
+                    await axios.put(`http://10.147.17.173:5004/clientes/${clienteId}`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
+                        this.$toast.success('Cliente editado con éxito')
+                        this.$router.push('/clientes');
+                    }).catch (e => {
+                        this.$toast.error(e.response.data.detail)
+                    })
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
                 }
             },
 
             async getCliente(clienteId){
-                await axios.get(`http://10.147.17.173:5004/cliente/${clienteId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get(`http://10.147.17.173:5004/clientes/${clienteId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
+                    this.form.id = response.data.id_cliente
                     this.form.tipo = response.data.tipoIdentificacion_cliente
                     this.form.ident = response.data.identificacion_cliente
                     this.form.nombre = response.data.nombre_cliente
+                    this.nombre = response.data.nombre_cliente
                     this.form.direccion = response.data.direccion_cliente
                     this.form.telefono = response.data.telefono_cliente
                     this.form.correo = response.data.correo_cliente
@@ -163,10 +175,6 @@
                 .catch(e => {
                     this.$toast.error(e.response.data.detail)
                 })
-            },
-
-            handleSubmit() {                
-                this.editarCliente()
             },
         }
     }

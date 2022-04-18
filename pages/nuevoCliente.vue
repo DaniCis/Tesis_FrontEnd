@@ -33,8 +33,8 @@
                                                 <select 
                                                     id="tipo-select" v-model="form.tipo" class="form-select" :state="form.tipoState" ref='tipo_select' required>
                                                     <option disabled :value='null'> Seleccione</option>
-                                                    <option>Cédula</option>
-                                                    <option>RUC</option>
+                                                    <option value='Cedula' >Cédula</option>
+                                                    <option value='RUC'>RUC</option>
                                                 </select>
                                             </b-form-group>
                                         </div>
@@ -158,7 +158,21 @@
         methods:{
             async crearCliente(){
                 if(this.crear){
-
+                    var params = {
+                        identificacion_cliente: this.form.ident,
+                        tipoIdentificacion_cliente: this.form.tipo,
+                        nombre_cliente: this.form.nombre,
+                        direccion_cliente: this.form.direccion,
+                        telefono_cliente: this.form.telefono,
+                        correo_cliente: this.form.correo
+                    }
+                    await axios.post(`http://10.147.17.173:5004/clientes/`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
+                        this.$toast.success('Cliente creado con éxito')
+                        this.$router.push('/clientes');
+                    }).catch (e => {
+                        this.$toast.error(e.response.data.detail)
+                    })
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
                 }

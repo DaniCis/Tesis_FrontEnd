@@ -47,7 +47,7 @@
                                                 label="Proveedor" 
                                                 label-for="proveedor-input">
                                                 <select 
-                                                    id="proveedor-input" v-model="form.nombreProveedor" class="form-select" ref='proveedor_select' required>
+                                                    id="proveedor-input" v-model="form.nombreProveedor" class="form-select">
                                                    <option v-for="proveedor in this.proveedores" :value="proveedor.id_proveedor">
                                                         {{proveedor.nombre_proveedor}}
                                                     </option>
@@ -81,14 +81,20 @@
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">{{detalle.cantidad_detalleCompra}}</p>
                                                             </td>
-                                                            <td class="align-middle text-center text-sm">
+                                                            <td class="align-middle text-center text-sm" v-if="detalle.precioUnitario_detalleCompra.includes('$')">
                                                                 <p class="text-sm font-weight-bold mb-0">{{detalle.precioUnitario_detalleCompra}}</p>
+                                                            </td>
+                                                            <td class="align-middle text-center text-sm" v-else>
+                                                                <p class="text-sm font-weight-bold mb-0">${{detalle.precioUnitario_detalleCompra}}</p>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">%{{detalle.descuentoPorcentaje_detalleCompra}}</p>
                                                             </td>
-                                                            <td class="align-middle text-center text-sm">
+                                                            <td class="align-middle text-center text-sm" v-if="detalle.precio_detalleCompra.includes('$')">
                                                                 <p class="text-sm font-weight-bold mb-0">{{detalle.precio_detalleCompra}}</p>
+                                                            </td>
+                                                            <td class="align-middle text-center text-sm" v-else>
+                                                                <p class="text-sm font-weight-bold mb-0">${{detalle.precio_detalleCompra}}</p>
                                                             </td>
                                                             <td class="align-middle">
                                                                 <div class="contenedorAcciones">
@@ -103,37 +109,37 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mt-3 d-lg-flex pe-4">
+                                    <div class="row d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
                                             <label class="col-5">Subtotal</label>
-                                            <span class="col-4 text-sm">{{this.form.subtotal}}</span>
+                                            <span class="col-4 text-sm">${{this.form.subtotal}}</span>
                                         </div>
                                     </div>
-                                    <div class="row mt-1 d-lg-flex pe-4">
+                                    <div class="row d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
                                             <label class="col-5">Descuento</label>
-                                            <span class="text-sm col-4">{{this.form.descuento}}</span>
+                                            <span class="text-sm col-4">${{this.form.descuento}}</span>
                                         </div>
                                     </div>
-                                    <div class="row mt-1 d-lg-flex pe-4">
+                                    <div class="row d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
                                             <label class="col-5">IVA %12</label>
                                             <span class="text-sm col-4">${{this.iva}}</span>
                                         </div>
                                     </div>  
-                                    <div class="row mt-1 d-lg-flex pe-4">
+                                    <div class="row d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
                                             <label class="col-5">Total</label>
-                                            <span class="text-sm col-4">{{this.form.total}}</span>
+                                            <span class="text-sm col-4">${{this.form.total}}</span>
                                         </div>
                                     </div> 
                                     <div class="row mt-4">
                                         <div class="col-12 col-md-8 col-lg-6">
                                             <div class="d-flex ms-auto mb-3">
-                                                <b-button class="btn bg-gradient-primary mb-0" type='submit'> Actualizar</b-button>
+                                                <b-button  @click="editarCompra(form.id)" class="btn bg-gradient-primary mb-0">Actualizar</b-button>
                                             </div>
                                         </div>
-                                    </div>                
+                                    </div>             
                                 </b-form>
                                 <b-modal id="detalle-modal" title='Editar Detalle' cancel-title='Cancelar' ok-title='Actualizar' @ok="handleOk($event)">
                                     <b-form @submit.stop.prevent="handleSubmit()">
@@ -142,33 +148,31 @@
                                                 <b-form-group 
                                                     label="Producto" 
                                                     label-for="producto-select">
-                                                    <b-form-input list="input-list3"  v-model='detalle.producto' id="producto-select"></b-form-input>
-                                                    <datalist id="input-list3">
-                                                        <option v-for="producto in this.productos" :value="producto.id_producto">
+                                                    <select 
+                                                        id="producto-select" v-model="detalle.producto" class="form-select">
+                                                        <option v-for="producto in this.productos" :value="{id: producto.id_producto, nombre: producto.nombre_producto}">
                                                             {{producto.nombre_producto}}
                                                         </option>
-                                                    </datalist>
+                                                    </select>
                                                 </b-form-group>
                                             </div>
                                         </div>
                                         <div class="row mt-2">
-                                            <div class="col-12 col-md-8">
+                                            <div class="col-12 col-md-4">
                                                 <b-form-group 
-                                                    label="Precio Unitario" 
+                                                    label="Precio Unitario $" 
                                                     label-for="precioUnit-input">
                                                     <b-form-input 
                                                         id="precioUnit-input" class="form-control" type="number" step='any' v-model="detalle.precioUnit">
                                                     </b-form-input>
                                                 </b-form-group>
                                             </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-12 col-md-8">
+                                            <div class="col-12 col-md-4">
                                                 <b-form-group 
-                                                    label="Descuento" 
+                                                    label="Descuento %" 
                                                     label-for="desct-input">
                                                     <b-form-input 
-                                                        id="desct-input" class="form-control" type="number" v-model="detalle.desct">
+                                                        id="desct-input" class="form-control" type="number"  min="0" v-model="detalle.desct">
                                                     </b-form-input>
                                                 </b-form-group>
                                             </div>
@@ -196,6 +200,7 @@
         data(){
             return{
                 form:{
+                    id:'',
                     fecha:'',
                     numeroFactura:null,
                     nombreProveedor:'',
@@ -207,25 +212,26 @@
                     producto:'',
                     precioUnit:'',
                     desct:'',
+                    cantidad:'',
                 },
                 permisosCrud:[],
                 compras:[],
                 proveedores:[],
                 detalles:[],
-                detallesEdit:[],
+                detallesCopia:[],
                 productos:[],
                 precios:[],
                 descuentos:[],
                 editar:null,
-                noEditado:true,
                 iva:null,
                 compraId:'',
+                detalleId:'',
             }
         },
         async mounted(){
-            this.compraId = this.$route.params.compraId
             this.getProveedores()
             this.getProductos()
+            this.compraId = this.$route.params.compraId
             this.permisosCrud = getSubmodulos('Compras','OrdenCompra')
             if('editar' in this.permisosCrud)
                 this.editar = true
@@ -235,20 +241,16 @@
                 this.$toast.error('No tiene permiso de lectura')
         },    
         methods:{
-            calcularIva(){
-                this.iva = parseFloat(this.form.subtotal.slice(1)) - parseFloat(this.form.descuento.slice(1))
-                this.iva = (this.iva*0.12).toFixed(2)
-            },
-
             async getCompra(compraId){
                 await axios.get(`http://10.147.17.173:5003/compraDetalle/${compraId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.compras = response.data[0].Compras
+                    this.form.id = this.compras.id_compra
                     this.form.fecha = this.compras.fecha_compra
                     this.form.numeroFactura = this.compras.numeroFactura_compra
-                    this.form.total = this.compras.total_compra
-                    this.form.subtotal = this.compras.subtotal_compra
-                    this.form.descuento = this.compras.descuento_compra
+                    this.form.total = this.compras.total_compra.slice(1)
+                    this.form.subtotal = this.compras.subtotal_compra.slice(1)
+                    this.form.descuento = this.compras.descuento_compra.slice(1)
                     this.form.nombreProveedor = this.compras.proveedores_id_proveedor
                     this.detalles = this.compras.detalle_compra
                     this.calcularIva()
@@ -260,6 +262,15 @@
 
             async editarCompra(compraId){
                 if(this.editar){
+                    this.detallesCopia = JSON.parse(JSON.stringify(this.detalles));
+                    for (var i = 0; i < this.detalles.length; i++) {   
+                        delete this.detallesCopia[i].productos
+                        delete this.detallesCopia[i].cantidad_detalleCompra
+                        delete this.detallesCopia[i].compras_id_compra
+                        delete this.detallesCopia[i].borradoLogico_detalleCompra
+                        delete this.detallesCopia[i].fechaActualizacion_detalleCompra
+                        delete this.detallesCopia[i].fechaBorrado_detalleCompra
+                    }
                     var params = {
                         fecha_compra: this.form.fecha,
                         numeroFactura_compra: parseInt(this.form.numeroFactura),
@@ -267,17 +278,16 @@
                         descuento_compra: parseFloat(this.form.descuento),
                         total_compra: this.form.total,
                         proveedores_id_proveedor: this.form.nombreProveedor,
-                        detalle_compra: this.detalles,
+                        detalle_compra: this.detallesCopia,
                     }
                     console.log(params)
-                    /*
                     await axios.put(`http://10.147.17.173:5003/compra/${compraId}`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
-                        this.$toast.success('Compra creada con éxito')
+                        this.$toast.success('Compra editada con éxito')
                         this.$router.push('/compras');
                     }).catch (e => {
                         this.$toast.error(e.response.data.detail)
-                    })*/
+                    })
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
                 }
@@ -309,21 +319,74 @@
                     this.detalle.producto = response.data.nombre_producto
                     this.detalle.precioUnit = response.data.precioUnitario_detalleCompra.slice(1)
                     this.detalle.desct = response.data.descuentoPorcentaje_detalleCompra
+                    this.detalle.cantidad = response.data.cantidad_detalleCompra
                 }) .catch(e => {
                     this.$toast.error(e.response.data.detail)
                 })
             },
 
             editarDetalle(){
-                var detalle = {
-                    id_detalleCompra: 1,
-                    productos_id_producto: this.detalle.producto,
-                    precioUnitario_detalleCompra: (parseFloat(this.detalle.precioUnit)).toFixed(2),
-                    precio_detalleCompra: (parseFloat(this.detalle.precioTotal)).toFixed(2),
-                    descuentoPorcentaje_detalleCompra: parseInt(this.detalle.desct),
+                console.log(this.detalle.precioUnit)
+                var precio = parseFloat(this.detalle.precioUnit).toFixed(2)
+                var desct = parseInt(this.detalle.desct)
+                var total = parseFloat(this.detalle.cantidad * precio).toFixed(2)
+                for (var i = 0; i < this.detalles.length; i++) {
+                    if(this.detalles[i].id_detalleCompra == this.detalleId){
+                        this.detalles[i].productos_id_producto = this.detalle.producto.id
+                        this.detalles[i].productos.nombre_producto = this.detalle.producto.nombre
+                        this.detalles[i].precioUnitario_detalleCompra = precio
+                        this.detalles[i].descuentoPorcentaje_detalleCompra = desct
+                        this.detalles[i].precio_detalleCompra = total
+                    }
                 }
-                this.detalles.push(detalle)
+                this.agregarPrecios()
+                this.calcularSubtotal()
+                this.calcularDescuentoInd()
+                this.calcularDescuentoTotal()
+                this.calcularIva()
+                this.calcularTotal()
+            },
 
+            agregarPrecios(){
+                this.precios=[]
+                for (var i = 0; i < this.detalles.length; i++) {
+                    const precio = this.detalles[i].precio_detalleCompra
+                    this.precios.push((parseFloat(precio)).toFixed(2))
+                }
+            },
+            
+            calcularSubtotal(){  
+                this.form.subtotal = null
+                for (var i = 0; i < this.precios.length; i++) 
+                    this.form.subtotal += parseFloat(this.precios[i])       
+                this.form.subtotal = this.form.subtotal.toFixed(2)
+            },
+
+            calcularDescuentoInd(){
+                this.descuentos = []
+                for (var i = 0; i < this.detalles.length; i++) {
+                    const porcentaje = this.detalles[i].descuentoPorcentaje_detalleCompra
+                    const desctInd = (parseFloat(porcentaje))/100
+                    const desct = parseFloat(this.detalles[i].precio_detalleCompra) * desctInd.toFixed(2)
+                    this.descuentos.push((parseFloat(desct)).toFixed(2))
+                }
+            },
+            
+            calcularDescuentoTotal(){
+                this.form.descuento = null
+                for (var i = 0; i < this.descuentos.length; i++)
+                    this.form.descuento += parseFloat(this.descuentos[i])
+                this.form.descuento = this.form.descuento.toFixed(2)
+            },
+            
+            calcularIva(){
+                this.iva = parseFloat(this.form.subtotal) - parseFloat(this.form.descuento)
+                this.iva = (this.iva*0.12).toFixed(2)
+            },
+
+            calcularTotal(){
+                this.form.total = null
+                this.form.total = (this.form.subtotal - this.form.descuento) + parseFloat(this.iva)
             },
 
             handleOk(bvModalEvt){
@@ -332,15 +395,10 @@
             },
 
             handleSubmit() {
-                this.noEditado = false
                 this.editarDetalle()
                 this.$nextTick(() => {
                     this.closeModal()
                 })
-            },
-
-            handleSubmit2() {
-                this.editarCompra(this.compraId)
             },
             
             closeModal(){
@@ -350,6 +408,7 @@
             openModal(detalleId){
                 this.$bvModal.show('detalle-modal')
                 this.getDetalle(detalleId)
+                this.detalleId = detalleId
             },
         }
     }
