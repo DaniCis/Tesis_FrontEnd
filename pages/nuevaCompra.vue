@@ -51,13 +51,12 @@
                                                 label-for="proveedor-select"
                                                 invalid-feedback="Seleccione un proveedor" 
                                                 :state="form.proveedorState">
-                                                <select 
-                                                    id="proveedor-select" v-model="form.nombreProveedor" class="form-select" ref='proveedor_select' :state="form.proveedorState" required >
-                                                    <option disabled :value='null'> Seleccione</option>
-                                                     <option v-for="proveedor in this.proveedores" :value="proveedor.id_proveedor">
+                                                <b-form-input id="proveedor-select" placeholder='Proveedor' list="list-prov" v-model="form.nombreProveedor" ref='proveedor_select' :state="form.proveedorState" required></b-form-input>
+                                                    <datalist id="list-prov">
+                                                        <option v-for="proveedor in this.proveedores">
                                                         {{proveedor.nombre_proveedor}}
                                                     </option>
-                                                </select>
+                                                </datalist>
                                             </b-form-group>
                                         </div>
                                     </div>    
@@ -157,13 +156,12 @@
                                                                 label-for="producto-select"
                                                                 invalid-feedback="Seleccione un producto" 
                                                                 :state="detalle.productoState">
-                                                                <select 
-                                                                    id="producto-select" v-model="detalle.producto" class="form-select" :state="detalle.productoState" ref='producto_select' required>
-                                                                    <option disabled :value='null'> Seleccione</option>
-                                                                    <option v-for="producto in this.productos" :value="{id: producto.id_producto, nombre:producto.nombre_producto}">
+                                                                <b-form-input :state="detalle.productoState" ref='producto_select' required id="producto-select" list="list-prod" v-model="detalle.producto.nombre"></b-form-input>
+                                                                <datalist id="list-prod">
+                                                                    <option v-for="producto in this.productos">
                                                                         {{producto.nombre_producto}}
                                                                     </option>
-                                                                </select>
+                                                                </datalist>
                                                             </b-form-group>
                                                         </div>
                                                     </div>
@@ -307,12 +305,16 @@
                     facturaState:null,
                     nombreProveedor:'',
                     proveedorState:null,
+                    proveedorId:null,
                     total:null,
                     subtotal:null,
                     descuento:null,
                 },
                 detalle:{
-                    producto:'',
+                    producto:{
+                        id:'',
+                        nombre:''
+                    },
                     productoState:null,
                     pvp:'',
                     pvpState:null,
@@ -337,6 +339,8 @@
                 detallesCopia:[],
                 precios:[],
                 descuentos:[],
+                nombres_productos:[],
+                nombres_proveedores:[],
                 crear:null,
                 iva:null,
                 numCant:1,
@@ -355,6 +359,8 @@
                     if(this.detalles.length ==0){
                         this.$toast.error('Debe agregar productos para registar una compra')
                     }else{
+                        if(!this.validarProveedores())
+                            return
                         this.detallesCopia = JSON.parse(JSON.stringify(this.detalles));
                         for (var i = 0; i < this.detalles.length; i++) {   
                             delete this.detallesCopia[i].nombre_producto
@@ -509,6 +515,44 @@
                     return true
             },
 
+            validarProveedores(){
+                this.nombres_proveedores=[]
+                for (var i = 0; i < this.proveedores.length; i++) { 
+                    const nombre =this.proveedores[i].nombre_proveedor.trim()
+                    this.nombres_proveedores.push(nombre)
+                }
+                if(this.nombres_proveedores.includes(this.form.nombreProveedor)){
+                    for (var i = 0; i < this.proveedores.length; i++) {
+                        if(this.proveedores[i].nombre_proveedor.trim() == this.form.nombreProveedor)
+                            this.form.proveedorId = this.proveedores[i].id_proveedor
+                    }
+                    return true
+                }
+                else{
+                    this.$toast.error('El proveedor ingresado no existe. Seleccione de la lista')
+                    return false
+                }
+            },
+            
+            validarProductos(){
+                this.nombres_productos=[]
+                for (var i = 0; i < this.productos.length; i++) { 
+                    const nombre =this.productos[i].nombre_producto.trim()
+                    this.nombres_productos.push(nombre)
+                }
+                if(this.nombres_productos.includes(this.detalle.producto.nombre)){
+                    for (var i = 0; i < this.productos.length; i++) {
+                        if(this.productos[i].nombre_producto.trim() == this.detalle.producto.nombre)
+                            this.detalle.producto.id = this.productos[i].id_producto
+                    }
+                    return true
+                }
+                else{
+                    this.$toast.error('El producto ingresado no existe. Seleccione de la lista')
+                    return false
+                }
+            },
+
             validarInputs(){
                 if(this.detalle.serie.num.length == []){
                     this.$toast.error('Ingrese todos los números de serie.')
@@ -530,6 +574,8 @@
             },
 
             handleSubmit() {
+                if(!this.validarProductos())
+                    return
                 if (!this.validarDetalle())
                     return
                 if(!this.validarInputs())

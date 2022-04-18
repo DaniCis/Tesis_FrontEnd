@@ -46,12 +46,12 @@
                                             <b-form-group 
                                                 label="Proveedor" 
                                                 label-for="proveedor-input">
-                                                <select 
-                                                    id="proveedor-input" v-model="form.nombreProveedor" class="form-select">
-                                                   <option v-for="proveedor in this.proveedores" :value="proveedor.id_proveedor">
+                                                <b-form-input list="list-prov" v-model="form.nombreProveedor"></b-form-input>
+                                                    <datalist id="list-prov">
+                                                        <option v-for="proveedor in this.proveedores">
                                                         {{proveedor.nombre_proveedor}}
                                                     </option>
-                                                </select>
+                                                </datalist>
                                             </b-form-group>
                                         </div>
                                     </div>                          
@@ -148,12 +148,12 @@
                                                 <b-form-group 
                                                     label="Producto" 
                                                     label-for="producto-select">
-                                                    <select 
-                                                        id="producto-select" v-model="detalle.producto" class="form-select">
-                                                        <option v-for="producto in this.productos" :value="{id: producto.id_producto, nombre: producto.nombre_producto}">
+                                                    <b-form-input list="list-prod" v-model="detalle.producto.nombre"></b-form-input>
+                                                    <datalist id="list-prod">
+                                                        <option v-for="producto in this.productos">
                                                             {{producto.nombre_producto}}
                                                         </option>
-                                                    </select>
+                                                    </datalist>
                                                 </b-form-group>
                                             </div>
                                         </div>
@@ -202,6 +202,7 @@
                 form:{
                     id:'',
                     fecha:'',
+                    proveedorId:null,
                     numeroFactura:null,
                     nombreProveedor:'',
                     total:null,
@@ -209,7 +210,10 @@
                     descuento:null,
                 },
                 detalle:{
-                    producto:'',
+                    producto:{
+                        id:'',
+                        nombre:''
+                    },
                     precioUnit:'',
                     desct:'',
                     cantidad:'',
@@ -222,6 +226,8 @@
                 productos:[],
                 precios:[],
                 descuentos:[],
+                nombres_productos:[],
+                nombres_proveedores:[],
                 editar:null,
                 iva:null,
                 compraId:'',
@@ -244,6 +250,7 @@
             async getCompra(compraId){
                 await axios.get(`http://10.147.17.173:5003/compraDetalle/${compraId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
+                    console.log(response.data)
                     this.compras = response.data[0].Compras
                     this.form.id = this.compras.id_compra
                     this.form.fecha = this.compras.fecha_compra
@@ -251,7 +258,7 @@
                     this.form.total = this.compras.total_compra.slice(1)
                     this.form.subtotal = this.compras.subtotal_compra.slice(1)
                     this.form.descuento = this.compras.descuento_compra.slice(1)
-                    this.form.nombreProveedor = this.compras.proveedores_id_proveedor
+                    this.form.nombreProveedor = response.data[0].nombre_proveedor
                     this.detalles = this.compras.detalle_compra
                     this.calcularIva()
                 })
@@ -262,6 +269,8 @@
 
             async editarCompra(compraId){
                 if(this.editar){
+                    if(!this.validarProveedores())
+                        return
                     this.detallesCopia = JSON.parse(JSON.stringify(this.detalles));
                     for (var i = 0; i < this.detalles.length; i++) {   
                         delete this.detallesCopia[i].productos
@@ -280,7 +289,7 @@
                         proveedores_id_proveedor: this.form.nombreProveedor,
                         detalle_compra: this.detallesCopia,
                     }
-                    console.log(params)
+                    //console.log(params)
                     await axios.put(`http://10.147.17.173:5003/compra/${compraId}`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Compra editada con éxito')
@@ -316,7 +325,8 @@
             async getDetalle(detalleId){
                 await axios.get(`http://10.147.17.173:5003/detalle_compra/${detalleId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                 }) .then(response => {
-                    this.detalle.producto = response.data.nombre_producto
+                    this.detalle.producto.id = response.data.id_producto
+                    this.detalle.producto.nombre = response.data.nombre_producto
                     this.detalle.precioUnit = response.data.precioUnitario_detalleCompra.slice(1)
                     this.detalle.desct = response.data.descuentoPorcentaje_detalleCompra
                     this.detalle.cantidad = response.data.cantidad_detalleCompra
@@ -326,7 +336,6 @@
             },
 
             editarDetalle(){
-                console.log(this.detalle.precioUnit)
                 var precio = parseFloat(this.detalle.precioUnit).toFixed(2)
                 var desct = parseInt(this.detalle.desct)
                 var total = parseFloat(this.detalle.cantidad * precio).toFixed(2)
@@ -345,6 +354,44 @@
                 this.calcularDescuentoTotal()
                 this.calcularIva()
                 this.calcularTotal()
+            },
+
+            validarProveedores(){
+                this.nombres_proveedores=[]
+                for (var i = 0; i < this.proveedores.length; i++) { 
+                    const nombre =this.proveedores[i].nombre_proveedor.trim()
+                    this.nombres_proveedores.push(nombre)
+                }
+                if(this.nombres_proveedores.includes(this.form.nombreProveedor)){
+                    for (var i = 0; i < this.proveedores.length; i++) {
+                        if(this.proveedores[i].nombre_proveedor.trim() == this.form.nombreProveedor)
+                            this.form.proveedorId = this.proveedores[i].id_proveedor
+                    }
+                    return true
+                }
+                else{
+                    this.$toast.error('El proveedor ingresado no existe. Seleccione de la lista')
+                    return false
+                }
+            },
+
+            validarProductos(){
+                this.nombres_productos=[]
+                for (var i = 0; i < this.productos.length; i++) { 
+                    const nombre =this.productos[i].nombre_producto.trim()
+                    this.nombres_productos.push(nombre)
+                }
+                if(this.nombres_productos.includes(this.detalle.producto.nombre)){
+                    for (var i = 0; i < this.productos.length; i++) {
+                        if(this.productos[i].nombre_producto.trim() == this.detalle.producto.nombre)
+                            this.detalle.producto.id = this.productos[i].id_producto
+                    }
+                    return true
+                }
+                else{
+                    this.$toast.error('El producto ingresado no existe. Seleccione de la lista')
+                    return false
+                }
             },
 
             agregarPrecios(){
@@ -395,6 +442,8 @@
             },
 
             handleSubmit() {
+                if(!this.validarProductos())
+                    return
                 this.editarDetalle()
                 this.$nextTick(() => {
                     this.closeModal()
