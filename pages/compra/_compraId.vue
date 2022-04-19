@@ -81,19 +81,13 @@
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">{{detalle.cantidad_detalleCompra}}</p>
                                                             </td>
-                                                            <td class="align-middle text-center text-sm" v-if="detalle.precioUnitario_detalleCompra.includes('$')">
-                                                                <p class="text-sm font-weight-bold mb-0">{{detalle.precioUnitario_detalleCompra}}</p>
-                                                            </td>
-                                                            <td class="align-middle text-center text-sm" v-else>
+                                                            <td class="align-middle text-center text-sm" >
                                                                 <p class="text-sm font-weight-bold mb-0">${{detalle.precioUnitario_detalleCompra}}</p>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">%{{detalle.descuentoPorcentaje_detalleCompra}}</p>
                                                             </td>
-                                                            <td class="align-middle text-center text-sm" v-if="detalle.precio_detalleCompra.includes('$')">
-                                                                <p class="text-sm font-weight-bold mb-0">{{detalle.precio_detalleCompra}}</p>
-                                                            </td>
-                                                            <td class="align-middle text-center text-sm" v-else>
+                                                            <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">${{detalle.precio_detalleCompra}}</p>
                                                             </td>
                                                             <td class="align-middle">
@@ -163,16 +157,18 @@
                                                     label="Precio Unitario $" 
                                                     label-for="precioUnit-input">
                                                     <b-form-input 
-                                                        id="precioUnit-input" class="form-control" type="number" step='any' v-model="detalle.precioUnit">
+                                                        id="precioUnit-input" class="form-control" type="number" step='any' min="0" v-model="detalle.precioUnit">
                                                     </b-form-input>
                                                 </b-form-group>
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <b-form-group 
                                                     label="Descuento %" 
-                                                    label-for="desct-input">
-                                                    <b-form-input 
-                                                        id="desct-input" class="form-control" type="number"  min="0" v-model="detalle.desct">
+                                                    label-for="desct-input"
+                                                    invalid-feedback="Ingrese un número entero" 
+                                                    :state="detalle.desctState">
+                                                    <b-form-input :state="detalle.desctState"  ref="desct_input"
+                                                        id="desct-input" class="form-control" type="number" min="0" v-model="detalle.desct">
                                                     </b-form-input>
                                                 </b-form-group>
                                             </div>
@@ -216,6 +212,7 @@
                     },
                     precioUnit:'',
                     desct:'',
+                    desctState:'',
                     cantidad:'',
                 },
                 permisosCrud:[],
@@ -250,7 +247,6 @@
             async getCompra(compraId){
                 await axios.get(`http://10.147.17.173:5003/compraDetalle/${compraId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
-                    console.log(response.data)
                     this.compras = response.data[0].Compras
                     this.form.id = this.compras.id_compra
                     this.form.fecha = this.compras.fecha_compra
@@ -260,6 +256,10 @@
                     this.form.descuento = this.compras.descuento_compra.slice(1)
                     this.form.nombreProveedor = response.data[0].nombre_proveedor
                     this.detalles = this.compras.detalle_compra
+                    for (var i = 0; i < this.detalles.length; i++) {
+                        this.detalles[i].precioUnitario_detalleCompra = this.detalles[i].precioUnitario_detalleCompra.slice(1)
+                        this.detalles[i].precio_detalleCompra = this.detalles[i].precio_detalleCompra.slice(1)
+                    }
                     this.calcularIva()
                 })
                 .catch(e => {
@@ -286,10 +286,11 @@
                         subtotal_compra:parseFloat(this.form.subtotal),
                         descuento_compra: parseFloat(this.form.descuento),
                         total_compra: this.form.total,
-                        proveedores_id_proveedor: this.form.nombreProveedor,
+                        proveedores_id_proveedor: this.form.proveedorId,
                         detalle_compra: this.detallesCopia,
                     }
-                    //console.log(params)
+                    console.log(params)
+                    
                     await axios.put(`http://10.147.17.173:5003/compra/${compraId}`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Compra editada con éxito')
@@ -313,7 +314,7 @@
             },
 
             async getProductos(){
-                await axios.get(`http://10.147.17.173:5002/productosHabilitados`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get(`http://10.147.17.173:5002/productosExistentes`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.productos = response.data
                 })
@@ -337,7 +338,7 @@
 
             editarDetalle(){
                 var precio = parseFloat(this.detalle.precioUnit).toFixed(2)
-                var desct = parseInt(this.detalle.desct)
+                var desct = parseInt(this.detalle.desct).toFixed(2)
                 var total = parseFloat(this.detalle.cantidad * precio).toFixed(2)
                 for (var i = 0; i < this.detalles.length; i++) {
                     if(this.detalles[i].id_detalleCompra == this.detalleId){
@@ -381,7 +382,7 @@
                     const nombre =this.productos[i].nombre_producto.trim()
                     this.nombres_productos.push(nombre)
                 }
-                if(this.nombres_productos.includes(this.detalle.producto.nombre)){
+                if(this.nombres_productos.includes(this.detalle.producto.nombre.trim())){
                     for (var i = 0; i < this.productos.length; i++) {
                         if(this.productos[i].nombre_producto.trim() == this.detalle.producto.nombre)
                             this.detalle.producto.id = this.productos[i].id_producto
@@ -436,6 +437,15 @@
                 this.form.total = (this.form.subtotal - this.form.descuento) + parseFloat(this.iva)
             },
 
+            validarDesc(){
+                const valid = this.$refs.desct_input.checkValidity()
+                this.detalle.desctState = valid
+                if(valid == false)
+                    return false
+                else
+                    return true
+            },
+
             handleOk(bvModalEvt){
                 bvModalEvt.preventDefault()
                 this.handleSubmit()
@@ -443,6 +453,8 @@
 
             handleSubmit() {
                 if(!this.validarProductos())
+                    return
+                if(!this.validarDesc())
                     return
                 this.editarDetalle()
                 this.$nextTick(() => {
@@ -458,6 +470,7 @@
                 this.$bvModal.show('detalle-modal')
                 this.getDetalle(detalleId)
                 this.detalleId = detalleId
+                this.detalle.desctState = null
             },
         }
     }

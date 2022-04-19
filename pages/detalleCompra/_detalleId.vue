@@ -133,7 +133,6 @@
                 permisosCrud:[],
                 compras:[],
                 detalles:[],
-                editar:null,
                 iva:null,
                 compraId:'',
             }
@@ -141,8 +140,6 @@
         async mounted(){
             this.compraId = this.$route.params.detalleId
             this.permisosCrud = getSubmodulos('Compras','OrdenCompra')
-            if('editar' in this.permisosCrud)
-                this.editar = true
             if('leer' in this.permisosCrud)
                 this.getCompra(this.compraId)
             else

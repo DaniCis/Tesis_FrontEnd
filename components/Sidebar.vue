@@ -86,7 +86,7 @@
                             <b-card-text v-if="'Clientes' in this.modulos.Ventas">
                                 <nuxt-link to="/clientes">Clientes</nuxt-link>
                             </b-card-text>
-                            <b-card-text v-if="'Ventas' in this.modulos.Ventas">
+                            <b-card-text v-if="'OrdenVenta' in this.modulos.Ventas">
                                 <nuxt-link to="/ventas">Orden de Ventas</nuxt-link>
                             </b-card-text>
                         </b-card>
@@ -157,27 +157,3 @@
         }
     }
 </script>
-<style>
-    aside .card-body{
-        padding-left: 75px!important;
-    }
-    .card-body p{
-        font-size: 0.9rem;
-    }
-    .nav-item .nuxt-link-active {
-        background-color: #fff!important;
-        color: #344767!important;
-    }
-    .navbar-nav .nuxt-link-active {
-        font-weight: 600!important;
-        box-shadow: 0 20px 27px 0 rgb(0,0,0,5%);
-        border-radius: 0.5rem;
-    }
-    .nuxt-link-active .icon,
-    .icon .nuxt-link-active{
-        background-image: linear-gradient(310deg,#cb0c9f 0%, #cb0c9f 100%);
-    }
-    .nuxt-link-active .icon svg{
-        color: #fff!important;
-    }
-</style>

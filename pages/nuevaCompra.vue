@@ -178,11 +178,11 @@
                                                         </div>
                                                         <div class="col-12 col-md-5">
                                                             <b-form-group 
-                                                                label="Precio Unitario" 
+                                                                label="Precio Unitario $" 
                                                                 label-for="precioUnit-input"
                                                                 invalid-feedback="Este campo es requerido" 
                                                                 :state="detalle.precioUnitState">
-                                                                <b-form-input @change="calcularPrecioTotal()" required ref="precioUnit_input" :state="detalle.precioUnitState" id="precioUnit-input" class="form-control" type="number" min='1' step="any" v-model="detalle.precioUnit">
+                                                                <b-form-input @change="calcularPrecioTotal()" required ref="precioUnit_input" :state="detalle.precioUnitState" id="precioUnit-input" class="form-control" type="number" min='0' step="any" v-model="detalle.precioUnit">
                                                                 </b-form-input>
                                                             </b-form-group>
                                                         </div>
@@ -190,18 +190,18 @@
                                                     <div class="row mt-2">
                                                         <div class="col-12 col-md-5">
                                                             <b-form-group 
-                                                                label="Descuento" 
+                                                                label="Descuento %" 
                                                                 label-for="desct-input"
                                                                 invalid-feedback="Este campo es requerido" 
                                                                 :state="detalle.desctState">
                                                                 <b-form-input required  :state="detalle.desctState"  ref="desct_input"
-                                                                    id="desct-input" class="form-control" type="number" min='1' v-model="detalle.desct">
+                                                                    id="desct-input" class="form-control" type="number" min='0' v-model="detalle.desct">
                                                                 </b-form-input>
                                                             </b-form-group>
                                                         </div>
                                                         <div class="col-12 col-md-5">
                                                             <b-form-group 
-                                                                label="Precio Total" 
+                                                                label="Precio Total $" 
                                                                 label-for="precioTotal-input">
                                                                 <b-form-input 
                                                                     id="precioTotal-input" class="form-control" readonly type="text" v-model="detalle.precioTotal">
@@ -221,7 +221,7 @@
                                                                 invalid-feedback="Este campo es requerido" 
                                                                 :state="detalle.pvpState">
                                                                 <b-form-input required :state="detalle.pvpState" ref="pvp_input" step="any"
-                                                                    id="pvp-input" class="form-control" type="number" min='1' v-model="detalle.pvp">
+                                                                    id="pvp-input" class="form-control" type="number" min='0' v-model="detalle.pvp">
                                                                 </b-form-input>
                                                             </b-form-group>
                                                         </div>
@@ -232,7 +232,7 @@
                                                                 invalid-feedback="Este campo es requerido" 
                                                                 :state="detalle.pvdState">
                                                                 <b-form-input required :state="detalle.pvdState" ref="pvd_input" step="any"
-                                                                    id="pvd-input" class="form-control" type="number" min='1' v-model="detalle.pvd">
+                                                                    id="pvd-input" class="form-control" type="number" min='0' v-model="detalle.pvd">
                                                                 </b-form-input>
                                                             </b-form-group>
                                                         </div>
@@ -240,12 +240,12 @@
                                                     <div class="row mt-2">
                                                         <div class="col-12 col-md-5">
                                                             <b-form-group 
-                                                                label="Descuento" 
+                                                                label="Descuento del Item $" 
                                                                 label-for="desctItem-input"
                                                                 invalid-feedback="Este campo es requerido" 
                                                                 :state="detalle.desctItemState">
                                                                 <b-form-input required :state="detalle.desctItemState" ref="desctItem_input"
-                                                                    id="desctItem-input" class="form-control" min='1' type="number" v-model="detalle.desctItem">
+                                                                    id="desctItem-input" class="form-control" min='0' type="number" step='any' v-model="detalle.desctItem">
                                                                 </b-form-input>
                                                             </b-form-group>
                                                         </div>
@@ -266,7 +266,7 @@
                                                                     <span style="margin-right: 1rem; margin-top: 0.8rem;" class="text-sm">{{i}}</span>
                                                                     <b-form-group >
                                                                         <b-form-input  
-                                                                            id="num-input" class="form-control mt-1" type="text" v-model="detalle.serie.num[i]">
+                                                                            id="num-input" class="form-control mt-1" type="text" v-model="detalle.serie.num[i-1]">
                                                                         </b-form-input>
                                                                     </b-form-group>
                                                                 </div>
@@ -371,9 +371,10 @@
                             subtotal_compra:parseFloat(this.form.subtotal),
                             descuento_compra: parseFloat(this.form.descuento),
                             total_compra: this.form.total,
-                            proveedores_id_proveedor: this.form.nombreProveedor,
+                            proveedores_id_proveedor: this.form.proveedorId,
                             detalle_compra: this.detallesCopia,
                         }
+                        console.log(params)
                         await axios.post('http://10.147.17.173:5003/compra', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                         }).then(() => {
                             this.$toast.success('Compra creada con éxito')
@@ -398,7 +399,7 @@
             },
 
             async getProductos(){
-                await axios.get(`http://10.147.17.173:5002/productosHabilitados`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get(`http://10.147.17.173:5002/productosExistentes`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.productos = response.data
                 })
@@ -413,7 +414,7 @@
                     nombre_producto:this.detalle.producto.nombre,
                     pvp_item: (parseFloat(this.detalle.pvp)).toFixed(2),
                     pvd_item: (parseFloat(this.detalle.pvd)).toFixed(2),
-                    descuento_item: parseInt(this.detalle.desctItem),
+                    descuento_item: parseFloat(this.detalle.desctItem),
                     precioUnitario_detalleCompra: (parseFloat(this.detalle.precioUnit)).toFixed(2),
                     cantidad_detalleCompra: parseInt(this.detalle.cantidad),
                     precio_detalleCompra: (parseFloat(this.detalle.precioTotal)).toFixed(2),
@@ -472,6 +473,7 @@
             calcularTotal(){
                 this.form.total = null
                 this.form.total = (this.form.subtotal - this.form.descuento) + this.iva
+                this.form.total = parseFloat(this.form.total).toFixed(2)
             },
 
             mostrarInput(event){
@@ -509,6 +511,8 @@
                 this.detalle.pvpState = valid4
                 this.detalle.pvdState = valid5
                 this.detalle.desctItemState = valid6
+                if(!this.validarInputs())
+                    return
                 if(valid == false || valid1 == false || valid2 == false || valid3 == false || valid4 == false || valid5 == false || valid6 == false)
                     return false
                 else
@@ -554,13 +558,13 @@
             },
 
             validarInputs(){
-                if(this.detalle.serie.num.length == []){
-                    this.$toast.error('Ingrese todos los números de serie.')
-                    return false
+                for (var i = 0; i < this.detalle.serie.num.length; i++) {
+                    if(this.detalle.serie.num[i]== ''){
+                        this.$toast.error('El número de serie es requerido.')
+                        return false
+                    }
                 }
-                else if(this.detalle.serie.num.length == 1 && this.numCant ==1 ){
-                    return true
-                }else if(this.detalle.serie.num.length - 1 == this.numCant)
+                if(this.detalle.serie.num.length  == this.numCant)
                     return true
                 else{
                     this.$toast.error('Ingrese todos los números de serie.')
@@ -574,11 +578,9 @@
             },
 
             handleSubmit() {
-                if(!this.validarProductos())
-                    return
                 if (!this.validarDetalle())
                     return
-                if(!this.validarInputs())
+                if(!this.validarProductos())
                     return
                 this.crearDetalles()
                 this.$nextTick(() => {
@@ -599,6 +601,7 @@
                 this.detalle.pvdState= null
                 this.detalle.numSerie= ''
                 this.detalle.desctItem= ''
+                this.detalle.producto.nombre=''
                 this.detalle.desctItemState= null
                 this.detalle.cantidad= 1
                 this.detalle.cantidadState = null

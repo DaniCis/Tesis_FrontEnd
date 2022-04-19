@@ -41,7 +41,7 @@
                                                 <thead>
                                                     <tr>
                                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Id</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2"> # de Factura</th>
+                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2"> # Factura</th>
                                                     <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Fecha</th>
                                                     <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Proveedor</th>
                                                     <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Total</th>

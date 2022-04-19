@@ -40,33 +40,37 @@
                                             <table class="table table-flush dataTable-table">
                                                 <thead>
                                                     <tr>
-                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Id</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2"> # de Factura</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Fecha</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Proveedor</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Total</th>
-                                                    <th></th>
-                                                    <th></th>
+                                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Id</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2"># Comprobante</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Fecha</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Cliente</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Ident. Cliente</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Total</th>
+                                                        <th></th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr v-if="error">
-                                                        <td colspan="7">
+                                                        <td colspan="8">
                                                             <h6 class="ms-3 mb-2 text-sm text-center mt-4">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
-                                                    <tr v-for="venta in paginador(this.venta)">
+                                                    <tr v-for="venta in paginador(this.ventas)">
                                                         <td>
                                                             <h6 class=" ms-3 mb-2 text-sm">{{venta.id_venta}}</h6>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-sm font-weight-bold mb-0">{{venta.numeroFactura_venta}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{venta.numeroComprobante_venta}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <p class="text-sm font-weight-bold mb-0">{{venta.fecha_venta}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-sm font-weight-bold mb-0">{{venta.nombre_proveedor}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{venta.nombre_cliente}}</p>
+                                                        </td>
+                                                        <td class="align-middle text-center text-sm">
+                                                            <p class="text-sm font-weight-bold mb-0">{{venta.identificacion_cliente}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <p class="text-sm font-weight-bold mb-0">{{venta.total_venta}}</p>
@@ -141,13 +145,14 @@
                 this.$toast.error('No tiene permiso de lectura')
         },
         methods: {
-            async getCompras(){
+            async getVentas(){
                 await axios.get('http://10.147.17.173:5004/ventas',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     if(response.data !=null)
                         this.ventas = response.data
                     else
                         this.error=true
+                console.log(this.ventas)
                 }).catch (e=> {
                     this.$toast.error(e.response.data.detail)
                 })
@@ -163,5 +168,4 @@
             }
         }
     }
-
 </script>
