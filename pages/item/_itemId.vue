@@ -70,10 +70,12 @@
                                         <div class="col-12 col-md-3 col-lg-2">
                                             <b-form-group 
                                                 label="Descuento" 
-                                                label-for="des-input">
+                                                label-for="des-input"
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.descuentoState">
                                                 <b-input-group prepend="%">
-                                                    <b-form-input  
-                                                        id="des-input" class="form-control" type="text" v-model="form.descuento"
+                                                    <b-form-input  :state="form.descuentoState" ref='desct_input'
+                                                        id="des-input" class="form-control" type="number" v-model="form.descuento"
                                                         style='height: 42px'>
                                                     </b-form-input>
                                                 </b-input-group>
@@ -114,7 +116,8 @@
                     pvp:'',
                     pvd:'',
                     numeroSerie:'',
-                    descuento:''
+                    descuento:'',
+                    descuentoState:null,
                 },
                 item:[],
                 editar:null,
@@ -140,28 +143,42 @@
                     this.form.pvp = response.data.pvp_item
                     this.form.pvd = response.data.pvd_item
                     this.form.numeroSerie = response.data.numeroSerie_item
-                    this.form.descuento = response.data.descuento_item
+                    this.form.descuento = response.data.descuentoPorcentaje_item
                 })
                 .catch(e => {
                      this.$toast.error(e.response.data.detail)
                 })
             },
+
+            validarDesct(){
+                const valid = this.$refs.desct_input.checkValidity()
+                this.form.descuentoState = valid
+                if(valid == false)
+                    return false
+                else 
+                    return true
+            },
+
             async editarItem(itemId){
                 if(this.editar){
-                    var params = {
-                        pvp_item: this.form.pvp,
-                        pvd_item:this.form.pvd,
-                        numeroSerie_item:this.form.numeroSerie,
-                        descuento_item: parseFloat(this.form.descuento)
+                    if(!this.validarDesct()){
+                        return
+                    }else{
+                        var params = {
+                            pvp_item: this.form.pvp,
+                            pvd_item:this.form.pvd,
+                            numeroSerie_item:this.form.numeroSerie,
+                            descuento_item: parseInt(this.form.descuento)
+                        }
+                        await axios.put(`http://10.147.17.173:5002/item/${itemId}`, params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                        }).then(() => {
+                            this.$toast.success('Item editado con éxito')
+                            this.$router.push('/items');
+                            this.onReset()
+                        }).catch (e => {
+                            this.$toast.error(e.response.data.detail)
+                        })
                     }
-                    await axios.put(`http://10.147.17.173:5002/item/${itemId}`, params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
-                    }).then(() => {
-                        this.$toast.success('Item editado con éxito')
-                        this.$router.push('/items');
-                        this.onReset()
-                    }).catch (e => {
-                        this.$toast.error(e.response.data.detail)
-                    })
                 }else{
                     this.$toast.error('No tiene permisos para modificar')
                 }
@@ -171,6 +188,7 @@
                 this.form.pvd = ''
                 this.form.descuento =''
                 this.form.numeroSerie =''
+                this.form.descuentoState = null
             }
         },
     }

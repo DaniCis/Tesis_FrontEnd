@@ -63,7 +63,7 @@
                                     <div class="d-lg-flex">
                                         <div class="ms-auto my-auto mt-lg-0 mt-2">
                                             <div class="ms-auto my-auto">
-                                                <a @click="openModal()" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Agregar productos</a>
+                                                <a @click="openModal(null, 'agregar')" class="btn bg-gradient-primary btn-sm mb-0"> +&nbsp; Agregar productos</a>
                                             </div>
                                         </div>
                                     </div>                            
@@ -79,6 +79,7 @@
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Precio Unit</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Desct.</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Precio Total</th>
+                                                            <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -106,6 +107,20 @@
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">${{detalle.precio_detalleCompra}}</p>
                                                             </td>
+                                                            <td class="align-middle">
+                                                            <div class="contenedorAcciones" >
+                                                                <div v-if="detalle.editar">
+                                                                    <a class="cursor-pointer" @click="openModal(i, 'editar')">
+                                                                        <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
+                                                                    </a>
+                                                                </div>
+                                                                <div v-if="detalle.eliminar">
+                                                                    <a class="trash cursor-pointer"  @click='showModalDelete(i)'>
+                                                                        <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -144,11 +159,11 @@
                                         </div>
                                     </div>                                      
                                 </b-form>
-                                <b-modal id="detalle-modal" size="xl" title='Añadir productos' cancel-title='Cancelar' ok-title='Agregar' @ok="handleOk($event)">
+                                <b-modal id="detalle-modal" size="xl" :title="title" cancel-title='Cancelar' :ok-title="titleBtn" @ok="handleOk($event)">
                                     <b-form @submit.stop.prevent="handleSubmit()">
                                         <div class="row">
                                             <div class="col-12 col-lg-6">
-                                                <b-card style="border: 1px solid rgba(0, 0, 0, 0.125);" class="header-detalle" sub-title="Detalle">
+                                                <b-card style="border: 1px solid rgba(0, 0, 0, 0.125);" class="header-detalle" sub-title="Detalle de la Compra">
                                                     <div class="row mt-3">
                                                         <div class="col-12 col-md-10">
                                                             <b-form-group 
@@ -212,7 +227,7 @@
                                                 </b-card>
                                             </div>
                                             <div class="col-12 col-lg-6">
-                                                <b-card style="border: 1px solid rgba(0, 0, 0, 0.125);" sub-title='Item'>
+                                                <b-card style="border: 1px solid rgba(0, 0, 0, 0.125);" sub-title='Información del Item'>
                                                     <div class="row mt-3">
                                                         <div class="col-12 col-md-5">
                                                             <b-form-group 
@@ -240,12 +255,12 @@
                                                     <div class="row mt-2">
                                                         <div class="col-12 col-md-5">
                                                             <b-form-group 
-                                                                label="Descuento del Item $" 
+                                                                label="Descuento del Item %" 
                                                                 label-for="desctItem-input"
                                                                 invalid-feedback="Este campo es requerido" 
                                                                 :state="detalle.desctItemState">
                                                                 <b-form-input required :state="detalle.desctItemState" ref="desctItem_input"
-                                                                    id="desctItem-input" class="form-control" min='0' type="number" step='any' v-model="detalle.desctItem">
+                                                                    id="desctItem-input" class="form-control" min='0' type="number" v-model="detalle.desctItem">
                                                                 </b-form-input>
                                                             </b-form-group>
                                                         </div>
@@ -331,7 +346,7 @@
                     precioUnit:'',
                     precioUnitState:null,
                     desct:'',
-                    desctState:null
+                    desctState:null,
                 },
                 proveedores:[],
                 productos:[],
@@ -342,8 +357,14 @@
                 nombres_productos:[],
                 nombres_proveedores:[],
                 crear:null,
+                editId:null,
+                editar:true,
+                eliminar:true,
                 iva:null,
                 numCant:1,
+                confirm: '',
+                title:'',
+                titleBtn:'',
             }
         },
         async mounted(){
@@ -364,10 +385,12 @@
                         this.detallesCopia = JSON.parse(JSON.stringify(this.detalles));
                         for (var i = 0; i < this.detalles.length; i++) {   
                             delete this.detallesCopia[i].nombre_producto
+                            delete this.detallesCopia[i].editar
+                            delete this.detallesCopia[i].eliminar
                         }
                         var params = {
                             fecha_compra: this.form.fecha,
-                            numeroFactura_compra: parseInt(this.form.numeroFactura),
+                            numeroFactura_compra: this.form.numeroFactura,
                             subtotal_compra:parseFloat(this.form.subtotal),
                             descuento_compra: parseFloat(this.form.descuento),
                             total_compra: this.form.total,
@@ -414,12 +437,14 @@
                     nombre_producto:this.detalle.producto.nombre,
                     pvp_item: (parseFloat(this.detalle.pvp)).toFixed(2),
                     pvd_item: (parseFloat(this.detalle.pvd)).toFixed(2),
-                    descuento_item: parseFloat(this.detalle.desctItem),
+                    descuentoPorcentaje_item: parseInt(this.detalle.desctItem),
                     precioUnitario_detalleCompra: (parseFloat(this.detalle.precioUnit)).toFixed(2),
                     cantidad_detalleCompra: parseInt(this.detalle.cantidad),
                     precio_detalleCompra: (parseFloat(this.detalle.precioTotal)).toFixed(2),
                     descuentoPorcentaje_detalleCompra: parseInt(this.detalle.desct),
-                    numeroSerie_item: this.detalle.serie.num
+                    numeroSerie_item: this.detalle.serie.num,
+                    editar: this.editar,
+                    eliminar: this.eliminar
                 }
                 this.detalles.push(detalle)
                 this.agregarPrecios()
@@ -428,6 +453,30 @@
                 this.calcularDescuentoTotal()
                 this.calcularIva()
                 this.calcularTotal()
+            },
+            editarDetalle(detalleId){
+                this.detalles[detalleId].productos_id_producto = this.detalle.producto.id,
+                this.detalles[detalleId].nombre_producto =this.detalle.producto.nombre,
+                this.detalles[detalleId].pvp_item = (parseFloat(this.detalle.pvp)).toFixed(2),
+                this.detalles[detalleId].pvd_item = (parseFloat(this.detalle.pvd)).toFixed(2),
+                this.detalles[detalleId].descuentoPorcentaje_item = parseInt(this.detalle.desctItem),
+                this.detalles[detalleId].precioUnitario_detalleCompra = (parseFloat(this.detalle.precioUnit)).toFixed(2),
+                this.detalles[detalleId].cantidad_detalleCompra = parseInt(this.detalle.cantidad),
+                this.detalles[detalleId].precio_detalleCompra = (parseFloat(this.detalle.precioTotal)).toFixed(2),
+                this.detalles[detalleId].descuentoPorcentaje_detalleCompra = parseInt(this.detalle.desct),
+                this.detalles[detalleId].numeroSerie_item = this.detalle.serie.num,
+                this.detalles[detalleId].editar = this.editar,
+                this.detalles[detalleId].eliminar = this.eliminar
+                this.agregarPrecios()
+                this.calcularSubtotal()
+                this.calcularDescuentoInd()
+                this.calcularDescuentoTotal()
+                this.calcularIva()
+                this.calcularTotal()
+            },
+            
+            eliminarDetalle(detalleId){
+                this.detalles.splice(detalleId,1)
             },
 
             calcularPrecioTotal(){
@@ -479,6 +528,65 @@
             mostrarInput(event){
                 this.numCant = event
                 this.calcularPrecioTotal()
+            },
+
+            handleOk(bvModalEvt){
+                bvModalEvt.preventDefault()
+                this.handleSubmit()
+            },
+
+            handleSubmit() {
+                if (!this.validarDetalle())
+                    return
+                if(!this.validarProductos())
+                    return
+                if(this.titleBtn == 'Agregar')
+                    this.crearDetalles()
+                else
+                    this.editarDetalle(this.editId)
+                this.$nextTick(() => {
+                    this.closeModal()
+                })
+            },
+
+            handleSubmit2() {
+                if (!this.validarCompra())
+                    return
+                this.crearCompra()
+            },
+
+            closeModal(){
+                this.$bvModal.hide('detalle-modal')
+            },
+
+            openModal(detalleId,action){
+                this.$bvModal.show('detalle-modal')
+                this.onReset()
+                if(action == 'editar'){
+                    this.editId = detalleId
+                    this.cargarFormEditar(this.editId)
+                    this.title = 'Editar Detalle'
+                    this.titleBtn = 'Actualizar'
+                }else{
+                    this.title='Añadir Nuevo Producto'
+                    this.titleBtn = 'Agregar'
+                }
+            },
+            
+            cargarFormEditar(detalleId){
+                this.detalle.producto.id = this.detalles[detalleId].productos_id_producto
+                this.detalle.producto.nombre = this.detalles[detalleId].nombre_producto
+                this.detalle.pvp = this.detalles[detalleId].pvp_item
+                this.detalle.pvd = this.detalles[detalleId].pvd_item
+                this.detalle.desctItem = this.detalles[detalleId].descuentoPorcentaje_item
+                this.detalle.precioUnit = this.detalles[detalleId].precioUnitario_detalleCompra
+                this.detalle.cantidad = this.detalles[detalleId].cantidad_detalleCompra
+                this.detalle.precioTotal = this.detalles[detalleId].precio_detalleCompra
+                this.detalle.desct = this.detalles[detalleId].descuentoPorcentaje_detalleCompra
+                this.detalle.serie.num = this.detalles[detalleId].numeroSerie_item
+                this.editar = this.detalles[detalleId].editar
+                this.eliminar = this.detalles[detalleId].eliminar
+                this.numCant = this.detalles[detalleId].cantidad_detalleCompra
             },
 
             validarCompra() {
@@ -572,28 +680,6 @@
                 }
             },
 
-            handleOk(bvModalEvt){
-                bvModalEvt.preventDefault()
-                this.handleSubmit()
-            },
-
-            handleSubmit() {
-                if (!this.validarDetalle())
-                    return
-                if(!this.validarProductos())
-                    return
-                this.crearDetalles()
-                this.$nextTick(() => {
-                    this.closeModal()
-                })
-            },
-
-            handleSubmit2() {
-                if (!this.validarCompra())
-                    return
-                this.crearCompra()
-            },
-            
             onReset(){
                 this.detalle.pvp= ''
                 this.detalle.pvpState= null
@@ -615,13 +701,26 @@
                 this.detalle.serie.num =[]
             },
 
-            closeModal(){
-                this.$bvModal.hide('detalle-modal')
-            },
-
-            openModal(){
-                this.$bvModal.show('detalle-modal')
-                this.onReset()
+            showModalDelete(detalleId){
+                this.confirm = ''
+                this.$bvModal.msgBoxConfirm('¿Está seguro que desea eliminar este detalle?', {
+                    title: 'Confirmar',
+                    size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'danger',
+                    okTitle: 'Si',
+                    cancelTitle: 'No',
+                    footerClass: 'p-2',
+                    hideHeaderClose: false,
+                    centered: true
+                }).then(value => {
+                    this.confirm = value
+                    if(this.confirm == true){
+                        this.eliminarDetalle(detalleId)
+                    }
+                }).catch( e=>{
+                    this.$toast.error(e.response.data.detail)
+                })
             },
         },
     }

@@ -290,7 +290,6 @@
                         detalle_compra: this.detallesCopia,
                     }
                     console.log(params)
-                    
                     await axios.put(`http://10.147.17.173:5003/compra/${compraId}`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Compra editada con éxito')

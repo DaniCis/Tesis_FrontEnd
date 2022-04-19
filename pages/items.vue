@@ -66,7 +66,7 @@
                                                             <p class="text-s font-weight-bold mb-0">{{item.numeroSerie_item}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">%{{item.descuento_item}}</p>
+                                                            <p class="text-s font-weight-bold mb-0">%{{item.descuentoPorcentaje_item}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <div v-if="item.estado_item == 'Disponible'"> 

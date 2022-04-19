@@ -53,8 +53,8 @@
                                                 :state="form.clienteState">
                                                 <b-form-input id="cliente-select" placeholder='Cliente' list="list-cli" v-model="form.nombreCliente" ref='cliente_select' :state="form.clienteState" required></b-form-input>
                                                     <datalist id="list-cli">
-                                                        <option v-for="proveedor in this.proveedores">
-                                                        {{proveedor.nombre_proveedor}}
+                                                        <option v-for="cliente in this.clientes">
+                                                        {{cliente.nombre_cliente}}
                                                     </option>
                                                 </datalist>
                                             </b-form-group>
@@ -185,6 +185,7 @@
                 this.crear = true
         },
         methods:{
+            
             async getProductos(){
                 await axios.get(`http://10.147.17.173:5002/productosExistentes`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
@@ -196,7 +197,7 @@
             },
 
             async getClientes(){
-                await axios.get(`http://10.147.17.173:5002/productosExistentes`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get(`http://10.147.17.173:5004/clientes`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.clientes = response.data
                 })
