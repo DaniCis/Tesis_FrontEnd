@@ -41,7 +41,7 @@
                                                 invalid-feedback="Este campo es requerido" 
                                                 :state="form.comprobanteState">
                                                 <b-form-input  required :state="form.comprobanteState" ref="comp_input"
-                                                    id="comp-input" class="form-control" type="number" placeholder="Comprobante" v-model='form.numeroComprobante'>
+                                                    id="comp-input" class="form-control" type="text" placeholder="Comprobante" v-model='form.numeroComprobante'>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>

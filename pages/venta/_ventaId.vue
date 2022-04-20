@@ -116,5 +116,34 @@
     export default{
         components: { Sidebar, Navbar },
         middleware: 'authenticated',
+        data(){
+            return{
+                form:{
+                    fecha:'',
+                    numeroComprobante:'',
+                    nombreCliente:'',
+                    identCliente:'',
+                    total:'',
+                    subtotal:'',
+                    descuento:'',
+                },
+                permisosCrud:[],
+                detalles:[],
+                iva:null,
+                ventaId:'',
+            }
+        },
+        async mounted(){
+            this.ventaId = this.$route.params.detalleId
+            this.permisosCrud = getSubmodulos('Ventas','OrdenVenta')
+            if('leer' in this.permisosCrud)
+                this.getVenta(this.ventaId)
+            else
+                this.$toast.error('No tiene permiso de lectura')
+        },    
+        methods:{
+            
+        }
+
     }
 </script>

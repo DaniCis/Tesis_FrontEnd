@@ -41,7 +41,7 @@
                                                 invalid-feedback="Este campo es requerido" 
                                                 :state="form.facturaState">
                                                 <b-form-input  required  :state="form.facturaState" ref="factura_input"
-                                                    id="factura-input" class="form-control" type="number" placeholder="Factura" v-model='form.numeroFactura'>
+                                                    id="factura-input" class="form-control" type="text" placeholder="Factura" v-model='form.numeroFactura'>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -397,7 +397,6 @@
                             proveedores_id_proveedor: this.form.proveedorId,
                             detalle_compra: this.detallesCopia,
                         }
-                        console.log(params)
                         await axios.post('http://10.147.17.173:5003/compra', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                         }).then(() => {
                             this.$toast.success('Compra creada con éxito')
@@ -454,6 +453,7 @@
                 this.calcularIva()
                 this.calcularTotal()
             },
+            
             editarDetalle(detalleId){
                 this.detalles[detalleId].productos_id_producto = this.detalle.producto.id,
                 this.detalles[detalleId].nombre_producto =this.detalle.producto.nombre,

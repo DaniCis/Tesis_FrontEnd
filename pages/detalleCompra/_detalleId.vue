@@ -163,6 +163,7 @@
                     this.form.nombreProveedor = response.data[0].nombre_proveedor
                     this.detalles = this.compras.detalle_compra
                     this.calcularIva(this.form.subtotal,this.form.descuento)
+                    console.log(response.data)
                 })
                 .catch(e => {
                      this.$toast.error(e.response.data.detail)

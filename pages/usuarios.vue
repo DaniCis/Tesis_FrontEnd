@@ -159,7 +159,7 @@
                                                 </b-form-group>
                                                 <b-form-group v-else
                                                     label="Rol" 
-                                                    label-for="rol-select" >
+                                                    label-for="rol-select">
                                                    <select id="rol-select" v-model="form.rol" class="form-select" ref='rol_select' :state="form.rolState">
                                                         <option v-for="rol in this.roles" :value="rol.id_rol">
                                                             {{rol.nombre_rol}}

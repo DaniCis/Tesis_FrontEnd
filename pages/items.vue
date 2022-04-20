@@ -79,9 +79,9 @@
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones" >
                                                                 <div v-if="editar">
-                                                                    <nuxt-link :to="{name:'item-itemId',params:{itemId: item.id_item}}">
+                                                                    <a class="cursor-pointer" @click="openModal(item.id_item)">
                                                                         <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
-                                                                    </nuxt-link>
+                                                                    </a>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -100,6 +100,74 @@
                                         </div>
                                     </div>
                                 </div>
+                                <b-modal id="item-modal" title="Editar Item"  cancel-title='Cancelar' ok-title="Actualizar" @ok="handleOk($event)">
+                                    <b-form @submit.stop.prevent="handleSubmit()">
+                                        <div class="row mt-2">
+                                            <div class="col-10 ">
+                                                <b-form-group 
+                                                    label="Producto Asociado" 
+                                                    label-for="name-input">
+                                                    <b-form-input  
+                                                        id="name-input" class="form-control" type="text"
+                                                        v-model="form.producto" readonly>
+                                                    </b-form-input>
+                                                </b-form-group>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-10 col-md-5">
+                                                <b-form-group 
+                                                    label="PVP $"  
+                                                    label-for="pvp-input"
+                                                    invalid-feedback="Este campo es requerido" 
+                                                    :state="form.pvpState">
+                                                    <b-form-input  :state="form.pvpState" required ref='pvp_input'
+                                                        id="pvp-input" class="form-control" type="number" step='any' v-model="form.pvp">
+                                                    </b-form-input>
+                                                </b-form-group>
+                                            </div>
+                                            <div class="col-10 col-md-5">
+                                                <b-form-group 
+                                                    label="PVD $" 
+                                                    label-for="pvd-input"
+                                                    invalid-feedback="Este campo es requerido" 
+                                                    :state="form.pvdState">
+                                                    <b-form-input  :state="form.pvdState" required ref='pvd_input'
+                                                        id="pvd-input" class="form-control" type="number" step='any' v-model="form.pvd">
+                                                    </b-form-input>
+                                                </b-form-group>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-10 col-md-5">
+                                                <b-form-group 
+                                                    label="Número de Serie" 
+                                                    label-for="num-input"
+                                                    invalid-feedback="Este campo es requerido" 
+                                                    :state="form.numeroSerieState">
+                                                    <b-form-input  :state="form.numeroSerieState" required ref='num_input'
+                                                        id="num-input" class="form-control" type="text" v-model="form.numeroSerie"
+                                                        style='height: 42px'>
+                                                    </b-form-input>
+                                                </b-form-group>
+                                            </div>
+                                            <div class="col-10 col-md-5 ">
+                                                <b-form-group 
+                                                    label="Descuento" 
+                                                    label-for="des-input"
+                                                    invalid-feedback="Este campo es requerido" 
+                                                    :state="form.descuentoState">
+                                                    <b-input-group prepend="%">
+                                                        <b-form-input  :state="form.descuentoState" ref='desct_input' required
+                                                            id="des-input" class="form-control" type="number" min='0' v-model="form.descuento"
+                                                            style='height: 42px'>
+                                                        </b-form-input>
+                                                    </b-input-group>
+                                                </b-form-group>
+                                            </div>
+                                        </div>
+                                    </b-form>
+                                </b-modal>
                             </div>
                         </div>
                     </div>
@@ -120,12 +188,26 @@
         middleware: 'authenticated',
         data(){
             return{
+                form:{
+                    id:'',
+                    producto:'',
+                    pvp:'',
+                    pvpState:null,
+                    pvd:'',
+                    pvdState:null,
+                    numeroSerie:'',
+                    numeroSerieState:null,
+                    descuento:'',
+                    descuentoState:null,
+                },
+                item:[],
                 permisosCrud:[],
                 items:[],
                 editar:null,
                 error:false,
                 pagActual:1,
                 porPag:20,
+                itemId:'',
             }
         },
         async mounted(){
@@ -149,6 +231,94 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+            async getItem(itemId){
+                await axios.get(`http://10.147.17.173:5002/item/${itemId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then(response => {
+                    this.form.id = response.data.id_item
+                    this.form.producto = response.data.nombre_producto
+                    this.form.pvp = response.data.pvp_item.slice(1)
+                    this.form.pvd = response.data.pvd_item.slice(1)
+                    this.form.numeroSerie = response.data.numeroSerie_item
+                    this.form.descuento = response.data.descuentoPorcentaje_item
+                })
+                .catch(e => {
+                     this.$toast.error(e.response.data.detail)
+                })
+            },
+
+            validarForm(){
+                const valid = this.$refs.desct_input.checkValidity()
+                const valid2 = this.$refs.pvp_input.checkValidity()
+                const valid3 = this.$refs.pvd_input.checkValidity()
+                const valid4 = this.$refs.num_input.checkValidity()
+                this.form.descuentoState = valid
+                this.form.pvpState = valid2
+                this.form.pvdState = valid3
+                this.form.numeroSerieState = valid4
+                if(valid == false || valid2 == false || valid3 == false || valid4 == false )
+                    return false
+                else 
+                    return true
+            },
+
+            async editarItem(itemId){
+                if(this.editar){
+                    var params = {
+                        id_item: itemId,
+                        pvp_item:parseFloat(this.form.pvp).toFixed(2),
+                        pvd_item:parseFloat(this.form.pvd).toFixed(2),
+                        numeroSerie_item:this.form.numeroSerie,
+                        descuentoPorcentaje_item: parseInt(this.form.descuento)
+                    }
+                    console.log(params)
+                    await axios.put(`http://10.147.17.173:5002/item/${itemId}`, params, { headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then(() => {
+                        this.$toast.success('Item editado con éxito')
+                        this.getItems()
+                    }).catch (e => {
+                        this.$toast.error(e.response.data.detail)
+                    })
+                }else{
+                    this.$toast.error('No tiene permisos para modificar')
+                }
+            },
+
+            closeModal(){
+                this.$bvModal.hide('item-modal')
+            },
+
+            openModal(itemId){
+                this.$bvModal.show('item-modal')
+                this.onReset()
+                this.getItem(itemId)
+                this.itemId = itemId
+            },
+
+            handleOk(bvModalEvt){
+                bvModalEvt.preventDefault()
+                this.handleSubmit()
+            },
+            
+            handleSubmit() {
+                if (!this.validarForm())
+                    return
+                this.editarItem(this.itemId)
+                this.$nextTick(() => {
+                    this.closeModal()
+                })
+            },
+
+            onReset(){
+                this.form.pvp = ''
+                this.form.pvpState = null
+                this.form.pvd = ''
+                this.form.pvdState = null
+                this.form.descuentoState = null
+                this.form.descuento =''
+                this.form.numeroSerie =''
+                this.form.numeroSerieState = null
+            },
+
             paginador(items) {
                 const inicio = (this.pagActual - 1) * this.porPag;
                 const final =

@@ -121,7 +121,7 @@
                                                     </b-form-group>
                                                     <b-form-group v-else
                                                         label="Módulo al que pertenece" 
-                                                        label-for="mod-select" >
+                                                        label-for="mod-select">
                                                         <select id="mod-select" v-model="form.modulo" class="form-select" ref='mod_select' :state="form.modState">
                                                             <option v-for="modulo in this.modulos" :value="modulo.id_modulo">
                                                                 {{modulo.nombre_modulo}}

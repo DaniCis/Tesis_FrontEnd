@@ -29,8 +29,10 @@
                                                 <div class="col-12 col-md-10 ">
                                                     <b-form-group 
                                                         label="Nombre" 
-                                                        label-for="name-input">
-                                                        <b-form-input  
+                                                        label-for="name-input" 
+                                                        invalid-feedback="Este campo es requerido"
+                                                        :state="form.nombreState">
+                                                        <b-form-input  :state="form.nombreState" required ref='name_input'
                                                             id="name-input" class="form-control" type="text" placeholder="Nombre"
                                                             v-model="form.nombre">
                                                         </b-form-input>
@@ -41,8 +43,10 @@
                                                 <div class="col-12 col-md-10 ">
                                                     <b-form-group 
                                                         label="Detalle" 
-                                                        label-for="detail-input">
-                                                        <b-form-input  
+                                                        label-for="detail-input"
+                                                        invalid-feedback="Este campo es requerido" 
+                                                        :state="form.detalleState">
+                                                        <b-form-input :state="form.detalleState" required ref='detail_input'
                                                             id="detail-input" class="form-control" type="text" placeholder="Detalle" 
                                                             v-model="form.detalle">
                                                         </b-form-input>
@@ -53,8 +57,10 @@
                                                 <div class="col-12 col-md-5 ">
                                                     <b-form-group 
                                                         label="Marca" 
-                                                        label-for="marca-input">
-                                                        <b-form-input  
+                                                        label-for="marca-input"
+                                                        invalid-feedback="Este campo es requerido" 
+                                                        :state="form.marcaState">
+                                                        <b-form-input  :state="form.marcaState" required ref='marca_input'
                                                             id="marca-input" class="form-control" type="text" placeholder="Marca" 
                                                             v-model="form.marca">
                                                         </b-form-input>
@@ -128,9 +134,11 @@
             return{
                 form:{
                     nombre:'',
+                    nombreState:null,
                     detalle:'',
+                    detalleState:null,
                     marca:'',
-                    unidad:'',
+                    marcaState:null,
                 },
                 imagen:null,
                 imagenes:[],
@@ -172,9 +180,23 @@
                 this.imagen = e.target.files
             },
             
+            validarForm() {
+                const valid = this.$refs.name_input.checkValidity()
+                const valid2 = this.$refs.detail_input.checkValidity()
+                const valid3 = this.$refs.marca_input.checkValidity()
+                this.form.nombreState = valid
+                this.form.detalleState = valid2
+                this.form.marcaState = valid3
+                if(valid == false || valid2 == false || valid3 == false)
+                    return false
+                else
+                    return true
+            },
+
             async editarProducto(productId){
                 if(this.editar){
-                    console.log(this.imagenes )
+                    if (!this.validarForm())
+                        return
                     if(this.imagenes.length == 0 && this.imagen == null){
                         this.$toast.error('Por favor añada una imagen antes de continuar.')
                     } 
@@ -182,10 +204,9 @@
                         const formData = new FormData()
                         if(this.imagen!= null){
                             for (let i = 0; i < this.imagen.length; i++){
-                            formData.append('files',this.imagen[i])
+                                formData.append('files',this.imagen[i])
                             }
                         }
-
                         formData.append('nombre_producto',this.form.nombre)
                         formData.append('detalle_producto',this.form.detalle)
                         formData.append('marca_producto',this.form.marca)
@@ -213,6 +234,9 @@
                 this.form.nombre = ''
                 this.form.detalle = ''
                 this.form.marca =''
+                this.form.nombreState = null,
+                this.form.detalleState = null,
+                this.form.marcaState = null
             },
 
             removeItemFromArr (arr, item ) {

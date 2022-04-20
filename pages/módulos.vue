@@ -38,9 +38,9 @@
                                             <table class="table table-flush dataTable-table">
                                                 <thead>
                                                     <tr>
-                                                    <th class="text-uppercase  text-secondary text-xs font-weight-bolder opacity-7">ID</th>
-                                                    <th class="text-uppercase  text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
-                                                    <th></th>
+                                                        <th class="text-uppercase  text-secondary text-xs font-weight-bolder opacity-7">ID</th>
+                                                        <th class="text-uppercase  text-secondary text-xs font-weight-bolder opacity-7 ps-2">Nombre</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

@@ -110,7 +110,7 @@
                                     <b-form @submit.stop.prevent="handleSubmit(editId)">
                                         <div class="row mt-2">
                                             <div class="col-12 col-md-8">
-                                                <b-form-group v-if="titleBtn == 'Agregar'"
+                                                <b-form-group
                                                     label="Nombre" 
                                                     label-for="name-input" 
                                                     invalid-feedback="Este campo es requerido" 
@@ -120,19 +120,11 @@
                                                         v-model="form.nombre" :state="form.nameState" required>
                                                     </b-form-input>
                                                 </b-form-group>
-                                                <b-form-group v-else
-                                                    label="Nombre" 
-                                                    label-for="name-input">
-                                                    <b-form-input 
-                                                        id="name-input" class="form-control" type="text" ref='name_input' :state="form.nameState"
-                                                        v-model="form.nombre" >
-                                                    </b-form-input>
-                                                </b-form-group>
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="col-12 col-md-8">
-                                                <b-form-group v-if="titleBtn == 'Agregar'"
+                                                <b-form-group
                                                     label="Dirección" 
                                                     label-for="dir-input" 
                                                     invalid-feedback="Este campo es requerido" 
@@ -142,19 +134,11 @@
                                                         v-model="form.direccion" :state="form.direccionState" required>
                                                     </b-form-input>
                                                 </b-form-group>
-                                                <b-form-group v-else
-                                                    label="Dirección" 
-                                                    label-for="dir-input">
-                                                    <b-form-input 
-                                                        id="dir-input" class="form-control" type="text" ref='dir_input' :state="form.direccionState"
-                                                        v-model="form.direccion" >
-                                                    </b-form-input>
-                                                </b-form-group>
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="col-12 col-md-8">
-                                                <b-form-group v-if="titleBtn == 'Agregar'"
+                                                <b-form-group
                                                     label="Teléfono" 
                                                     label-for="telf-input" 
                                                     invalid-feedback="Este campo es requerido" 
@@ -164,34 +148,18 @@
                                                         v-model="form.telefono" :state="form.telefonoState" required>
                                                     </b-form-input>
                                                 </b-form-group>
-                                                <b-form-group v-else
-                                                    label="Teléfono" 
-                                                    label-for="telf-input">
-                                                    <b-form-input 
-                                                        id="telf-input" class="form-control" type="text"  ref='telf_input' :state="form.telefonoState"
-                                                        v-model="form.telefono" >
-                                                    </b-form-input>
-                                                </b-form-group>
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="col-12 col-md-8">
-                                                <b-form-group v-if="titleBtn == 'Agregar'"
+                                                <b-form-group
                                                     label="Correo" 
                                                     label-for="correo-input" 
                                                     invalid-feedback="Este campo es requerido" 
                                                     :state="form.correoState">
                                                     <b-form-input  
-                                                        id="correo-input" class="form-control" type="text" placeholder="Correo" ref='correo_input'
+                                                        id="correo-input" class="form-control" type="email" placeholder="Correo" ref='correo_input'
                                                         v-model="form.correo" :state="form.correoState" required>
-                                                    </b-form-input>
-                                                </b-form-group>
-                                                <b-form-group v-else
-                                                    label="Correo" 
-                                                    label-for="correo-input">
-                                                    <b-form-input 
-                                                        id="correo-input" class="form-control" type="text" ref='correo_input' :state="form.correoState"
-                                                        v-model="form.correo" >
                                                     </b-form-input>
                                                 </b-form-group>
                                             </div>
@@ -263,7 +231,6 @@
                         this.proveedores = response.data
                     else
                         this.error=true
-                    console.log(this.proveedores)
                 }).catch (e=> {
                     this.$toast.error(e.response.data.detail)
                 })
@@ -347,8 +314,8 @@
                 const valid4 = this.$refs.correo_input.checkValidity()
                 this.form.nameState = valid
                 this.form.direccionState = valid2
-                this.form.correoState = valid3
-                this.form.telefonoState = valid4
+                this.form.correoState = valid4
+                this.form.telefonoState = valid3
                 if(valid == false || valid2 == false || valid3 == false || valid4 == false)
                     return false
                 else

@@ -53,42 +53,42 @@
 <script>
   export default{
     data(){
-        return{
-            form: {
-                user:'',
-                password:'',
-            },
-            show:true,
-            error:null,
-        };
+      return{
+        form: {
+            user:'',
+            password:'',
+        },
+        show:true,
+        error:null,
+      };
     },
     methods:{
       async login() {
-          this.error=''
-          const formData = new FormData();
-          formData.append('username',this.form.user);
-          formData.append('password',this.form.password);
-          await this.$auth.loginWith('local', {
-            data: formData
-          }).then((response) => {
-              if(response != null && response != undefined){
-                  this.user=''
-                  this.password=''
-                  this.$router.push('/dashboard');
-              }
-          }).catch (e=> { 
-            this.$toast.error(e.response.data.detail + '. Vuelva a ingresar')
-            //this.$toast.error(e.message)
-          })
+        this.error=''
+        const formData = new FormData();
+        formData.append('username',this.form.user);
+        formData.append('password',this.form.password);
+        await this.$auth.loginWith('local', {
+          data: formData
+        }).then((response) => {
+          if(response != null && response != undefined){
+            this.user=''
+            this.password=''
+            this.$router.push('/dashboard');
+          }
+        }).catch (e=> { 
+          this.$toast.error(e.response.data.detail + '. Vuelva a ingresar')
+          //this.$toast.error(e.message)
+        })
       },
       password_show_hide() {
-          this.show = !this.show;
-          var input = document.getElementById("password");
-          if (input.type === "password") {
-              input.type = "text";
-          } else {
-              input.type = "password";
-          }
+        this.show = !this.show;
+        var input = document.getElementById("password");
+        if (input.type === "password") {
+          input.type = "text";
+        } else {
+          input.type = "password";
+        }
       },
     }
   };
