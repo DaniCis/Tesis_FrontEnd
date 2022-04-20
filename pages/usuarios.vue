@@ -72,9 +72,10 @@
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones" >
                                                                 <div v-if="editar">
-                                                                    <a class="cursor-pointer" @click="openModal(user.id_usuario, 'editar')">
+                                                                    <a v-if="user.estado_usuario == true" class="cursor-pointer" @click="openModal(user.id_usuario, 'editar')">
                                                                         <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                     </a>
+                                                                    <a v-else class="mx-4"></a>
                                                                 </div>
                                                                 <div v-if="eliminar">
                                                                     <a class="trash cursor-pointer"  @click='showModalDelete(user.id_usuario)'>
@@ -102,22 +103,14 @@
                                     <b-form @submit.stop.prevent="handleSubmit(editId)">
                                         <div class="row mt-2">
                                             <div class="col-12 col-md-8">
-                                                <b-form-group v-if="titleBtn == 'Agregar'"
+                                                <b-form-group 
                                                     label="Nombre" 
                                                     label-for="name-input" 
                                                     invalid-feedback="Este campo es requerido" 
                                                     :state="form.nameState">
                                                     <b-form-input  
                                                         id="name-input" class="form-control" type="text" placeholder="Nombre" ref='name_input'
-                                                        v-model="form.nombre" :state="form.nameState" required>
-                                                    </b-form-input>
-                                                </b-form-group>
-                                                <b-form-group v-else
-                                                    label="Nombre" 
-                                                    label-for="name-input">
-                                                    <b-form-input 
-                                                        id="name-input" class="form-control" type="text" readonly ref='name_input' :state="form.nameState"
-                                                        v-model="form.nombre" >
+                                                        v-model="form.nombre" :state="form.nameState" :readonly="titleBtn == 'Actualizar'" required>
                                                     </b-form-input>
                                                 </b-form-group>
                                             </div>
@@ -144,27 +137,18 @@
                                         </div>
                                         <div class="row mt-2">
                                             <div class="col-12 col-md-8">
-                                                <b-form-group v-if="titleBtn =='Agregar'"
+                                                <b-form-group
                                                     label="Rol" 
                                                     label-for="rol-select" 
                                                     invalid-feedback="Seleccione un rol" 
                                                     :state="form.rolState">
                                                     <select 
                                                         id="rol-select" v-model="form.rol" class="form-select" ref='rol_select' :state="form.rolState" required>
-                                                        <option disabled :value='null'> Seleccione</option>
+                                                        <option v-if="titleBtn =='Agregar'" disabled :value='null'> Seleccione</option>
                                                         <option v-for="rol in this.roles" :value="rol.id_rol">
                                                             {{rol.nombre_rol}}
                                                         </option>
                                                     </select>
-                                                </b-form-group>
-                                                <b-form-group v-else
-                                                    label="Rol" 
-                                                    label-for="rol-select">
-                                                   <select id="rol-select" v-model="form.rol" class="form-select" ref='rol_select' :state="form.rolState">
-                                                        <option v-for="rol in this.roles" :value="rol.id_rol">
-                                                            {{rol.nombre_rol}}
-                                                        </option>
-                                                    </select>                                         
                                                 </b-form-group>
                                             </div>
                                         </div>

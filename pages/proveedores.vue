@@ -78,11 +78,12 @@
                                                             </div>
                                                         </td>
                                                         <td class="align-middle">
-                                                            <div class="contenedorAcciones" >
+                                                            <div class="contenedorAcciones">
                                                                 <div v-if="editar">
-                                                                    <a class="cursor-pointer" @click="openModal(proveedor.id_proveedor, 'editar')">
+                                                                    <a v-if="proveedor.estado_proveedor == true" class="cursor-pointer" @click="openModal(proveedor.id_proveedor, 'editar')">
                                                                         <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
                                                                     </a>
+                                                                    <a v-else class="mx-4"></a>
                                                                 </div>
                                                                 <div v-if="eliminar">
                                                                     <a class="trash cursor-pointer"  @click='showModalDelete(proveedor.id_proveedor)'>

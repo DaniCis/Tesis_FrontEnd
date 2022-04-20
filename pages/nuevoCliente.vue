@@ -32,7 +32,7 @@
                                                 :state="form.tipoState">
                                                 <select 
                                                     id="tipo-select" v-model="form.tipo" class="form-select" :state="form.tipoState" ref='tipo_select' required>
-                                                    <option disabled :value='null'> Seleccione</option>
+                                                    <option disabled hidden value=''> Seleccione</option>
                                                     <option value='Cedula' >Cédula</option>
                                                     <option value='RUC'>RUC</option>
                                                 </select>

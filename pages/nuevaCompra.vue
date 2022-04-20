@@ -84,7 +84,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr v-if="this.detalles.length == 0">
-                                                            <td colspan="10">
+                                                            <td colspan="7">
                                                                 <h6 class="ms-3 mb-2 text-sm text-center mt-4">Sin Productos </h6> 
                                                             </td> 
                                                         </tr>
@@ -108,19 +108,19 @@
                                                                 <p class="text-sm font-weight-bold mb-0">${{detalle.precio_detalleCompra}}</p>
                                                             </td>
                                                             <td class="align-middle">
-                                                            <div class="contenedorAcciones" >
-                                                                <div v-if="detalle.editar">
-                                                                    <a class="cursor-pointer" @click="openModal(i, 'editar')">
-                                                                        <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
-                                                                    </a>
+                                                                <div class="contenedorAcciones" >
+                                                                    <div v-if="detalle.editar">
+                                                                        <a class="cursor-pointer" @click="openModal(i, 'editar')">
+                                                                            <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
+                                                                        </a>
+                                                                    </div>
+                                                                    <div v-if="detalle.eliminar">
+                                                                        <a class="trash cursor-pointer"  @click='showModalDelete(i)'>
+                                                                            <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                                        </a>
+                                                                    </div>
                                                                 </div>
-                                                                <div v-if="detalle.eliminar">
-                                                                    <a class="trash cursor-pointer"  @click='showModalDelete(i)'>
-                                                                        <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

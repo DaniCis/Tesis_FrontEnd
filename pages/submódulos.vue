@@ -106,27 +106,18 @@
                                             </div>
                                             <div class="row mt-2">
                                                 <div class="col-12 col-md-8">
-                                                    <b-form-group v-if="titleBtn =='Agregar'"
+                                                    <b-form-group
                                                         label="Módulo al que pertenece" 
                                                         label-for="mod-select" 
                                                         invalid-feedback="Seleccione un módulo" 
                                                         :state="form.modState">
                                                         <select 
                                                             id="mod-select" class="form-select" v-model="form.modulo" ref='mod_select' :state="form.modState" required>
-                                                            <option disabled :value='null'> Seleccione</option>
+                                                            <option v-if="titleBtn =='Agregar'" disabled hidden value=''> Seleccione</option>
                                                             <option v-for="modulo in this.modulos" :value="modulo.id_modulo">
                                                                 {{modulo.nombre_modulo}}
                                                             </option>
                                                         </select>
-                                                    </b-form-group>
-                                                    <b-form-group v-else
-                                                        label="Módulo al que pertenece" 
-                                                        label-for="mod-select">
-                                                        <select id="mod-select" v-model="form.modulo" class="form-select" ref='mod_select' :state="form.modState">
-                                                            <option v-for="modulo in this.modulos" :value="modulo.id_modulo">
-                                                                {{modulo.nombre_modulo}}
-                                                            </option>
-                                                        </select>                                         
                                                     </b-form-group>
                                                 </div>
                                             </div>

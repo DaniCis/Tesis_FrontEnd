@@ -140,7 +140,7 @@
                                                     :state="form.subState">
                                                     <select 
                                                         id="submod-select" class="form-select" ref='submod_select' v-model='form.submodulo' :state="form.subState" required>
-                                                        <option disabled :value='null'> Seleccione</option>
+                                                        <option disabled hidden value=''> Seleccione</option>
                                                         <option v-for="subm in this.submodulos" :value="subm.id_submodulo">
                                                             {{subm.nombre_submodulo}}
                                                         </option>
