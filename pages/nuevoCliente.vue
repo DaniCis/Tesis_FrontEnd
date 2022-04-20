@@ -24,7 +24,7 @@
                             <div class="card-body px-0 pt-0 pb-2">
                                 <b-form class="ps-4 mt-3" @submit.stop.prevent="handleSubmit()" novalidate>
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-4 col-lg-2">
+                                        <div class="col-12 col-md-5 col-lg-3">
                                             <b-form-group 
                                                 label="Tipo de Identificación" 
                                                 label-for="tipo-select" 
@@ -38,7 +38,7 @@
                                                 </select>
                                             </b-form-group>
                                         </div>
-                                         <div class="col-12 col-md-6 col-lg-3">
+                                        <div class="col-12 col-md-5 col-lg-3 mt-2 mt-md-0">
                                             <b-form-group 
                                                 label="Identificación" 
                                                 label-for="ident-input" 
@@ -52,35 +52,33 @@
                                         </div>
                                     </div>
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-5 col-lg-4">
+                                        <div class="col-12 col-md-5 col-lg-3">
                                             <b-form-group 
                                                 label="Nombre" 
                                                 label-for="nombre-input" 
                                                 invalid-feedback="Este campo es requerido" 
                                                 :state="form.nombreState">
                                                 <b-form-input  
-                                                    id="nombre-input" class="form-control" type="text" placeholder="Nombre" ref='nombre_input'
+                                                    id="nombre-input" class="form-control" type="text" ref='nombre_input'
                                                     v-model="form.nombre" :state="form.nombreState" required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col-12 col-md-5 col-lg-4">
+                                        <div class="col-12 col-md-5 col-lg-3 mt-2 mt-md-0">
                                             <b-form-group 
                                                 label="Dirección" 
                                                 label-for="dir-input" 
                                                 invalid-feedback="Este campo es requerido" 
                                                 :state="form.direccionState">
                                                 <b-form-input  
-                                                    id="dir-input" class="form-control" type="text" placeholder="Dirección" ref='dir_input'
+                                                    id="dir-input" class="form-control" type="text" ref='dir_input'
                                                     v-model="form.direccion" :state="form.direccionState" required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
                                     </div>
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-4 col-lg-2">
+                                        <div class="col-12 col-md-5 col-lg-3">
                                             <b-form-group 
                                                 label="Teléfono" 
                                                 label-for="telf-input" 
@@ -92,7 +90,7 @@
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
-                                        <div class="col-12 col-md-4 col-lg-3">
+                                        <div class="col-12 col-md-5 col-lg-3 mt-2 mt-md-0">
                                             <b-form-group 
                                                 label="Correo" 
                                                 label-for="correo-input" 

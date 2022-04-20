@@ -24,23 +24,28 @@
                             <div class="card-body px-0 pt-0 pb-2">
                                 <b-form class="ps-4 mt-3">
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-4 col-lg-3">
+                                        <div class="col-12 col-md-5 col-lg-3">
                                             <b-form-group 
                                                 label="Tipo de Identificación" 
-                                                label-for="tipo-select">
+                                                label-for="tipo-select" 
+                                                invalid-feedback="Este campo es requerido"
+                                                :state="form.tipoState">
                                                 <select 
-                                                    id="tipo-select" v-model="form.tipo" class="form-select">
-                                                    <option value="Cedula">Cédula</option>
+                                                    id="tipo-select" v-model="form.tipo" class="form-select" :state="form.tipoState" ref='tipo_select' required>
+                                                    <option value='Cedula' >Cédula</option>
                                                     <option value='RUC'>RUC</option>
                                                 </select>
                                             </b-form-group>
                                         </div>
-                                         <div class="col-12 col-md-6 col-lg-3">
+                                         <div class="col-12 col-md-5 col-lg-3 mt-2 mt-md-0">
                                             <b-form-group 
                                                 label="Identificación" 
-                                                label-for="ident-input">
+                                                label-for="ident-input" 
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.identState">
                                                 <b-form-input  
-                                                    id="ident-input" class="form-control" type="text" v-model="form.ident">
+                                                    id="ident-input" class="form-control" type="text" ref='ident_input'
+                                                    v-model="form.ident" :state="form.identState" required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -49,38 +54,50 @@
                                         <div class="col-12 col-md-5 col-lg-3">
                                             <b-form-group 
                                                 label="Nombre" 
-                                                label-for="nombre-input">
+                                                label-for="nombre-input" 
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.nombreState">
                                                 <b-form-input  
-                                                    id="nombre-input" class="form-control" type="text" v-model="form.nombre">
+                                                    id="nombre-input" class="form-control" type="text" ref='nombre_input'
+                                                    v-model="form.nombre" :state="form.nombreState" required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
-                                        <div class="col-12 col-md-5 col-lg-3">
+                                        <div class="col-12 col-md-5 col-lg-3 mt-2 mt-md-0">
                                             <b-form-group 
                                                 label="Dirección" 
-                                                label-for="dir-input">
+                                                label-for="dir-input" 
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.direccionState">
                                                 <b-form-input  
-                                                    id="dir-input" class="form-control" type="text"  v-model="form.direccion">
+                                                    id="dir-input" class="form-control" type="text" ref='dir_input'
+                                                    v-model="form.direccion" :state="form.direccionState" required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
                                     </div>
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-4 col-lg-3">
+                                        <div class="col-12 col-md-5 col-lg-3">
                                             <b-form-group 
                                                 label="Teléfono" 
-                                                label-for="telf-input">
+                                                label-for="telf-input" 
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.telefonoState">
                                                 <b-form-input  
-                                                    id="telf-input" class="form-control" type="text" v-model="form.telefono" >
+                                                    id="telf-input" class="form-control" type="text" ref='telf_input'
+                                                    v-model="form.telefono" :state="form.telefonoState" required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
-                                        <div class="col-12 col-md-4 col-lg-3">
+                                        <div class="col-12 col-md-5 col-lg-3 mt-2 mt-md-0">
                                             <b-form-group 
                                                 label="Correo" 
-                                                label-for="correo-input">
+                                                label-for="correo-input" 
+                                                invalid-feedback="Este campo es requerido" 
+                                                :state="form.correoState">
                                                 <b-form-input  
-                                                    id="correo-input" class="form-control" type="text"  v-model="form.correo">
+                                                    id="correo-input" class="form-control" type="text" ref='correo_input'
+                                                    v-model="form.correo" :state="form.correoState" required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -116,11 +133,17 @@
                 form:{
                     id:'',
                     tipo:'',
+                    tipoState:null,
                     ident:'',
+                    identState:null,
                     nombre:'',
+                    nombreState:null,
                     direccion:'',
+                    direccionState:null,
                     telefono:'',
+                    telefonoState:null,
                     correo:'',
+                    correoState:null,
                 },
                 nombre:'',
                 editar: null,
@@ -140,6 +163,8 @@
         methods:{
             async editarCliente(clienteId){
                 if(this.editar){
+                    if (!this.validarForm())
+                        return
                     var params = {
                         identificacion_cliente: this.form.ident,
                         tipoIdentificacion_cliente: this.form.tipo,
@@ -175,6 +200,25 @@
                 .catch(e => {
                     this.$toast.error(e.response.data.detail)
                 })
+            },
+
+            validarForm(){
+                const valid = this.$refs.tipo_select.checkValidity()
+                const valid1 = this.$refs.ident_input.checkValidity()
+                const valid2 = this.$refs.nombre_input.checkValidity()
+                const valid3 = this.$refs.dir_input.checkValidity()
+                const valid4 = this.$refs.telf_input.checkValidity()
+                const valid5 = this.$refs.correo_input.checkValidity()
+                this.form.nombreState = valid2
+                this.form.tipoState = valid
+                this.form.identState = valid1
+                this.form.direccionState = valid3
+                this.form.telefonoState = valid4
+                this.form.correoState = valid5
+                if(valid == false || valid1 == false || valid2 == false || valid3 == false || valid4 == false || valid5 == false)
+                    return false
+                else
+                    return true
             },
         }
     }

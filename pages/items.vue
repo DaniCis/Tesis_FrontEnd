@@ -264,7 +264,6 @@
             async editarItem(itemId){
                 if(this.editar){
                     var params = {
-                        id_item: itemId,
                         pvp_item:parseFloat(this.form.pvp).toFixed(2),
                         pvd_item:parseFloat(this.form.pvd).toFixed(2),
                         numeroSerie_item:this.form.numeroSerie,
