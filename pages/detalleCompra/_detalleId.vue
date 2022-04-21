@@ -43,7 +43,7 @@
                                                 <table class="table table-flush dataTable-table">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
+                                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">#</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Producto</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Cant.</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Precio Unit</th>
@@ -147,7 +147,9 @@
         },    
         methods:{
             calcularIva(subtotal, descuento){
-                this.iva = parseFloat(subtotal.slice(1)) - parseFloat(descuento.slice(1))
+                const subt = parseFloat(subtotal.slice(1).replace(',', ''))
+                const desct = parseFloat(descuento.slice(1).replace(',', ''))
+                this.iva = subt - desct
                 this.iva = (this.iva*0.12).toFixed(2)
             },
 

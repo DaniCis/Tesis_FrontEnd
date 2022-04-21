@@ -187,22 +187,20 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+            
             async getGarantia(garantiaId){
                 await axios.get(`http://10.147.17.173:5002/garantia/${garantiaId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                 }) .then(response => {
-                    this.user = response.data
-                    this.form.nombre = response.data
-                    this.form.rol = response.data
+                    
                 }) .catch(e => {
                     this.$toast.error(e.response.data.detail)
                 })
             },
+
             async crearGarantia(){
                 if(this.crear){
                     var params = {
-                        nombre_usuario: this.form.nombre,
-                        password_usuario: this.form.password,
-                        roles_id_rol:this.form.rol
+                        
                     }
                     await axios.post('http://10.147.17.173:5002/garantia', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
@@ -215,6 +213,7 @@
                     this.$toast.error('No tiene permisos para agregar')
                 }
             },
+
             async editarGarantia(garantiaId){
                 if(this.editar){
                     var params ={
@@ -231,6 +230,7 @@
                     this.$toast.error('No tiene permisos para modificar')
                 }
             },
+
             async eliminarGarantia(garantiaId){
                 if(this.eliminar){
                     await axios.delete(`http://10.147.17.173:5002/garantia/${garantiaId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
@@ -244,13 +244,16 @@
                     this.$toast.error('No tiene permisos para eliminar')
                 }
             },
+
             validarForm(){
 
             },
+
             handleOk(bvModalEvt, garantiaId){
                 bvModalEvt.preventDefault()
                 this.handleSubmit(garantiaId)
             },
+
             handleSubmit(garantiaId) {
                 if (!this.validarForm())
                     return
@@ -262,12 +265,15 @@
                     this.closeModal('garantia-modal')
                 })
             },
+
             onReset(){
 
             },
+
             closeModal(name){
                 this.$bvModal.hide(name)
             },
+
             openModal(garantiaId, action){
                 this.$bvModal.show('garantia-modal')
                 this.onReset()
@@ -283,6 +289,7 @@
                     this.titleBtn = 'Agregar'
                 }
             },
+
             showModalDelete(garantiaId){
                 this.confirm = ''
                 this.$bvModal.msgBoxConfirm('¿Está seguro que desea eliminar este registro?', {
@@ -304,6 +311,7 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+
             paginador(items) {
                 const inicio = (this.pagActual - 1) * this.porPag;
                 const final =
@@ -313,6 +321,5 @@
                 return items.slice(inicio, final);
             }
         },
-
     }
 </script>

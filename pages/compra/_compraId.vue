@@ -67,7 +67,7 @@
                                                 <table class="table table-flush dataTable-table">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
+                                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">#</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Producto</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Cant.</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Precio Unit</th>

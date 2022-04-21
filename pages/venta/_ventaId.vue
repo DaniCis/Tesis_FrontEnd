@@ -24,18 +24,7 @@
                             <div class="card-body px-0 pt-0 pb-2">
                                 <b-form class="ps-4 mt-3 pe-4">
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-8 col-lg-3">
-                                            <label >Fecha</label>
-                                            <span class="text-sm ps-4">{{this.form.fecha}}</span>
-                                        </div>
-                                        <div class="col-12 col-md-8 col-lg-2">
-                                            <label># Comprobante</label>
-                                            <span class="text-sm ps-4">{{this.form.numeroComprobante}}</span>
-                                        </div>
-                                        <div class="col-12 col-md-8 col-lg-4">
-                                            <label>Cliente</label>
-                                            <span class="text-sm ps-4">{{this.form.nombreCliente}}</span>
-                                        </div>
+                                        
                                     </div>                          
                                     <div class="table-responsive p-0 mt-4">
                                         <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
@@ -43,11 +32,13 @@
                                                 <table class="table table-flush dataTable-table">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
+                                                            <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">#</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Producto</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Cant.</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Precio Unit</th>
+                                                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Desct.</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Precio Total</th>
+                                                            <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -66,6 +57,13 @@
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">{{detalle.precio_detalleVenta}}</p>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <div class="contenedorAcciones">
+                                                                    <a class="cursor-pointer" @click="openModal(detalle.id_detalleCompra)">
+                                                                        <b-icon class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
+                                                                    </a>
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                     </tbody>

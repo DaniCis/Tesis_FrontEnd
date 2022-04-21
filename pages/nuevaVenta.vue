@@ -213,13 +213,13 @@
                                                                 <p class="text-sm font-weight-bold mb-0">{{detalle.cantidad_detalleVenta}}</p>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
-                                                                <p class="text-sm font-weight-bold mb-0">{{detalle.precioUnitario_detalleVenta}}</p>
+                                                                <p class="text-sm font-weight-bold mb-0">${{detalle.precioUnitario_detalleVenta}}</p>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
-                                                                <p class="text-sm font-weight-bold mb-0">{{detalle.descuentoPorcentaje_detalleVenta}}</p>
+                                                                <p class="text-sm font-weight-bold mb-0">%{{detalle.descuentoPorcentaje_detalleVenta}}</p>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
-                                                                <p class="text-sm font-weight-bold mb-0">{{detalle.precio_detalleVenta}}</p>
+                                                                <p class="text-sm font-weight-bold mb-0">${{detalle.precio_detalleVenta}}</p>
                                                             </td>
                                                             <td class="align-middle">
                                                                 <div class="contenedorAcciones">
@@ -282,7 +282,7 @@
                                                     label-for="producto-select"
                                                     invalid-feedback="Seleccione un producto" 
                                                     :state="detalle.productoState">
-                                                    <b-form-input :state="detalle.productoState" ref='producto_select' required id="producto-select" list="list-prod" v-model="detalle.producto.nombre"></b-form-input>
+                                                    <b-form-input :state="detalle.productoState" ref='producto_select' required id="producto-select" list="list-prod" v-model="detalle.producto.nombre" @change="busquedaProducto($event)"></b-form-input>
                                                     <datalist id="list-prod">
                                                         <option v-for="producto in this.productos">
                                                             {{producto.nombre_producto}}
@@ -290,14 +290,17 @@
                                                     </datalist>
                                                 </b-form-group>
                                             </div>
-                                            <div class="row mt-2">
+                                            <div class="row mt-2" v-if="this.stockState">
+                                                <label>Disponibilidad en stock: {{this.stock}}</label>
+                                            </div>
+                                            <div class="row mt-2" v-if="this.stockState">
                                                 <div class="col-12 col-md-5">
                                                     <b-form-group 
                                                         label="Cantidad" 
                                                         label-for="cant-input"
                                                         invalid-feedback="Este campo es requerido" 
                                                         :state="detalle.cantidadState">
-                                                        <b-form-input @change="calcularPrecioTotal()" required :state="detalle.cantidadState" ref="cant_input" id="cant-input" class="form-control" type="number" min='1' v-model="detalle.cantidad">
+                                                        <b-form-input @change="calcularPrecioTotal()" required :state="detalle.cantidadState" ref="cant_input" id="cant-input" class="form-control" type="number" min='1' :max="this.stock" v-model="detalle.cantidad">
                                                         </b-form-input>
                                                     </b-form-group>
                                                 </div>
@@ -310,7 +313,7 @@
                                                     </b-form-group>
                                                 </div>
                                             </div>
-                                            <div class="row mt-2">
+                                            <div class="row mt-2" v-if="this.stockState">
                                                 <div class="col-12 col-md-5">
                                                     <b-form-group 
                                                         label="Descuento %" 
@@ -397,12 +400,13 @@
                 precios:[],
                 descuentos:[],
                 nombres_productos:[],
-                //nombres_clientes:[],
                 crear:null,
                 editar:true,
                 eliminar:true,
                 iva:null,
                 editId:null,
+                stock:null,
+                stockState:false,
                 confirm:'',
                 title:'',
                 titleBtn:'',
@@ -435,14 +439,15 @@
                             total_venta: parseFloat(this.form.total).toFixed(2),
                             clientes_id_cliente: this.form.clienteId,
                             detalle_venta: this.detallesCopia,
-                        }/*
+                        }
+                        console.log(params)
                         await axios.post('http://10.147.17.173:5004/ventas', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                         }).then(() => {
                             this.$toast.success('Venta creada con éxito')
                             this.$router.push('/ventas');
                         }).catch (e => {
                             this.$toast.error(e.response.data.detail)
-                        })*/
+                        })
                     }
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
@@ -453,6 +458,7 @@
                 await axios.get(`http://10.147.17.173:5002/productosExistentes`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.productos = response.data
+                    console.log(this.productos)
                 })
                 .catch(e => {
                     this.$toast.error(e.response.data.detail)
@@ -522,15 +528,30 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+            
+            async getDetalleProducto(nombre){
+                 await axios.get(`http://10.147.17.173:5002/detalleProducto/venta/${nombre}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then(response => {
+                    this.stock = response.data.cantidad_producto
+                    this.detalle.precioUnit = response.data.pvp_item.slice(1)
+                    this.detalle.desct = response.data.descuentoPorcentaje_item
+                    this.detalle.producto.id = response.data.id_producto
+                    this.detalle.producto.nombre = response.data.nombre_producto
+                    this.detalle.precioTotal = response.data.pvp_item.slice(1)
+                })
+                .catch(e => {
+                    this.$toast.error(e.response.data.detail)
+                })
+            },
 
             crearDetalles(){
                 var detalle = {
                     productos_id_producto: this.detalle.producto.id,
                     nombre_producto:this.detalle.producto.nombre,
-                    precioUnitario_detalleCompra: (parseFloat(this.detalle.precioUnit)).toFixed(2),
-                    cantidad_detalleCompra: parseInt(this.detalle.cantidad),
-                    precio_detalleCompra: (parseFloat(this.detalle.precioTotal)).toFixed(2),
-                    descuentoPorcentaje_detalleCompra: parseInt(this.detalle.desct),
+                    precioUnitario_detalleVenta: (parseFloat(this.detalle.precioUnit)).toFixed(2),
+                    cantidad_detalleVenta: parseInt(this.detalle.cantidad),
+                    precio_detalleVenta: (parseFloat(this.detalle.precioTotal)).toFixed(2),
+                    descuentoPorcentaje_detalleVenta: parseInt(this.detalle.desct),
                     editar: this.editar,
                     eliminar: this.eliminar
                 }
@@ -546,10 +567,10 @@
             editarDetalle(detalleId){
                 this.detalles[detalleId].productos_id_producto = this.detalle.producto.id,
                 this.detalles[detalleId].nombre_producto =this.detalle.producto.nombre,
-                this.detalles[detalleId].precioUnitario_detalleCompra = (parseFloat(this.detalle.precioUnit)).toFixed(2),
-                this.detalles[detalleId].cantidad_detalleCompra = parseInt(this.detalle.cantidad),
-                this.detalles[detalleId].precio_detalleCompra = (parseFloat(this.detalle.precioTotal)).toFixed(2),
-                this.detalles[detalleId].descuentoPorcentaje_detalleCompra = parseInt(this.detalle.desct),
+                this.detalles[detalleId].precioUnitario_detalleVenta = (parseFloat(this.detalle.precioUnit)).toFixed(2),
+                this.detalles[detalleId].cantidad_detalleVenta = parseInt(this.detalle.cantidad),
+                this.detalles[detalleId].precio_detalleVenta = (parseFloat(this.detalle.precioTotal)).toFixed(2),
+                this.detalles[detalleId].descuentoPorcentaje_detalleVenta = parseInt(this.detalle.desct),
                 this.detalles[detalleId].editar = this.editar,
                 this.detalles[detalleId].eliminar = this.eliminar
                 this.agregarPrecios()
@@ -571,7 +592,7 @@
             agregarPrecios(){
                 this.precios=[]
                 for (var i = 0; i < this.detalles.length; i++) {
-                    const precio = this.detalles[i].precio_detalleCompra
+                    const precio = this.detalles[i].precio_detalleVenta
                     this.precios.push((parseFloat(precio)).toFixed(2))
                 }
             },
@@ -586,8 +607,8 @@
             calcularDescuentoInd(){
                 this.descuentos = []
                 for (var i = 0; i < this.detalles.length; i++) {
-                    const desctInd = (parseFloat(this.detalles[i].descuentoPorcentaje_detalleCompra))/100
-                    const desct = parseFloat(this.detalles[i].precio_detalleCompra) * desctInd.toFixed(2)
+                    const desctInd = (parseFloat(this.detalles[i].descuentoPorcentaje_detalleVenta))/100
+                    const desct = parseFloat(this.detalles[i].precio_detalleVenta) * desctInd.toFixed(2)
                     this.descuentos.push((parseFloat(desct)).toFixed(2))
                 }
             },
@@ -601,18 +622,23 @@
 
             calcularIva(){
                 this.iva = (this.form.subtotal - this.form.descuento)
-                this.iva = parseFloat((this.iva*0.12).toFixed(2))
+                this.iva = ((this.iva*0.12).toFixed(2))
             },
 
             calcularTotal(){
                 this.form.total = null
-                this.form.total = (this.form.subtotal - this.form.descuento) + this.iva
+                this.form.total = (this.form.subtotal - this.form.descuento) + parseFloat(this.iva)
                 this.form.total = parseFloat(this.form.total).toFixed(2)
             },
 
             getFecha(){
                 let date = new Date();
                 this.form.fecha = date.toISOString().split('T')[0]
+            },
+
+            busquedaProducto($event){
+                this.stockState = true
+                this.getDetalleProducto($event)
             },
 
             busquedaPor($event){
@@ -660,6 +686,7 @@
                     this.title = 'Editar Detalle'
                     this.titleBtn = 'Actualizar'
                 }else{
+                    this.stockState = false
                     this.title='Añadir Nuevo Producto'
                     this.titleBtn = 'Agregar'
                 }
@@ -668,10 +695,10 @@
             cargarFormEditar(detalleId){
                 this.detalle.producto.id = this.detalles[detalleId].productos_id_producto
                 this.detalle.producto.nombre = this.detalles[detalleId].nombre_producto
-                this.detalle.precioUnit = this.detalles[detalleId].precioUnitario_detalleCompra
-                this.detalle.cantidad = this.detalles[detalleId].cantidad_detalleCompra
-                this.detalle.precioTotal = this.detalles[detalleId].precio_detalleCompra
-                this.detalle.desct = this.detalles[detalleId].descuentoPorcentaje_detalleCompra
+                this.detalle.precioUnit = this.detalles[detalleId].precioUnitario_detalleVenta
+                this.detalle.cantidad = this.detalles[detalleId].cantidad_detalleVenta
+                this.detalle.precioTotal = this.detalles[detalleId].precio_detalleVenta
+                this.detalle.desct = this.detalles[detalleId].descuentoPorcentaje_detalleVenta
                 this.editar = this.detalles[detalleId].editar
                 this.eliminar = this.detalles[detalleId].eliminar
             },
@@ -714,14 +741,23 @@
             },
 
             validarDetalle() {
-                const valid = this.$refs.producto_select.checkValidity()
-                const valid1 = this.$refs.cant_input.checkValidity()
-                this.detalle.productoState = valid
-                this.detalle.cantidadState = valid1
-                if(valid == false || valid1 == false)
-                    return false
-                else
-                    return true
+                if(this.stock== true){
+                    const valid = this.$refs.producto_select.checkValidity()
+                    this.detalle.productoState = valid
+                    if(valid == false)
+                        return false
+                    else
+                        return true
+                }else{
+                    const valid = this.$refs.producto_select.checkValidity()
+                    const valid1 = this.$refs.cant_input.checkValidity()
+                    this.detalle.productoState = valid
+                    this.detalle.cantidadState = valid1
+                    if(valid == false || valid1 == false)
+                        return false
+                    else
+                        return true
+                }            
             },
 
             validarProductos(){
