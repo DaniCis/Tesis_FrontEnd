@@ -39,6 +39,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Producto</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Item</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Cliente</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Fecha de Entrada</th>
@@ -48,13 +49,16 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr v-if="error">
-                                                        <td colspan="4">
+                                                        <td colspan="7">
                                                             <h6 class="ms-3 mb-2 text-sm text-center">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
                                                     <tr v-for="garantia in paginador(this.garantias)">
                                                         <td>
-                                                            <h6 class=" ms-3 mb-2 text-sm">{{garantia.id_garantia}}</h6>
+                                                            <h6 class="ms-3 mb-2 text-sm">{{garantia.id_garantia}}</h6>
+                                                        </td>
+                                                        <td class="align-middle text-center text-sm">
+                                                            <p class="text-s font-weight-bold mb-0">{{garantia.nombre_producto}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <p class="text-s font-weight-bold mb-0">{{garantia.inventario.id_item}}</p>
@@ -101,27 +105,18 @@
                                     <b-form @submit.stop.prevent="handleSubmit(editId)">
                                         <div class="row mt-2">
                                             <div class="col-12 col-md-8">
-                                                <b-form-group v-if="titleBtn =='Agregar'"
+                                                <b-form-group 
                                                     label="Producto Asociado" 
                                                     label-for="product-select" 
                                                     invalid-feedback="Seleccione un producto" 
                                                     :state="form.productoState">
                                                     <select 
                                                         id="product-select" v-model="form.producto" class="form-select" ref='product_select' :state="form.productoState" required>
-                                                        <option disabled :value='null'> Seleccione</option>
+                                                        <option v-if="titleBtn =='Agregar'" disabled hidden value=''> Seleccione</option>
                                                         <option v-for="product in this.productos" :value="product.id_producto">
                                                             {{product.nombre_producto}}
                                                         </option>
                                                     </select>
-                                                </b-form-group>
-                                                <b-form-group v-else
-                                                    label="Producto Asociado" 
-                                                    label-for="product-select" >
-                                                   <select id="product-select" v-model="form.producto" class="form-select" ref='product_select' :state="form.productoState">
-                                                        <option v-for="product in this.productos" :value="product.id_producto">
-                                                            {{product.nombre_producto}}
-                                                        </option>
-                                                    </select>                                         
                                                 </b-form-group>
                                             </div>
                                         </div>
@@ -176,7 +171,7 @@
         },
         methods:{
             async getGarantias(){
-                await axios.get('http://10.147.17.173:5002/garantias',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get('http://10.147.17.173:5004/garantias',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     console.log(response.data)
                     if(response.data !=null)
@@ -189,7 +184,7 @@
             },
             
             async getGarantia(garantiaId){
-                await axios.get(`http://10.147.17.173:5002/garantia/${garantiaId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                await axios.get(`http://10.147.17.173:5004/garantia/${garantiaId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                 }) .then(response => {
                     
                 }) .catch(e => {
@@ -202,7 +197,7 @@
                     var params = {
                         
                     }
-                    await axios.post('http://10.147.17.173:5002/garantia', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.post('http://10.147.17.173:5004/garantia', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Garantía creado con éxito')
                         this.getGarantias()
@@ -233,7 +228,7 @@
 
             async eliminarGarantia(garantiaId){
                 if(this.eliminar){
-                    await axios.delete(`http://10.147.17.173:5002/garantia/${garantiaId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.delete(`http://10.147.17.173:5004/garantia/${garantiaId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Garantía eliminado con éxito')
                         this.getGarantias()

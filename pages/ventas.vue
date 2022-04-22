@@ -82,11 +82,13 @@
                                                                 </nuxt-link>
                                                             </div>
                                                         </td>
-                                                        <td class="align-middle"  v-if="editar">
+                                                        <td class="align-middle">
                                                             <div class="contenedorAcciones">
-                                                                <nuxt-link :to="{name:'venta-ventaId',params:{ventaId: venta.id_venta}}">
-                                                                    <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
-                                                                </nuxt-link>
+                                                                <div v-if="eliminar">
+                                                                    <a class="trash cursor-pointer"  @click='showModalDelete(venta.id_venta)'>
+                                                                        <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
+                                                                    </a>
+                                                                </div>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -127,18 +129,19 @@
                 permisosCrud:[],
                 ventas:[],
                 crear:null,
-                editar:null,
+                eliminar:null,
                 error:null,
                 pagActual:1,
-                porPag:10,
+                porPag:10, 
+                confirm:''
             }
         },
         async mounted(){
             this.permisosCrud = getSubmodulos('Ventas','OrdenVenta')
             if('crear' in this.permisosCrud)
                 this.crear = true
-            if('editar' in this.permisosCrud)
-                this.editar = true
+            if('eliminar' in this.permisosCrud)
+                this.eliminar = true
             if('leer' in this.permisosCrud)
                 this.getVentas()
             else
@@ -154,6 +157,32 @@
                         this.error=true
                 console.log(this.ventas)
                 }).catch (e=> {
+                    this.$toast.error(e.response.data.detail)
+                })
+            },
+            
+            async eliminarGarantia(garantiaId){
+
+            },
+
+            showModalDelete(garantiaId){
+                this.confirm = ''
+                this.$bvModal.msgBoxConfirm('¿Está seguro que desea eliminar este registro?', {
+                    title: 'Confirmar',
+                    size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'danger',
+                    okTitle: 'Si',
+                    cancelTitle: 'No',
+                    footerClass: 'p-2',
+                    hideHeaderClose: false,
+                    centered: true
+                }).then(value => {
+                    this.confirm = value
+                    if(this.confirm == true){
+                        this.eliminarGarantia(garantiaId)
+                    }
+                }).catch( e=>{
                     this.$toast.error(e.response.data.detail)
                 })
             },

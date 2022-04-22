@@ -1,12 +1,12 @@
 <template>
-    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 border-radius-xl shadow-none" id="navbarBlur" navbar-scroll="false">
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 border-radius-xl shadow-none left-auto" id="navbarBlur" navbar-scroll="true">
         <div class="container-fluid py-1 px-3">
             <div class="nav-item d-xl-none d-flex">
-                <i v-on:click='toggleSidenav' class="nav-link text-body p-0" id="iconNavbarSidenav">
+                <a @click='toggleSidenav' class="nav-link text-body p-0" id="iconNavbarSidenav">
                     <div class="sidenav-toggler-inner">
                         <b-icon icon='list' font-scale="2" ></b-icon>
                     </div>
-                </i>
+                </a>
             </div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
@@ -55,9 +55,9 @@
         },
         methods: {
             toggleSidenav() {
-                let body = document.getElementById("mainDashboard");
-                let sidenav = document.getElementById("sidenav-main");
-                let iconSidenav = document.getElementById("iconSidenav");
+                var body = document.getElementById("mainDashboard");
+                var sidenav = document.getElementById("sidenav-main");
+                var iconSidenav = document.getElementById("iconSidenav");
                 if (body.classList.contains("g-sidenav-pinned")) {
                     body.classList.remove("g-sidenav-pinned");
                     setTimeout(function () {

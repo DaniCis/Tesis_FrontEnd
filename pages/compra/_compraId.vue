@@ -330,7 +330,7 @@
             },
 
             async getProductos(){
-                await axios.get(`http://10.147.17.173:5002/productosExistentes`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get(`http://10.147.17.173:5002/productosNombres`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.productos = response.data
                 })

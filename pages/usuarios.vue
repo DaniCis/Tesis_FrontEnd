@@ -1,5 +1,5 @@
 <template>
-    <div class="g-sidenav-show bg-gray-10 vh-completa" id='mainDashboard'> 
+    <div class="g-sidenav-show bg-gray-100 vh-completa" id='mainDashboard'> 
         <Sidebar />
         <Navbar :Modulo='"Administración"' :Tabla='"Usuarios"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">

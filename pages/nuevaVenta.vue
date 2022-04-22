@@ -414,7 +414,6 @@
         },
         async mounted(){
             this.getNombresClientes()
-            this.getProductos()
             this.getFecha()
             this.permisosCrud = getSubmodulos('Ventas','OrdenVenta')
             if('crear' in this.permisosCrud)
@@ -437,6 +436,8 @@
                         }
                         var params = {
                             total_venta: parseFloat(this.form.total).toFixed(2),
+                            subtotal_venta:parseFloat(this.form.subtotal),
+                            descuento_venta: parseFloat(this.form.descuento),
                             clientes_id_cliente: this.form.clienteId,
                             detalle_venta: this.detallesCopia,
                         }
@@ -678,6 +679,7 @@
             },
 
             openModal(detalleId,action){
+                this.getProductos()
                 this.$bvModal.show('detalle-modal')
                 this.onResetModal()
                 if(action == 'editar'){

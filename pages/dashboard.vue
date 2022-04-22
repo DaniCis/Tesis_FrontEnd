@@ -2,7 +2,7 @@
     <div class="g-sidenav-show bg-gray-100 vh-completa" id='mainDashboard'>
         <Sidebar/>
         <Navbar :Modulo='"Inicio"' :Tabla='"Dashboard"'/>
-        <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
+        <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left ps ps--active-y">
             <div class="container-fluid py-4">
                 <div class="row">
                     <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">

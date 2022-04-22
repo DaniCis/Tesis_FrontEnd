@@ -369,7 +369,6 @@
         },
         async mounted(){
             this.getProveedores()
-            this.getProductos()
             this.permisosCrud = getSubmodulos('Compras','OrdenCompra')
             if('crear' in this.permisosCrud)
                 this.crear = true
@@ -421,7 +420,7 @@
             },
 
             async getProductos(){
-                await axios.get(`http://10.147.17.173:5002/productosExistentes`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get(`http://10.147.17.173:5002/productosNombres`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.productos = response.data
                 })
@@ -560,6 +559,7 @@
             },
 
             openModal(detalleId,action){
+                this.getProductos()
                 this.$bvModal.show('detalle-modal')
                 this.onReset()
                 if(action == 'editar'){
