@@ -163,25 +163,27 @@
         },
         methods:{
             verificarRuta(ruta){
-                if(ruta =='usuarios' || ruta =='roles' ||ruta =='módulos' ||ruta =='submódulos' ){
+                if(ruta =='usuarios' || ruta =='roles' ||ruta =='módulos' ||ruta =='submódulos' || ruta == 'rol-rolId'){
                     this.abrirAdm=true
                     this.actAdm= true
                     this.actInicio= false
                 }
-                else if(ruta =='compras' || ruta =='proveedores'){
+                else if(ruta =='compras' || ruta =='proveedores' || ruta =='nuevaCompra' || ruta=='compra-compraId' ||ruta =='detalleCompra-detalleId'){
                     this.abrirComp=true
                     this.actComp= true
                     this.actInicio= false
                 }
-                else if(ruta =='ventas' || ruta =='clientes'){
+                else if(ruta =='ventas' || ruta =='clientes' || ruta =='nuevoCliente' || ruta=='cliente-clienteId' || ruta =='nuevaVenta' || ruta =='detalleVenta-detalleId'){
                     this.abrirVent=true
                     this.actVent= true
                     this.actInicio= false
                 }
-                else if(ruta =='productos' || ruta =='items'){
+                else if(ruta =='productos' || ruta =='items' || ruta =='nuevoProducto' || ruta =='producto-productId'){
                     this.abrirInv=true
                     this.actInv= true
                     this.actInicio= false
+                }else{
+                    this.actInicio= true
                 }
             },
             
