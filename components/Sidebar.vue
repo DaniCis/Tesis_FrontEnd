@@ -115,23 +115,12 @@
                     </b-collapse>
                 </div>
                 <div class="nav-item" v-if="'Garantías' in this.modulos">
-                    <a class="nav-link" id="submenuMov" v-b-toggle.collapse-5 @:click="actGar= !actGar">
+                    <nuxt-link class="nav-link" id="submenuMov" to="/garantías">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                            <b-icon icon='cash-stack' style="color:#000"></b-icon>
+                            <b-icon icon='shield-check' style="color:#000"></b-icon>
                         </div>
-                        <span class="nav-link-text ms-1">Garantías&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        <span class="ms-4" >
-                            <b-icon v-show='actGar' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
-                            <b-icon v-show='!actGar' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
-                        </span>
-                    </a>
-                    <b-collapse id="collapse-5" > 
-                        <b-card>
-                            <b-card-text v-if="'Garantías' in this.modulos.Garantías">
-                                <nuxt-link to="/garantías">Garantías</nuxt-link>
-                            </b-card-text>
-                        </b-card>
-                    </b-collapse>
+                        <span class="nav-link-text ms-1">Garantías&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    </nuxt-link>
                 </div>
             </ul>
         </div>

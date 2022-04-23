@@ -145,6 +145,7 @@ import axios from 'axios';
         },
         async mounted(){
             this.permisosCrud = getSubmodulos('Ventas','Clientes')
+            console.log(this.permisosCrud)
             if('crear' in this.permisosCrud)
                 this.crear = true
             if('editar' in this.permisosCrud)

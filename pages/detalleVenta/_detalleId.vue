@@ -64,7 +64,7 @@
                                                                 <p class="text-sm font-weight-bold mb-0">{{detalle.nombre_producto}}</p>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
-                                                                <p class="text-sm font-weight-bold mb-0">{{detalle.descuento_item}}</p>
+                                                                <p class="text-sm font-weight-bold mb-0">%{{detalle.descuentoPorcentaje_item}}</p>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">{{detalle.cantidad_detalleVenta}}</p>
@@ -83,25 +83,25 @@
                                     </div>
                                     <div class="row mt-3 d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
-                                            <label class="col-5">Subtotal</label>
+                                            <label class="col-5 col-lg-6">Subtotal</label>
                                             <span class="col-4 text-sm">{{this.form.subtotal}}</span>
                                         </div>
                                     </div>
                                     <div class="row mt-1 d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
-                                            <label class="col-5">Descuento</label>
+                                            <label class="col-5 col-lg-6">Descuento</label>
                                             <span class="text-sm col-4">{{this.form.descuento}}</span>
                                         </div>
                                     </div>
                                     <div class="row mt-1 d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
-                                            <label class="col-5">IVA %12</label>
+                                            <label class="col-5 col-lg-6">IVA %12</label>
                                             <span class="text-sm col-4">${{this.iva}}</span>
                                         </div>
                                     </div>  
                                     <div class="row mt-1 d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
-                                            <label class="col-5">Total</label>
+                                            <label class="col-5 col-lg-6">Total</label>
                                             <span class="text-sm col-4">{{this.form.total}}</span>
                                         </div>
                                     </div>              

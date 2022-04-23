@@ -86,7 +86,7 @@
                                     <div class="row mt-4">
                                         <div class="col-12 col-md-8 col-lg-6">
                                             <div class="d-flex ms-auto mb-3">
-                                                <b-button class="btn bg-gradient-primary mb-0" type='submit'> Agregar</b-button>
+                                                <b-button class="btn bg-gradient-primary mb-0" type='submit'>Agregar</b-button>
                                             </div>
                                         </div>
                                     </div>

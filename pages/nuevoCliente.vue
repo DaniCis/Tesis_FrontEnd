@@ -43,9 +43,10 @@
                                                 label="Identificación" 
                                                 label-for="ident-input" 
                                                 invalid-feedback="Este campo es requerido" 
-                                                :state="form.identState">
+                                                :state="form.identState"
+                                                description='máx.13 dígitos'>
                                                 <b-form-input  
-                                                    id="ident-input" class="form-control" type="text" placeholder="Identificación" ref='ident_input'
+                                                    id="ident-input" class="form-control" type="number" min='0' placeholder="Identificación" ref='ident_input'
                                                     v-model="form.ident" :state="form.identState" required>
                                                 </b-form-input>
                                             </b-form-group>
@@ -83,9 +84,10 @@
                                                 label="Teléfono" 
                                                 label-for="telf-input" 
                                                 invalid-feedback="Este campo es requerido" 
-                                                :state="form.telefonoState">
+                                                :state="form.telefonoState"
+                                                description='máx.13 dígitos'>
                                                 <b-form-input  
-                                                    id="telf-input" class="form-control" type="text" placeholder="Teléfono" ref='telf_input'
+                                                    id="telf-input" class="form-control" type="number" min='0' placeholder="Teléfono" ref='telf_input'
                                                     v-model="form.telefono" :state="form.telefonoState" required>
                                                 </b-form-input>
                                             </b-form-group>
@@ -106,7 +108,7 @@
                                     <div class="row mt-4">
                                         <div class="col-12 col-md-8 col-lg-6">
                                             <div class="d-flex ms-auto mb-3">
-                                                <b-button class="btn bg-gradient-primary mb-0" type='submit'> Agregar</b-button>
+                                                <b-button class="btn bg-gradient-primary mb-0" type='submit'>Agregar</b-button>
                                             </div>
                                         </div>
                                     </div>
@@ -195,8 +197,32 @@
                     return true
             },
 
+            validarTelf(){
+                if(this.form.telefono.length > 0 && this.form.telefono < 14)
+                    return true
+                else{
+                    this.form.telefonoState=false
+                    this.$toast.error('El teléfono no puede ser de más de 13 dígitos')
+                    return false
+                }                   
+            },
+
+            validarIdent(){
+                if(this.form.ident.length > 0 && this.form.ident < 14)
+                    return true
+                else{
+                    this.form.identState=false
+                    this.$toast.error('La dentificación no puede ser de más de 13 dígitos')
+                    return false
+                }                   
+            },
+
             handleSubmit() {
                 if (!this.validarForm())
+                    return
+                if (!this.validarIdent())
+                    return
+                if (!this.validarTelf())
                     return
                 this.crearCliente()
             },

@@ -143,9 +143,10 @@
                                                     label="Teléfono" 
                                                     label-for="telf-input" 
                                                     invalid-feedback="Este campo es requerido" 
-                                                    :state="form.telefonoState">
+                                                    :state="form.telefonoState"
+                                                    description='máx.13 dígitos'>
                                                     <b-form-input  
-                                                        id="telf-input" class="form-control" type="text" placeholder="Teléfono" ref='telf_input'
+                                                        id="telf-input" class="form-control" type="number" min='0' placeholder="Teléfono" ref='telf_input'
                                                         v-model="form.telefono" :state="form.telefonoState" required>
                                                     </b-form-input>
                                                 </b-form-group>
@@ -308,23 +309,36 @@
                 this.handleSubmit(proveedorId)
             },
 
-            validarForm() {
+            validarForm() { 
                 const valid = this.$refs.name_input.checkValidity()
                 const valid2 = this.$refs.dir_input.checkValidity()
                 const valid3 = this.$refs.telf_input.checkValidity()
                 const valid4 = this.$refs.correo_input.checkValidity()
                 this.form.nameState = valid
                 this.form.direccionState = valid2
-                this.form.correoState = valid4
                 this.form.telefonoState = valid3
+                this.form.correoState = valid4
                 if(valid == false || valid2 == false || valid3 == false || valid4 == false)
                     return false
                 else
                     return true
             },
 
+            validarTelf(){
+                if(this.form.telefono.length > 0 && this.form.telefono < 14)
+                    return true
+                else{
+                    this.form.telefonoState=false
+                    this.$toast.error('El teléfono no puede ser de más de 13 dígitos')
+                    return false
+                }
+                    
+            },
+
             handleSubmit( proveedorId) {
                 if (!this.validarForm())
+                    return
+                if (!this.validarTelf())
                     return
                 if(this.titleBtn == 'Agregar')
                     this.crearProveedor()

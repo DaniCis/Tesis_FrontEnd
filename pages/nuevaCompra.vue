@@ -129,32 +129,32 @@
                                     </div>
                                     <div class="row d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
-                                            <label class="col-5">Subtotal</label>
+                                            <label class="col-5 col-lg-6">Subtotal</label>
                                             <span class="col-4 text-sm">${{this.form.subtotal}}</span>
                                         </div>
                                     </div>
                                     <div class="row d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
-                                            <label class="col-5">Descuento</label>
+                                            <label class="col-5 col-lg-6">Descuento</label>
                                             <span class="text-sm col-4">${{this.form.descuento}}</span>
                                         </div>
                                     </div>
                                     <div class="row d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
-                                            <label class="col-5">IVA %12</label>
+                                            <label class="col-5 col-lg-6">IVA %12</label>
                                             <span class="text-sm col-4">${{this.iva}}</span>
                                         </div>
                                     </div>  
                                     <div class="row d-lg-flex pe-4">
                                         <div class="col-12 col-md-8 col-lg-3 ms-auto my-auto">
-                                            <label class="col-5">Total</label>
+                                            <label class="col-5 col-lg-6">Total</label>
                                             <span class="text-sm col-4">${{this.form.total}}</span>
                                         </div>
                                     </div>
                                     <div class="row mt-4">
                                         <div class="col-12 col-md-8 col-lg-6">
                                             <div class="d-flex ms-auto mb-3">
-                                                <b-button class="btn bg-gradient-primary mb-0" type='submit'> Agregar</b-button>
+                                                <b-button class="btn bg-gradient-primary mb-0" type='submit'>Guardar</b-button>
                                             </div>
                                         </div>
                                     </div>                                      

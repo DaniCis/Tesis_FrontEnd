@@ -44,7 +44,7 @@
                                                 invalid-feedback="Este campo es requerido" 
                                                 :state="form.identState">
                                                 <b-form-input  
-                                                    id="ident-input" class="form-control" type="text" ref='ident_input'
+                                                    id="ident-input" class="form-control" type="number" min='0' ref='ident_input'
                                                     v-model="form.ident" :state="form.identState" required>
                                                 </b-form-input>
                                             </b-form-group>
@@ -84,7 +84,7 @@
                                                 invalid-feedback="Este campo es requerido" 
                                                 :state="form.telefonoState">
                                                 <b-form-input  
-                                                    id="telf-input" class="form-control" type="text" ref='telf_input'
+                                                    id="telf-input" class="form-control" type="number" min='0' ref='telf_input'
                                                     v-model="form.telefono" :state="form.telefonoState" required>
                                                 </b-form-input>
                                             </b-form-group>

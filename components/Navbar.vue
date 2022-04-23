@@ -22,13 +22,13 @@
                 <ul class="navbar-nav justify-content-end" >
                     <li class="nav-item d-flex align-items-center">
                         <a class="nav-link px-0 font-weight-bold">
-                            <b-icon icon='person-fill' style="width: 1.3em; height: 1.3em"></b-icon>
+                            <b-icon v-b-tooltip.hover :title="this.user" icon='person-fill' style="width: 1.3em; height: 1.3em"></b-icon>
                             <span class="d-sm-inline d-none">{{this.user}}</span>
                         </a>
                     </li>
                     <li class="nav-item px-3 d-flex align-items-center">
                         <div class="nav-link cursor-pointer" >
-                            <b-icon @click="logout" icon='box-arrow-right' variant="dark" style="width: 1.3em; height: 1.3em"></b-icon>
+                            <b-icon v-b-tooltip.hover title="Cerrar Sesión" @click="logout" icon='box-arrow-right' variant="dark" style="width: 1.3em; height: 1.3em"></b-icon>
                             <a @click="logout" class="d-sm-inline d-none">
                             Cerrar Sesión</a>
                         </div>
