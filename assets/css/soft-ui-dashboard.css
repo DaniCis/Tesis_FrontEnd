@@ -22863,7 +22863,7 @@ hr.horizontal.gray-light {
 
 .table td,
 .table th {
-  white-space: nowrap;
+  white-space: pre-line;
 }
 
 .table.align-items-center td,

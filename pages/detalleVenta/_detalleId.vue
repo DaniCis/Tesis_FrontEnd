@@ -49,6 +49,7 @@
                                                         <tr>
                                                             <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Producto</th>
+                                                            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Num Serie</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Desct.</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Cant.</th>
                                                             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Precio Unit</th>
@@ -56,13 +57,16 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr v-for="detalle in this.detalles">
+                                                        <tr v-for="(detalle,i) in this.detalles">
                                                             <td>
-                                                                <h6 class=" ms-3 mb-2 text-sm">{{detalle.id_detalleVenta}}</h6>
+                                                                <h6 class=" ms-3 mb-2 text-sm">{{i+1}}</h6>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">{{detalle.nombre_producto}}</p>
-                                                            </td>
+                                                            </td><!--
+                                                            <td class="align-middle text-center text-sm" v-for="num in this.detalle.">
+                                                                <p class="text-sm font-weight-bold mb-0">{{num}}</p>
+                                                            </td>-->
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">%{{detalle.descuentoPorcentaje_item}}</p>
                                                             </td>

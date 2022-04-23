@@ -325,11 +325,11 @@
             },
 
             validarTelf(){
-                if(this.form.telefono.length > 0 && this.form.telefono < 14)
+                if(this.form.telefono.length > 0 && this.form.telefono.length < 14)
                     return true
                 else{
                     this.form.telefonoState=false
-                    this.$toast.error('El teléfono no puede ser de más de 13 dígitos')
+                    this.$toast.error('El teléfono debe ser máx. 13 dígitos')
                     return false
                 }
                     

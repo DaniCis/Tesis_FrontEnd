@@ -166,13 +166,13 @@
                         telefono_cliente: this.form.telefono,
                         correo_cliente: this.form.correo
                     }
-                    await axios.post(`http://10.147.17.173:5004/clientes/`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    /*await axios.post(`http://10.147.17.173:5004/clientes/`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Cliente creado con éxito')
                         this.$router.push('/clientes');
                     }).catch (e => {
                         this.$toast.error(e.response.data.detail)
-                    })
+                    })*/
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
                 }
@@ -198,21 +198,21 @@
             },
 
             validarTelf(){
-                if(this.form.telefono.length > 0 && this.form.telefono < 14)
+                if(this.form.telefono.length > 0 && this.form.telefono.length < 14)
                     return true
                 else{
                     this.form.telefonoState=false
-                    this.$toast.error('El teléfono no puede ser de más de 13 dígitos')
+                    this.$toast.error('El teléfono debe ser máx. 13 dígitos')
                     return false
                 }                   
             },
 
             validarIdent(){
-                if(this.form.ident.length > 0 && this.form.ident < 14)
+                if(this.form.ident.length > 0 && this.form.ident.length < 14)
                     return true
                 else{
                     this.form.identState=false
-                    this.$toast.error('La dentificación no puede ser de más de 13 dígitos')
+                    this.$toast.error('La identificación debe ser máx 13 dígitos')
                     return false
                 }                   
             },

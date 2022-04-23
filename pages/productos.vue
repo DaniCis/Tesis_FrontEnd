@@ -63,16 +63,16 @@
                                                            <b-img thumbnail :src="`http://10.147.17.173:5002/productos/images_small/${product.id_producto}/${product.imagen_producto[0]}`"></b-img>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{product.nombre_producto}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{product.nombre_producto}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{product.detalle_producto}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{product.detalle_producto}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{product.marca_producto}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{product.marca_producto}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{product.cantidad_producto}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{product.cantidad_producto}}</p>
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones" >

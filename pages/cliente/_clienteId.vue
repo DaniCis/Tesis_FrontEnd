@@ -42,7 +42,8 @@
                                                 label="Identificación" 
                                                 label-for="ident-input" 
                                                 invalid-feedback="Este campo es requerido" 
-                                                :state="form.identState">
+                                                :state="form.identState"
+                                                description='máx.13 dígitos'>
                                                 <b-form-input  
                                                     id="ident-input" class="form-control" type="number" min='0' ref='ident_input'
                                                     v-model="form.ident" :state="form.identState" required>
@@ -82,7 +83,8 @@
                                                 label="Teléfono" 
                                                 label-for="telf-input" 
                                                 invalid-feedback="Este campo es requerido" 
-                                                :state="form.telefonoState">
+                                                :state="form.telefonoState"
+                                                description='máx.13 dígitos'>
                                                 <b-form-input  
                                                     id="telf-input" class="form-control" type="number" min='0' ref='telf_input'
                                                     v-model="form.telefono" :state="form.telefonoState" required>
@@ -165,6 +167,10 @@
                 if(this.editar){
                     if (!this.validarForm())
                         return
+                    if (!this.validarIdent())
+                        return
+                    if (!this.validarTelf())
+                        return
                     var params = {
                         identificacion_cliente: this.form.ident,
                         tipoIdentificacion_cliente: this.form.tipo,
@@ -219,6 +225,26 @@
                     return false
                 else
                     return true
+            },
+
+            validarTelf(){
+                if(this.form.telefono.length > 0 && this.form.telefono.length < 14)
+                    return true
+                else{
+                    this.form.telefonoState=false
+                    this.$toast.error('El teléfono debe ser máx. 13 dígitos')
+                    return false
+                }                   
+            },
+
+            validarIdent(){
+                if(this.form.ident.length > 0 && this.form.ident.length < 14)
+                    return true
+                else{
+                    this.form.identState=false
+                    this.$toast.error('La identificación debe ser máx 13 dígitos')
+                    return false
+                }                   
             },
         }
     }

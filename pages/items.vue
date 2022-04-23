@@ -21,9 +21,9 @@
                                             <div class="dataTable-dropdown">
                                                 <label style="width: 200px"> 
                                                     <select class="form-select dataTable-selector" v-model='porPag'>
-                                                        <option value=10>10</option>
                                                         <option value=20>20</option>
                                                         <option value=30>30</option>
+                                                        <option value=40>40</option>
                                                     </select>
                                                     Registros por página
                                                 </label>
