@@ -52,7 +52,7 @@
                                                         </td>       
                                                     </tr>
                                                     <tr v-for="rol in paginador(this.roles)">
-                                                        <td>
+                                                        <td class="align-middle">
                                                             <h6 class=" ms-3 mb-2 text-sm">{{rol.id_rol}}</h6>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
@@ -62,7 +62,7 @@
                                                             <p class="text-s font-weight-bold mb-0">{{rol.descripcion_rol}}</p>
                                                         </td>
                                                         <td class="align-middle text-sm">
-                                                            <div>
+                                                            <div class="align-middle text-center">
                                                                 <nuxt-link :to="{name:'rol-rolId',params:{rolId: rol.id_rol}}">
                                                                     Permisos
                                                                 </nuxt-link>
@@ -108,7 +108,7 @@
                                                     :state="form.nameState">
                                                     <b-form-input
                                                         id="name-input" class="form-control" type="text" placeholder="Nombre" ref='name_input'
-                                                        v-model="form.nombre" :state="form.nameState" required>
+                                                        v-model="form.nombre" :state="form.nameState" trim required>
                                                     </b-form-input>
                                                 </b-form-group>
                                             </div>
@@ -122,7 +122,7 @@
                                                     :state="form.desState">
                                                     <b-form-input 
                                                         id="de-input" class="form-control" type="text" placeholder="Descripción" ref='des_input'
-                                                        v-model="form.descripcion" :state="form.desState" required>
+                                                        v-model="form.descripcion" :state="form.desState" trim required>
                                                     </b-form-input>
                                                 </b-form-group>
                                             </div>
@@ -193,6 +193,8 @@
                         this.error=true
                 }).catch (e=> {
                     this.$toast.error(e.response.data.detail)
+                    if(e.response.data.detail=='Credenciales no validas')
+                        this.$router.push('/');
                 })
             },
 

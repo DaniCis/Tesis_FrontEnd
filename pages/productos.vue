@@ -56,7 +56,7 @@
                                                         </td>       
                                                     </tr>
                                                     <tr v-for="product in paginador(this.productos)">
-                                                        <td>
+                                                        <td class="align-middle">
                                                             <h6 class=" ms-3 mb-2 text-sm">{{product.id_producto}}</h6>
                                                         </td>
                                                         <td  class="align-middle text-center text-sm">

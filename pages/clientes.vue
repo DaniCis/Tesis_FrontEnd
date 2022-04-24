@@ -42,7 +42,7 @@
                                                     <tr>
                                                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Tipo Ident.</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Num Ident.</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Num Ident.</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Nombre</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Dirección</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Teléfono</th>
@@ -57,31 +57,31 @@
                                                         </td>       
                                                     </tr>
                                                     <tr v-for="cliente in paginador(this.clientes)">
-                                                        <td>
+                                                        <td class="align-middle">
                                                             <h6 class=" ms-3 mb-2 text-sm">{{cliente.id_cliente}}</h6>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <div v-if="cliente.tipoIdentificacion_cliente == 'Cedula'" >
-                                                                <p class="text-s font-weight-bold mb-0">Cédula</p>
+                                                                <p class="text-sm font-weight-bold mb-0">Cédula</p>
                                                             </div>
                                                             <div v-else>
-                                                                <p class="text-s font-weight-bold mb-0">RUC</p>
+                                                                <p class="text-sm font-weight-bold mb-0">RUC</p>
                                                             </div>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{cliente.identificacion_cliente}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{cliente.identificacion_cliente}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{cliente.nombre_cliente}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{cliente.nombre_cliente}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{cliente.direccion_cliente}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{cliente.direccion_cliente}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{cliente.telefono_cliente}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{cliente.telefono_cliente}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{cliente.correo_cliente}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{cliente.correo_cliente}}</p>
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones" >

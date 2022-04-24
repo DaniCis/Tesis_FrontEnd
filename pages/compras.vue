@@ -40,13 +40,13 @@
                                             <table class="table table-flush dataTable-table">
                                                 <thead>
                                                     <tr>
-                                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Id</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2"> # Factura</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Fecha</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Proveedor</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Total</th>
-                                                    <th></th>
-                                                    <th></th>
+                                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Id</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2"> # Factura</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Fecha</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Proveedor</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Total</th>
+                                                        <th></th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -56,7 +56,7 @@
                                                         </td>       
                                                     </tr>
                                                     <tr v-for="compra in paginador(this.compras)">
-                                                        <td>
+                                                        <td class="align-middle">
                                                             <h6 class=" ms-3 mb-2 text-sm">{{compra.id_compra}}</h6>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
@@ -71,7 +71,7 @@
                                                         <td class="align-middle text-center text-sm">
                                                             <p class="text-sm font-weight-bold mb-0">{{compra.total_compra}}</p>
                                                         </td>
-                                                        <td class="text-sm">
+                                                        <td class="align-middle text-sm">
                                                             <div class="mb-0">
                                                                 <nuxt-link :to="{name:'detalleCompra-detalleId',params:{detalleId: compra.id_compra}}">
                                                                     Ver detalles

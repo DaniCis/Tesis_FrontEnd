@@ -50,7 +50,7 @@
                                                         </td>       
                                                     </tr>
                                                     <tr v-for="modulo in paginador(this.modulos)">
-                                                        <td>
+                                                        <td class="align-middle">
                                                             <h6 class=" ms-3 mb-2 text-sm">{{modulo.id_modulo}}</h6>
                                                         </td>
                                                         <td class="align-middle text-sm">
@@ -96,7 +96,7 @@
                                                     :state="form.nameState">
                                                     <b-form-input
                                                         id="name-input" class="form-control" type="text" placeholder="Nombre" ref='name_input'
-                                                        v-model="form.nombre" :state="form.nameState" required>
+                                                        v-model="form.nombre" :state="form.nameState" trim required>
                                                     </b-form-input>
                                                 </b-form-group>
                                             </div>

@@ -1,7 +1,7 @@
 <template>
     <div class="g-sidenav-show bg-gray-100 vh-completa" id='mainDashboard'> 
         <Sidebar />
-        <Navbar :Modulo='"Garantías"' :Tabla='"Garantía"'/>
+        <Navbar :Modulo='"Soporte Técnico"' :Tabla='"Garantías"'/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -43,6 +43,7 @@
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Producto</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Item</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Cliente</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Ident.Cliente</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Detalle</th>
                                                         <th class="text-secondary opacity-7"></th>
                                                     </tr>
@@ -54,31 +55,29 @@
                                                         </td>       
                                                     </tr>
                                                     <tr v-for="garantia in paginador(this.garantias)">
-                                                        <td>
+                                                        <td class="align-middle">
                                                             <h6 class="ms-3 mb-2 text-sm">{{garantia.id_garantia}}</h6>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{garantia.fechaEntrada_garantia}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{garantia.fechaEntrada_garantia}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{garantia.nombre_producto}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{garantia.nombre_producto}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{garantia.inventario_id_item}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{garantia.numeroSerie_item}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{garantia.nombre_cliente}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{garantia.nombre_cliente}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{garantia.detalle_garantia}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{garantia.identificacion_cliente}}</p>
+                                                        </td>
+                                                        <td class="align-middle text-center text-sm">
+                                                            <p class="text-sm font-weight-bold mb-0">{{garantia.detalle_garantia}}</p>
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="contenedorAcciones" >
-                                                                <div v-if="editar">
-                                                                    <a class="cursor-pointer" @click="openModal(garantia.id_garantia, 'editar')">
-                                                                        <b-icon  class='mx-3' icon='pencil-square' style="width: 1.2em; height: 1.2em"></b-icon>
-                                                                    </a>
-                                                                </div>
                                                                 <div v-if="eliminar">
                                                                     <a class="trash cursor-pointer"  @click='showModalDelete(garantia.id_garantia)'>
                                                                         <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
@@ -128,7 +127,7 @@
                                                             label-for="clienteBus-select"
                                                             invalid-feedback="Seleccione un nombre" 
                                                             :state="form.clienteBusState">
-                                                            <b-form-input id="clienteBus-select" placeholder='Nombre' list="list-cli" v-model="form.clienteBus" ref='clienteBus_select' :state="form.clienteBusState" required @change="busquedaPor($event)"></b-form-input>
+                                                            <b-form-input id="clienteBus-select" placeholder='Nombre' list="list-cli" v-model="form.clienteBus" ref='clienteBus_select' :state="form.clienteBusState" trim required @change="busquedaPor($event)"></b-form-input>
                                                                 <datalist id="list-cli">
                                                                     <option v-for="cliente in this.clientes">
                                                                     {{cliente.nombre_cliente}}
@@ -141,9 +140,10 @@
                                                                 label="Identificación"
                                                                 label-for="identBus-input"
                                                                 invalid-feedback="Este campo es requerido" 
-                                                                :state="form.identBusState">
+                                                                :state="form.identBusState"
+                                                                description='máx.13 dígitos'>
                                                                 <b-form-input  @change="busquedaPor($event)"
-                                                                    id="identBus-input" class="form-control" type="text" placeholder="Identificación" ref='identBus_input'
+                                                                    id="identBus-input" class="form-control" type="number" min='0' placeholder="Identificación" ref='identBus_input'
                                                                     v-model="form.identBus" :state="form.identBusState" required>
                                                                 </b-form-input>
                                                             </b-form-group>
@@ -182,34 +182,22 @@
                                             <div class="col-12 col-lg-6">
                                                 <b-card style="border: 1px solid rgba(0, 0, 0, 0.125);" sub-title='Información del Producto'>
                                                     <div class="row mt-3">
-                                                        <div class="col-12 col-md-11">
+                                                        <div class="col-12 col-md-8">
                                                             <b-form-group 
-                                                                label="Producto" 
-                                                                label-for="producto-select"
-                                                                invalid-feedback="Seleccione un producto" 
-                                                                :state="form.productoState">
-                                                                <b-form-input :state="form.productoState" ref='producto_select' required id="producto-select" list="list-prod" v-model="form.producto.nombre"></b-form-input>
-                                                                <datalist id="list-prod">
-                                                                    <option v-for="producto in this.productos">
-                                                                        {{producto.nombre_producto}}
-                                                                    </option>
-                                                                </datalist>
+                                                                label="Número de Serie" 
+                                                                label-for="num-select"
+                                                                invalid-feedback="Este campo es requerido" 
+                                                                :state="form.numState">
+                                                                <b-form-input trim :state="form.numState" placeholder="Número de Serie" ref='num_select' required id="num-select" v-model="form.num"></b-form-input>
                                                             </b-form-group>
                                                         </div>
                                                     </div>
                                                     <div class="row mt-2">
                                                         <div class="col-12 col-md-8">
                                                             <b-form-group 
-                                                                label="Número de Serie" 
-                                                                label-for="num-select"
-                                                                invalid-feedback="Seleccione un número" 
-                                                                :state="form.numState">
-                                                                <b-form-input :state="form.numState" ref='producto_select' required id="num-select" list="list-prod" v-model="form.num"></b-form-input>
-                                                                <datalist id="list-prod">
-                                                                    <option v-for="producto in this.productos">
-                                                                        {{producto.nombre_producto}}
-                                                                    </option>
-                                                                </datalist>
+                                                                label="Producto" 
+                                                                label-for="producto-input">
+                                                                <b-form-input id="producto-input" v-model="form.producto" readonly></b-form-input>
                                                             </b-form-group>
                                                         </div>
                                                     </div>
@@ -222,11 +210,14 @@
                                                                 :state="form.detalleState">
                                                                 <b-form-textarea
                                                                     id="detalle-area"
+                                                                    ref="detalle_area"
                                                                     v-model="form.detalle"
+                                                                    :state="form.detalleState"
                                                                     placeholder="Detalle"
-                                                                    rows="3"
+                                                                    rows="3" trim
                                                                     max-rows="4"
-                                                                    ></b-form-textarea>
+                                                                    required>
+                                                                </b-form-textarea>
                                                             </b-form-group>
                                                         </div>
                                                     </div>
@@ -267,11 +258,6 @@
                     telefono:'',
                     correo:'',
                     clienteId:null,
-                    producto:{
-                        id:'',
-                        nombre:''
-                    },
-                    productoState:null,
                     num:'',
                     numState:null,
                     detalle:'',
@@ -294,12 +280,9 @@
             }
         },
         async mounted(){
-            this.permisosCrud = getSubmodulos('Ventas','Clientes')
-            //this.permisosCrud = getSubmodulos('Garantías','Garantías')
+            this.permisosCrud = getSubmodulos('SoporteTécnico','Garantías')
             if('crear' in this.permisosCrud)
                 this.crear = true
-            if('editar' in this.permisosCrud)
-                this.editar = true
             if('eliminar' in this.permisosCrud)
                 this.eliminar = true
             if('leer' in this.permisosCrud)
@@ -309,7 +292,7 @@
         },
         methods:{
             async getGarantias(){
-                await axios.get('http://10.147.17.173:5004/clientes',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get('http://10.147.17.173:5004/garantias',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     console.log(response.data)
                     if(response.data !=null)
@@ -320,48 +303,23 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
-            
-            async getGarantia(garantiaId){
-                await axios.get(`http://10.147.17.173:5004/garantia/${garantiaId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
-                }) .then(response => {
-                    
-                }) .catch(e => {
-                    this.$toast.error(e.response.data.detail)
-                })
-            },
 
             async crearGarantia(){
                 if(this.crear){
                     var params = {
                         clientes_id_cliente: this.form.clienteId,
-                        detalle_garantia:  this.form.detalle
+                        detalle_garantia:  this.form.detalle,
+                        inventario_id_item: this.form.item
                     }
-                    await axios.post('http://10.147.17.173:5004/garantia', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    /*await axios.post('http://10.147.17.173:5004/garantia', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Garantía creada con éxito')
                         this.getGarantias()
                     }).catch (e => {
                         this.$toast.error(e.response.data.detail)
-                    })
+                    })*/
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
-                }
-            },
-
-            async editarGarantia(garantiaId){
-                if(this.editar){
-                    var params ={
-
-                    }
-                    await axios.put(`http://10.147.17.173:5002/garantia/${garantiaId}`, params ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
-                    }).then(() => {
-                        this.$toast.success('Garantía editada con éxito')
-                        this.getGarantias()
-                    }).catch (e => {
-                        this.$toast.error(e.response.data.detail)
-                    })
-                }else{
-                    this.$toast.error('No tiene permisos para modificar')
                 }
             },
 
@@ -417,17 +375,6 @@
                 })
             },
 
-            async getProductos(){
-                await axios.get(`http://10.147.17.173:5002/productosNombres`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
-                }).then(response => {
-                    this.productos = response.data
-                    console.log(this.productos)
-                })
-                .catch(e => {
-                    this.$toast.error(e.response.data.detail)
-                })
-            },
-
             busquedaPor($event){
                 if(this.form.busqueda == 'nombre')
                     this.getClienteNombre($event)
@@ -436,7 +383,32 @@
             },
 
             validarForm(){
+                const valid = this.$refs.num_select.checkValidity()
+                const valid1 = this.$refs.detalle_area.checkValidity()
+                this.form.numState = valid
+                this.form.detalleState = valid1
+                if(valid == false || valid1 == false)
+                    return false
+                else
+                    return true
+            },
 
+            validarBusqueda() {
+                if(this.form.busqueda == 'ident'){
+                    const valid = this.$refs.identBus_input.checkValidity()
+                    this.form.identBusState = valid
+                    if( valid == false)
+                        return false
+                    else
+                        return true
+                }else if(this.form.busqueda == 'nombre'){
+                    const valid = this.$refs.clienteBus_select.checkValidity()
+                    this.form.clienteBusState = valid
+                    if( valid == false)
+                        return false
+                    else
+                        return true
+                }  
             },
 
             handleOk(bvModalEvt, garantiaId){
@@ -445,19 +417,19 @@
             },
 
             handleSubmit(garantiaId) {
+                if(!this.validarBusqueda())
+                    return
                 if (!this.validarForm())
                     return
-                if(this.titleBtn == 'Agregar')
-                    this.crearGarantia()
-                else
-                    this.editarGarantia(garantiaId)
+                this.crearGarantia()
                 this.$nextTick(() => {
                     this.closeModal('garantia-modal')
                 })
             },
 
             onReset(){
-
+                this.form.detalleState = null
+                this.form.numState = null
             },
             
             onResetOptionBus(){
@@ -479,8 +451,8 @@
             openModal(garantiaId, action){
                 this.getNombresClientes()
                 this.$bvModal.show('garantia-modal')
+                this.onReset()
                 this.onResetOptionBus()
-                this.getProductos()
                 if(action == 'editar'){
                     this.getGarantia(garantiaId)
                     this.editId = garantiaId
@@ -491,8 +463,6 @@
                     this.titleBtn = 'Agregar'
                 }
             },
-            
-           
 
             showModalDelete(garantiaId){
                 this.confirm = ''

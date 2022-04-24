@@ -77,7 +77,8 @@ export default {
           login: { url: 'http://10.147.17.173:5001/login', method: 'post'},
           logout: false,
           user:false
-        }
+        },
+        //autoLogout: true,
       }
     }
   },

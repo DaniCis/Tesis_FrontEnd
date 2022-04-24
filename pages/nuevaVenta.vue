@@ -54,7 +54,7 @@
                                                     label-for="clienteBus-select"
                                                     invalid-feedback="Seleccione un nombre" 
                                                     :state="form.clienteBusState">
-                                                    <b-form-input id="clienteBus-select" placeholder='Nombre' list="list-cli" v-model="form.clienteBus" ref='clienteBus_select' :state="form.clienteBusState" required @change="busquedaPor($event)"></b-form-input>
+                                                    <b-form-input id="clienteBus-select" placeholder='Nombre' list="list-cli" v-model="form.clienteBus" ref='clienteBus_select' :state="form.clienteBusState" trim required @change="busquedaPor($event)"></b-form-input>
                                                         <datalist id="list-cli">
                                                             <option v-for="cliente in this.clientes">
                                                             {{cliente.nombre_cliente}}
@@ -69,8 +69,8 @@
                                                         invalid-feedback="Este campo es requerido" 
                                                         :state="form.identBusState">
                                                         <b-form-input  @change="busquedaPor($event)"
-                                                            id="identBus-input" class="form-control" type="text" placeholder="Identificación" ref='identBus_input'
-                                                            v-model="form.identBus" :state="form.identBusState" required>
+                                                            id="identBus-input" class="form-control" type="number" min='0' placeholder="Identificación" ref='identBus_input'
+                                                            v-model="form.identBus" :state="form.identBusState" trim required>
                                                         </b-form-input>
                                                     </b-form-group>
                                                 </div>
@@ -95,10 +95,11 @@
                                                         label="Identificación" 
                                                         label-for="ident-input" 
                                                         invalid-feedback="Este campo es requerido" 
-                                                        :state="form.identState">
+                                                        :state="form.identState"
+                                                        description='máx.13 dígitos'>
                                                         <b-form-input  
-                                                            id="ident-input" class="form-control" type="text" placeholder="Identificación" ref='ident_input'
-                                                            v-model="form.ident" :state="form.identState" required>
+                                                            id="ident-input" class="form-control" type="number" placeholder="Identificación" ref='ident_input'
+                                                            v-model="form.ident" :state="form.identState" min='0' required>
                                                         </b-form-input>
                                                     </b-form-group>
                                                 </div>
@@ -111,7 +112,7 @@
                                                         label="Identificación" 
                                                         label-for="ident-input" >
                                                         <b-form-input  
-                                                            id="ident-input" class="form-control" type="text" ref='ident_input' placeholder='Identificación'
+                                                            id="ident-input" class="form-control" type="number" min='0' ref='ident_input' placeholder='Identificación'
                                                             v-model="form.ident" :readonly="this.form.busqueda == 'nombre'">
                                                         </b-form-input>
                                                     </b-form-group>
@@ -124,7 +125,7 @@
                                                         :state="form.nombreState">
                                                         <b-form-input  :readonly="this.form.busqueda == 'ident'"
                                                             id="nombre-input" class="form-control" type="text" ref='nombre_input'
-                                                            v-model="form.nombre" :state="form.nombreState" required placeholder='Nombre'>
+                                                            v-model="form.nombre" :state="form.nombreState" required trim placeholder='Nombre'>
                                                         </b-form-input>
                                                     </b-form-group>
                                                 </div>
@@ -134,9 +135,9 @@
                                                         label-for="dir-input" 
                                                         invalid-feedback="Este campo es requerido" 
                                                         :state="form.direccionState">
-                                                        <b-form-input :readonly="this.form.busqueda == 'ident' || this.form.busqueda == 'nombre'"
+                                                        <b-form-input :readonly="this.form.busqueda != 'nuevo'"
                                                             id="dir-input" class="form-control" type="text" ref='dir_input' placeholder='Dirección'
-                                                            v-model="form.direccion" :state="form.direccionState" required>
+                                                            v-model="form.direccion" :state="form.direccionState"  trim required>
                                                         </b-form-input>
                                                     </b-form-group>
                                                 </div>
@@ -148,8 +149,8 @@
                                                         label-for="telf-input" 
                                                         invalid-feedback="Este campo es requerido" 
                                                         :state="form.telefonoState">
-                                                        <b-form-input :readonly="this.form.busqueda == 'ident' || this.form.busqueda == 'nombre'"
-                                                            id="telf-input" class="form-control" type="text" placeholder="Teléfono" ref='telf_input'
+                                                        <b-form-input :readonly="this.form.busqueda != 'nuevo'"
+                                                            id="telf-input" class="form-control" type="number" min='0' placeholder="Teléfono" ref='telf_input'
                                                             v-model="form.telefono" :state="form.telefonoState" required>
                                                         </b-form-input>
                                                     </b-form-group>
@@ -160,9 +161,9 @@
                                                         label-for="correo-input" 
                                                         invalid-feedback="Este campo es requerido" 
                                                         :state="form.correoState">
-                                                        <b-form-input :readonly="this.form.busqueda == 'ident' || this.form.busqueda == 'nombre'"
-                                                            id="correo-input" class="form-control" type="text" placeholder="Correo" ref='correo_input'
-                                                            v-model="form.correo" :state="form.correoState" required>
+                                                        <b-form-input :readonly="this.form.busqueda != 'nuevo'"
+                                                            id="correo-input" class="form-control" type="email" placeholder="Correo" ref='correo_input'
+                                                            v-model="form.correo" :state="form.correoState" trim required>
                                                         </b-form-input>
                                                     </b-form-group>
                                                 </div>
@@ -282,7 +283,7 @@
                                                     label-for="producto-select"
                                                     invalid-feedback="Seleccione un producto" 
                                                     :state="detalle.productoState">
-                                                    <b-form-input :state="detalle.productoState" ref='producto_select' required id="producto-select" list="list-prod" v-model="detalle.producto.nombre" @change="busquedaProducto($event)"></b-form-input>
+                                                    <b-form-input :state="detalle.productoState" ref='producto_select' trim required id="producto-select" list="list-prod" v-model="detalle.producto.nombre" @change="busquedaProducto($event)"></b-form-input>
                                                     <datalist id="list-prod">
                                                         <option v-for="producto in this.productos">
                                                             {{producto.nombre_producto}}
@@ -300,7 +301,7 @@
                                                         label-for="cant-input"
                                                         invalid-feedback="Este campo es requerido" 
                                                         :state="detalle.cantidadState">
-                                                        <b-form-input @change="calcularPrecioTotal()" required :state="detalle.cantidadState" ref="cant_input" id="cant-input" class="form-control" type="number" min='1' :max="this.stock" v-model="detalle.cantidad">
+                                                        <b-form-input @change="calcularPrecioTotal()" required :state="detalle.cantidadState" ref="cant_input" id="cant-input" class="form-control" type="number" min='1' :max="this.stock" trim v-model="detalle.cantidad">
                                                         </b-form-input>
                                                     </b-form-group>
                                                 </div>
@@ -478,6 +479,10 @@
 
             async registrarCliente(){
                 if (!this.validarForm())
+                    return
+                if (!this.validarIdent())
+                    return
+                if (!this.validarTelf())
                     return
                 var params = {
                     identificacion_cliente: this.form.ident,
@@ -780,6 +785,26 @@
                     return false
                 }
             },
+            validarTelf(){
+                if(this.form.telefono.length > 0 && this.form.telefono.length < 14)
+                    return true
+                else{
+                    this.form.telefonoState=false
+                    this.$toast.error('El teléfono debe ser máx. 13 dígitos')
+                    return false
+                }                   
+            },
+
+            validarIdent(){
+                if(this.form.ident.length > 0 && this.form.ident.length < 14)
+                    return true
+                else{
+                    this.form.identState=false
+                    this.$toast.error('La identificación debe ser máx 13 dígitos')
+                    return false
+                }                   
+            },
+
             onResetForm(){
                 this.form.tipo='',
                 this.form.tipoState=null,

@@ -60,7 +60,7 @@
                                                 :state="form.nombreState">
                                                 <b-form-input  
                                                     id="nombre-input" class="form-control" type="text" ref='nombre_input'
-                                                    v-model="form.nombre" :state="form.nombreState" required>
+                                                    v-model="form.nombre" :state="form.nombreState" trim required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -72,7 +72,7 @@
                                                 :state="form.direccionState">
                                                 <b-form-input  
                                                     id="dir-input" class="form-control" type="text" ref='dir_input'
-                                                    v-model="form.direccion" :state="form.direccionState" required>
+                                                    v-model="form.direccion" :state="form.direccionState" trim required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -98,8 +98,8 @@
                                                 invalid-feedback="Este campo es requerido" 
                                                 :state="form.correoState">
                                                 <b-form-input  
-                                                    id="correo-input" class="form-control" type="text" ref='correo_input'
-                                                    v-model="form.correo" :state="form.correoState" required>
+                                                    id="correo-input" class="form-control" type="email" ref='correo_input'
+                                                    v-model="form.correo" :state="form.correoState" trim required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>

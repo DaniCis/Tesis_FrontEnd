@@ -52,7 +52,7 @@
                                                         </td>       
                                                     </tr>
                                                     <tr v-for="user in paginador(this.usuarios)">
-                                                        <td>
+                                                        <td class="align-middle">
                                                             <h6 class=" ms-3 mb-2 text-sm">{{user.id_usuario}}</h6>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
@@ -109,7 +109,7 @@
                                                     invalid-feedback="Este campo es requerido" 
                                                     :state="form.nameState">
                                                     <b-form-input  
-                                                        id="name-input" class="form-control" type="text" placeholder="Nombre" ref='name_input'
+                                                        id="name-input" class="form-control" trim type="text" placeholder="Nombre" ref='name_input'
                                                         v-model="form.nombre" :state="form.nameState" :readonly="titleBtn == 'Actualizar'" required>
                                                     </b-form-input>
                                                 </b-form-group>
@@ -123,7 +123,7 @@
                                                     invalid-feedback="Este campo es requerido" 
                                                     :state="form.passState">
                                                     <div class="input-group mb-3">
-                                                        <b-form-input class="form-control" type="password" id='password' placeholder="Contraseña" v-model='form.password' ref="pass_input" :state="form.passState" required>
+                                                        <b-form-input class="form-control" trim type="password" id='password' placeholder="Contraseña" v-model='form.password' ref="pass_input" :state="form.passState" required>
                                                         </b-form-input>
                                                         <div class="input-group-append ">
                                                             <span class="input-group-text" v-on:click="password_show_hide('password') ">
@@ -167,7 +167,8 @@
                                                     label="Contraseña" 
                                                     label-for="password2" 
                                                     invalid-feedback="Este campo es requerido" 
-                                                    :state="form.pass2State">
+                                                    :state="form.pass2State"
+                                                    trim>
                                                     <div class="input-group mb-3">
                                                         <b-form-input class="form-control" type="password" id='password2' placeholder="Contraseña" v-model='form.password' ref="pass2_input" :state="form.pass2State" required>
                                                         </b-form-input>
@@ -326,7 +327,7 @@
                 if(this.eliminar){
                     await axios.delete(`http://10.147.17.173:5000/usuario/${usuarioId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
-                        this.$toast.success('Estado editado con éxito')
+                        this.$toast.success('Estado del usuario editado con éxito')
                         this.getUsuarios()
                     }).catch (e => {
                         this.$toast.error(e.response.data.detail)

@@ -20,7 +20,7 @@
                  <div class="nav-item" v-if="'Administración' in this.modulos">
                     <a class="nav-link" ref="menuAdm" v-b-toggle.collapse-1 @click="actAdm = !actAdm " :class='{active: actAdm}' >
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                            <b-icon icon='tools' style="color:#000"></b-icon>
+                            <b-icon icon='people' style="color:#000"></b-icon>
                         </div>
                         <span class="nav-link-text ms-1">Administración</span>
                         <span class="ps-4" >
@@ -114,13 +114,24 @@
                         </b-card>
                     </b-collapse>
                 </div>
-                <div class="nav-item" v-if="'Garantías' in this.modulos">
-                    <nuxt-link class="nav-link" id="submenuMov" to="/garantías">
+                <div class="nav-item" v-if="'SoporteTécnico' in this.modulos">
+                     <a class="nav-link" id="submenuInv" v-b-toggle.collapse-5 @click="actGar = !actGar" :class='{active: actGar}'>
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                            <b-icon icon='shield-check' style="color:#000"></b-icon>
+                            <b-icon icon='tools' style="color:#000"></b-icon>
                         </div>
-                        <span class="nav-link-text ms-1">Garantías&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    </nuxt-link>
+                        <span class="nav-link-text ms-1">Soporte Técnico&nbsp;</span>
+                        <span class="ms-3" >
+                            <b-icon v-show='!actGar' icon='chevron-down' style="width: 0.8em; height: 0.8em;" ></b-icon>
+                            <b-icon v-show='actGar' icon='chevron-up' style="width: 0.8em; height: 0.8em;"></b-icon>
+                        </span>
+                    </a>
+                    <b-collapse id="collapse-5" :visible="abrirGar"> 
+                        <b-card>
+                            <b-card-text v-if="'Garantías' in this.modulos.SoporteTécnico">
+                                <nuxt-link to="/garantías">Garantías</nuxt-link>
+                            </b-card-text>
+                        </b-card>
+                    </b-collapse>
                 </div>
             </ul>
         </div>
@@ -132,7 +143,7 @@
     export default{
         data(){
             return{
-                actGar:true,
+                actGar:false,
                 actInv:false,
                 actVent:false,
                 actComp:false,
@@ -142,6 +153,7 @@
                 abrirInv:false,
                 abrirComp:false,
                 abrirVent:false,
+                abrirGar:false,
                 modulos:[],
                 submodulos:[],
             }
@@ -170,6 +182,11 @@
                 else if(ruta =='productos' || ruta =='items' || ruta =='nuevoProducto' || ruta =='producto-productId'){
                     this.abrirInv=true
                     this.actInv= true
+                    this.actInicio= false
+                }
+                else if(ruta =='garantías'){
+                    this.abrirGar=true
+                    this.actGar= true
                     this.actInicio= false
                 }else{
                     this.actInicio= true

@@ -40,7 +40,7 @@
                                                     <tr>
                                                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Nombre</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Dirección</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Dirección</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Teléfono</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Correo</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Estado</th>
@@ -54,20 +54,20 @@
                                                         </td>       
                                                     </tr>
                                                     <tr v-for="proveedor in paginador(this.proveedores)">
-                                                        <td>
+                                                        <td class="align-middle">
                                                             <h6 class=" ms-3 mb-2 text-sm">{{proveedor.id_proveedor}}</h6>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{proveedor.nombre_proveedor}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{proveedor.nombre_proveedor}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{proveedor.direccion_proveedor}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{proveedor.direccion_proveedor}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{proveedor.telefono_proveedor}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{proveedor.telefono_proveedor}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{proveedor.correo_proveedor}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{proveedor.correo_proveedor}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <div v-if="proveedor.estado_proveedor == true"> 
@@ -118,7 +118,7 @@
                                                     :state="form.nameState">
                                                     <b-form-input  
                                                         id="name-input" class="form-control" type="text" placeholder="Nombre" ref='name_input'
-                                                        v-model="form.nombre" :state="form.nameState" required>
+                                                        v-model="form.nombre" :state="form.nameState" trim required>
                                                     </b-form-input>
                                                 </b-form-group>
                                             </div>
@@ -132,7 +132,7 @@
                                                     :state="form.direccionState">
                                                     <b-form-input  
                                                         id="dir-input" class="form-control" type="text" placeholder="Dirección" ref='dir_input'
-                                                        v-model="form.direccion" :state="form.direccionState" required>
+                                                        v-model="form.direccion" :state="form.direccionState" trim required>
                                                     </b-form-input>
                                                 </b-form-group>
                                             </div>
@@ -161,7 +161,7 @@
                                                     :state="form.correoState">
                                                     <b-form-input  
                                                         id="correo-input" class="form-control" type="email" placeholder="Correo" ref='correo_input'
-                                                        v-model="form.correo" :state="form.correoState" required>
+                                                        v-model="form.correo" :state="form.correoState" trim required>
                                                     </b-form-input>
                                                 </b-form-group>
                                             </div>

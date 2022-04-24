@@ -25,14 +25,14 @@
                                 <b-form class="ps-4 mt-3 pe-4">
                                     <div class="row mt-2">
                                         <div class="col-12 col-md-8 col-lg-3">
-                                            <label >Fecha</label>
+                                            <label>Fecha</label>
                                             <span class="text-sm ps-4">{{this.form.fecha}}</span>
                                         </div>
-                                        <div class="col-12 col-md-8 col-lg-2">
+                                        <div class="col-12 col-md-8 col-lg-3">
                                             <label># Comprobante</label>
                                             <span class="text-sm ps-4">{{this.form.numeroComprobante}}</span>
                                         </div>
-                                        <div class="col-12 col-md-8 col-lg-4">
+                                        <div class="col-12 col-md-8 col-lg-3">
                                             <label>Cliente</label>
                                             <span class="text-sm ps-4">{{this.form.nombreCliente}}</span>
                                         </div>
@@ -63,12 +63,12 @@
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">{{detalle.nombre_producto}}</p>
-                                                            </td><!--
-                                                            <td class="align-middle text-center text-sm" v-for="num in this.detalle.">
-                                                                <p class="text-sm font-weight-bold mb-0">{{num}}</p>
-                                                            </td>-->
+                                                            </td>
+                                                            <td class="align-middle text-center text-sm" v-for="num in detalle.numeros_serie">
+                                                                <p class="text-sm font-weight-bold mb-0">{{num.numeroSerie_item}}</p>
+                                                            </td>
                                                             <td class="align-middle text-center text-sm">
-                                                                <p class="text-sm font-weight-bold mb-0">%{{detalle.descuentoPorcentaje_item}}</p>
+                                                                <p class="text-sm font-weight-bold mb-0">%{{detalle.descuentoPorcentaje_detalleVenta}}</p>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">{{detalle.cantidad_detalleVenta}}</p>
@@ -170,6 +170,7 @@
                     this.form.descuento = response.data.descuento_venta
                     this.form.nombreCliente = response.data.nombre_cliente
                     this.form.identCliente = response.data.identificacion_cliente
+
                     this.detalles = response.data.detalle_venta
                     this.calcularIva(this.form.subtotal,this.form.descuento)
                 })

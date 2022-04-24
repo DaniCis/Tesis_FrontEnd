@@ -33,8 +33,8 @@ export function getModulo(modulo){
         case 'Ventas':
             modulos = menu.Ventas
             break;
-        case 'Garantías':
-            modulos = menu.Garantías
+        case 'SoporteTécnico':
+            modulos = menu.SoporteTécnico
             break;
         case 'Inventario':
             modulos = menu.Inventario
@@ -79,6 +79,9 @@ export function getSubmodulos(modulo,submodulo){
         case 'OrdenCompra':
             submodulos = submodulos.OrdenCompra
             break;  
+        case 'Garantías':
+            submodulos = submodulos.Garantías
+            break;
     }
     return submodulos
 }

@@ -41,7 +41,7 @@
                                                 invalid-feedback="Este campo es requerido" 
                                                 :state="form.facturaState">
                                                 <b-form-input  required  :state="form.facturaState" ref="factura_input"
-                                                    id="factura-input" class="form-control" type="text" placeholder="Factura" v-model='form.numeroFactura'>
+                                                    id="factura-input" class="form-control" type="text" trim placeholder="Factura" v-model='form.numeroFactura'>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -51,7 +51,7 @@
                                                 label-for="proveedor-select"
                                                 invalid-feedback="Seleccione un proveedor" 
                                                 :state="form.proveedorState">
-                                                <b-form-input id="proveedor-select" placeholder='Proveedor' list="list-prov" v-model="form.nombreProveedor" ref='proveedor_select' :state="form.proveedorState" required></b-form-input>
+                                                <b-form-input id="proveedor-select" placeholder='Proveedor' list="list-prov" v-model="form.nombreProveedor" ref='proveedor_select' :state="form.proveedorState" trim required></b-form-input>
                                                     <datalist id="list-prov">
                                                         <option v-for="proveedor in this.proveedores">
                                                         {{proveedor.nombre_proveedor}}
@@ -171,7 +171,7 @@
                                                                 label-for="producto-select"
                                                                 invalid-feedback="Seleccione un producto" 
                                                                 :state="detalle.productoState">
-                                                                <b-form-input :state="detalle.productoState" ref='producto_select' required id="producto-select" list="list-prod" v-model="detalle.producto.nombre"></b-form-input>
+                                                                <b-form-input :state="detalle.productoState" ref='producto_select' trim required id="producto-select" list="list-prod" v-model="detalle.producto.nombre"></b-form-input>
                                                                 <datalist id="list-prod">
                                                                     <option v-for="producto in this.productos">
                                                                         {{producto.nombre_producto}}
@@ -271,7 +271,7 @@
                                                                 <label>Número de Serie</label>
                                                                 <b-form-group >
                                                                     <b-form-input 
-                                                                    id="num-input" class="form-control" type="text" v-model="detalle.serie.num[0]">
+                                                                    id="num-input" trim class="form-control" type="text" v-model="detalle.serie.num[0]">
                                                                     </b-form-input>
                                                                 </b-form-group>
                                                             </div>
@@ -281,7 +281,7 @@
                                                                     <span style="margin-right: 1rem; margin-top: 0.8rem;" class="text-sm">{{i}}</span>
                                                                     <b-form-group >
                                                                         <b-form-input  
-                                                                            id="num-input" class="form-control mt-1" type="text" v-model="detalle.serie.num[i-1]">
+                                                                            id="num-input" trim class="form-control mt-1" type="text" v-model="detalle.serie.num[i-1]">
                                                                         </b-form-input>
                                                                     </b-form-group>
                                                                 </div>

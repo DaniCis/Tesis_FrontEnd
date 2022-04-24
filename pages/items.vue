@@ -50,23 +50,23 @@
                                                         </td>       
                                                     </tr>
                                                     <tr v-for="item in paginador(this.items)">
-                                                        <td>
+                                                        <td class="align-middle">
                                                             <h6 class=" ms-3 mb-2 text-sm">{{item.id_item}}</h6>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.nombre_producto}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{item.nombre_producto}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.pvp_item}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{item.pvp_item}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.pvd_item}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{item.pvd_item}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">{{item.numeroSerie_item}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">{{item.numeroSerie_item}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <p class="text-s font-weight-bold mb-0">%{{item.descuentoPorcentaje_item}}</p>
+                                                            <p class="text-sm font-weight-bold mb-0">%{{item.descuentoPorcentaje_item}}</p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
                                                             <div v-if="item.estado_item == 'Disponible'"> 
@@ -108,7 +108,7 @@
                                                     label="Producto Asociado" 
                                                     label-for="name-input">
                                                     <b-form-input  
-                                                        id="name-input" class="form-control" type="text"
+                                                        id="name-input" class="form-control" type="text" 
                                                         v-model="form.producto" readonly>
                                                     </b-form-input>
                                                 </b-form-group>
@@ -146,7 +146,7 @@
                                                     invalid-feedback="Este campo es requerido" 
                                                     :state="form.numeroSerieState">
                                                     <b-form-input  :state="form.numeroSerieState" required ref='num_input'
-                                                        id="num-input" class="form-control" type="text" v-model="form.numeroSerie"
+                                                        id="num-input" class="form-control" type="text" v-model="form.numeroSerie" trim
                                                         style='height: 42px'>
                                                     </b-form-input>
                                                 </b-form-group>

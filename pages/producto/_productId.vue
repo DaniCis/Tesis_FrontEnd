@@ -33,7 +33,7 @@
                                                         invalid-feedback="Este campo es requerido"
                                                         :state="form.nombreState">
                                                         <b-form-input  :state="form.nombreState" required ref='name_input'
-                                                            id="name-input" class="form-control" type="text" placeholder="Nombre"
+                                                            id="name-input" class="form-control" type="text" trim placeholder="Nombre"
                                                             v-model="form.nombre">
                                                         </b-form-input>
                                                     </b-form-group>
@@ -46,7 +46,7 @@
                                                         label-for="detail-input"
                                                         invalid-feedback="Este campo es requerido" 
                                                         :state="form.detalleState">
-                                                        <b-form-input :state="form.detalleState" required ref='detail_input'
+                                                        <b-form-input :state="form.detalleState" required ref='detail_input' trim
                                                             id="detail-input" class="form-control" type="text" placeholder="Detalle" 
                                                             v-model="form.detalle">
                                                         </b-form-input>
@@ -60,7 +60,7 @@
                                                         label-for="marca-input"
                                                         invalid-feedback="Este campo es requerido" 
                                                         :state="form.marcaState">
-                                                        <b-form-input  :state="form.marcaState" required ref='marca_input'
+                                                        <b-form-input  :state="form.marcaState" required ref='marca_input' trim
                                                             id="marca-input" class="form-control" type="text" placeholder="Marca" 
                                                             v-model="form.marca">
                                                         </b-form-input>

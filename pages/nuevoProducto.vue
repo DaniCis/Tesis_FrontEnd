@@ -32,7 +32,7 @@
                                                 :state="form.nombreState">
                                                 <b-form-input  
                                                     id="name-input" class="form-control" type="text" placeholder="Nombre" ref='name_input'
-                                                    v-model="form.nombre"  :state="form.nombreState" required>
+                                                    v-model="form.nombre"  :state="form.nombreState" trim required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -46,7 +46,7 @@
                                                 :state="form.detalleState">
                                                 <b-form-input  
                                                     id="detail-input" class="form-control" type="text" placeholder="Detalle" ref='detail_input'
-                                                    v-model="form.detalle" :state="form.detalleState" required>
+                                                    v-model="form.detalle" :state="form.detalleState" trim required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -60,7 +60,7 @@
                                                 :state="form.marcaState">
                                                 <b-form-input  
                                                     id="marca-input" class="form-control" type="text" placeholder="Marca" ref='marca_input'
-                                                    v-model="form.marca" :state="form.marcaState" required>
+                                                    v-model="form.marca" :state="form.marcaState" trim required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>

@@ -47,7 +47,7 @@
                                                 description='máx.13 dígitos'>
                                                 <b-form-input  
                                                     id="ident-input" class="form-control" type="number" min='0' placeholder="Identificación" ref='ident_input'
-                                                    v-model="form.ident" :state="form.identState" required>
+                                                    v-model="form.ident" :state="form.identState" trim required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -61,7 +61,7 @@
                                                 :state="form.nombreState">
                                                 <b-form-input  
                                                     id="nombre-input" class="form-control" type="text" ref='nombre_input'
-                                                    v-model="form.nombre" :state="form.nombreState" required>
+                                                    v-model="form.nombre" :state="form.nombreState" trim required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -73,7 +73,7 @@
                                                 :state="form.direccionState">
                                                 <b-form-input  
                                                     id="dir-input" class="form-control" type="text" ref='dir_input'
-                                                    v-model="form.direccion" :state="form.direccionState" required>
+                                                    v-model="form.direccion" :state="form.direccionState" trim required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -88,7 +88,7 @@
                                                 description='máx.13 dígitos'>
                                                 <b-form-input  
                                                     id="telf-input" class="form-control" type="number" min='0' placeholder="Teléfono" ref='telf_input'
-                                                    v-model="form.telefono" :state="form.telefonoState" required>
+                                                    v-model="form.telefono" :state="form.telefonoState" trim required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -100,7 +100,7 @@
                                                 :state="form.correoState">
                                                 <b-form-input  
                                                     id="correo-input" class="form-control" type="text" placeholder="Correo" ref='correo_input'
-                                                    v-model="form.correo" :state="form.correoState" required>
+                                                    v-model="form.correo" :state="form.correoState" trim required>
                                                 </b-form-input>
                                             </b-form-group>
                                         </div>
@@ -166,13 +166,13 @@
                         telefono_cliente: this.form.telefono,
                         correo_cliente: this.form.correo
                     }
-                    /*await axios.post(`http://10.147.17.173:5004/clientes/`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.post(`http://10.147.17.173:5004/clientes/`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Cliente creado con éxito')
                         this.$router.push('/clientes');
                     }).catch (e => {
                         this.$toast.error(e.response.data.detail)
-                    })*/
+                    })
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
                 }

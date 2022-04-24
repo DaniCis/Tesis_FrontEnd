@@ -57,10 +57,10 @@
                                                         </td>       
                                                     </tr>
                                                     <tr v-for="permiso in paginador(this.permisos)">
-                                                        <td>
+                                                        <td class="align-middle">
                                                             <h6 class="ms-3 mb-2 text-sm">{{permiso.id_permiso}}</h6>
                                                         </td>
-                                                        <td>
+                                                        <td class="align-middle">
                                                             <p class="text-sm font-weight-bold mb-0">{{permiso.nombre_submodulo}}</p>
                                                         </td>
                                                         <td class="align-middle text-md">
