@@ -162,7 +162,6 @@
             async getVenta(ventaId){
                 await axios.get(`http://10.147.17.173:5004/ventaDetalle/${ventaId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
-                    console.log(response.data)
                     this.form.fecha = response.data.fecha_venta
                     this.form.numeroComprobante = response.data.numeroComprobante_venta
                     this.form.total = response.data.total_venta

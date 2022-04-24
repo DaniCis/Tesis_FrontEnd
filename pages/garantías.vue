@@ -41,11 +41,10 @@
                                                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Fecha de Entrada</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Producto</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Item</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Num Serie</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Cliente</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Ident.Cliente</th>
-                                                        <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Detalle</th>
-                                                        <th class="text-secondary opacity-7"></th>
+                                                        <th></th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -70,14 +69,15 @@
                                                         <td class="align-middle text-center text-sm">
                                                             <p class="text-sm font-weight-bold mb-0">{{garantia.nombre_cliente}}</p>
                                                         </td>
-                                                        <td class="align-middle text-center text-sm">
-                                                            <p class="text-sm font-weight-bold mb-0">{{garantia.identificacion_cliente}}</p>
-                                                        </td>
-                                                        <td class="align-middle text-center text-sm">
-                                                            <p class="text-sm font-weight-bold mb-0">{{garantia.detalle_garantia}}</p>
+                                                        <td class="align-middle text-sm">
+                                                            <div class="mb-0">
+                                                                <a class="cursor-pointer" @click="openModal(garantia.id_garantia,'ver')">
+                                                                    Ver detalles
+                                                                </a>
+                                                            </div>
                                                         </td>
                                                         <td class="align-middle">
-                                                            <div class="contenedorAcciones" >
+                                                            <div class="contenedorAcciones">
                                                                 <div v-if="eliminar">
                                                                     <a class="trash cursor-pointer"  @click='showModalDelete(garantia.id_garantia)'>
                                                                         <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
@@ -105,7 +105,7 @@
                                         <div class="row">
                                             <div class="col-12 col-lg-6">
                                                 <b-card style="border: 1px solid rgba(0, 0, 0, 0.125);" class="header-detalle" sub-title="Datos del Cliente">
-                                                    <div class="row mt-3">
+                                                    <div class="row mt-3" v-if="titleBtn == 'Agregar'">
                                                         <div class="col-12 col-md-8 col-lg-10 mt-2 ">
                                                             <b-form-group 
                                                                 label="Buscar cliente por"
@@ -120,7 +120,7 @@
                                                             </b-form-group>
                                                         </div>
                                                     </div>
-                                                    <div class="row mt-2">
+                                                    <div class="row mt-2" v-if="titleBtn == 'Agregar'">
                                                         <div class="col-10 col-md-8 col-lg-7 " v-if="this.form.busqueda == 'nombre'">
                                                             <b-form-group 
                                                             label="Nombre" 
@@ -149,7 +149,11 @@
                                                             </b-form-group>
                                                         </div>
                                                     </div>
-                                                    <div class="row mt-2">
+                                                    <div class="row mt-1">
+                                                        <div class="col-12" v-if="titleBtn == 'ok'">
+                                                            <label class="col-4 col-lg-3">Identificación:</label>
+                                                            <span class="col-8 text-sm">{{this.form.ident}}</span>
+                                                        </div>
                                                         <div class="col-12" v-if="this.form.busqueda == 'nombre'">
                                                             <label class="col-4 col-lg-3">Identificación:</label>
                                                             <span class="col-8 text-sm">{{this.form.ident}}</span>
@@ -182,27 +186,41 @@
                                             <div class="col-12 col-lg-6">
                                                 <b-card style="border: 1px solid rgba(0, 0, 0, 0.125);" sub-title='Información del Producto'>
                                                     <div class="row mt-3">
-                                                        <div class="col-12 col-md-8">
+                                                        <div class="col-12 col-md-8" v-if="titleBtn != 'ok'">
                                                             <b-form-group 
                                                                 label="Número de Serie" 
                                                                 label-for="num-select"
                                                                 invalid-feedback="Este campo es requerido" 
                                                                 :state="form.numState">
-                                                                <b-form-input trim :state="form.numState" placeholder="Número de Serie" ref='num_select' required id="num-select" v-model="form.num"></b-form-input>
+                                                                <b-form-input trim :state="form.numState" placeholder="Número de Serie" ref='num_select' required id="num-select" v-model="form.num" @change="getProductoItem($event)"></b-form-input>
                                                             </b-form-group>
+                                                        </div>
+                                                        <div class="col-12" v-else>
+                                                            <label class="col-6 col-lg-6">Fecha:</label>
+                                                            <span class="col-6 text-sm">{{this.form.fecha}}</span>
                                                         </div>
                                                     </div>
                                                     <div class="row mt-2">
-                                                        <div class="col-12 col-md-8">
+                                                        <div class="col-12" v-if="titleBtn == 'ok'">
+                                                            <label class="col-6 col-lg-6">Número de Serie:</label>
+                                                            <span class="col-6 text-sm">{{this.form.num}}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-12 col-md-8" v-if="titleBtn != 'ok'">
                                                             <b-form-group 
                                                                 label="Producto" 
                                                                 label-for="producto-input">
                                                                 <b-form-input id="producto-input" v-model="form.producto" readonly></b-form-input>
                                                             </b-form-group>
                                                         </div>
+                                                        <div class="col-12" v-else>
+                                                            <label class="col-6 col-lg-6">Producto:</label>
+                                                            <span class="col-6 text-sm">{{this.form.num}}</span>
+                                                        </div>
                                                     </div>
                                                     <div class="row mt-2" >
-                                                        <div class="col-12 col-md-8">
+                                                        <div class="col-12 col-md-8" v-if="titleBtn != 'ok'">
                                                             <b-form-group 
                                                                 label="Detalle" 
                                                                 label-for="detalle-area"
@@ -219,6 +237,10 @@
                                                                     required>
                                                                 </b-form-textarea>
                                                             </b-form-group>
+                                                        </div>
+                                                        <div class="col-12" v-else>
+                                                            <label class="col-6 col-lg-6">Detalle:</label>
+                                                            <span class="col-6 text-sm">{{this.form.detalle}}</span>
                                                         </div>
                                                     </div>
                                                 </b-card>
@@ -262,6 +284,9 @@
                     numState:null,
                     detalle:'',
                     detalleState:null,
+                    producto:'',
+                    itemId:'',
+                    fecha:''
                 },
                 permisosCrud:[],
                 garantias:[],
@@ -304,20 +329,35 @@
                 })
             },
 
+            async getGarantia(garantiaId){
+                await axios.get(`http://10.147.17.173:5004/garantia/${garantiaId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then(response => {
+                    this.form.fecha = response.data.fechaEntrada_garantia
+                    this.form.ident = response.data.identificacion_cliente
+                    this.getClienteIdent(this.form.ident)
+                    this.form.num = response.data.numeroSerie_item
+                    this.form.producto = response.data.nombre_producto
+                    this.form.detalle = response.data.detalle_garantia
+
+                }).catch (e=> {
+                    this.$toast.error(e.response.data.detail)
+                })
+            },
+
             async crearGarantia(){
                 if(this.crear){
                     var params = {
                         clientes_id_cliente: this.form.clienteId,
                         detalle_garantia:  this.form.detalle,
-                        inventario_id_item: this.form.item
+                        inventario_id_item: this.form.itemId
                     }
-                    /*await axios.post('http://10.147.17.173:5004/garantia', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.post('http://10.147.17.173:5004/garantia', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Garantía creada con éxito')
                         this.getGarantias()
                     }).catch (e => {
                         this.$toast.error(e.response.data.detail)
-                    })*/
+                    })
                 }else{
                     this.$toast.error('No tiene permisos para agregar')
                 }
@@ -374,6 +414,21 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+            
+            async getProductoItem(item){
+                await axios.get(`http://10.147.17.173:5004/findProductoByNumeroSerie/${item}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then(response => {
+                    if(response.data !=null){
+                        this.form.producto = response.data.nombre_producto
+                        this.form.itemId = response.data.id_item
+                    }
+                    else
+                        this.$toast.error('Número de serie no encontrado')
+                })
+                .catch(e => {
+                    this.$toast.error(e.response.data.detail)
+                })
+            },
 
             busquedaPor($event){
                 if(this.form.busqueda == 'nombre')
@@ -411,12 +466,12 @@
                 }  
             },
 
-            handleOk(bvModalEvt, garantiaId){
+            handleOk(bvModalEvt){
                 bvModalEvt.preventDefault()
-                this.handleSubmit(garantiaId)
+                this.handleSubmit()
             },
 
-            handleSubmit(garantiaId) {
+            handleSubmit() {
                 if(!this.validarBusqueda())
                     return
                 if (!this.validarForm())
@@ -453,11 +508,11 @@
                 this.$bvModal.show('garantia-modal')
                 this.onReset()
                 this.onResetOptionBus()
-                if(action == 'editar'){
-                    this.getGarantia(garantiaId)
+                if(action == 'ver'){
+                    //this.getGarantia(garantiaId)
                     this.editId = garantiaId
-                    this.title = 'Editar Garantía'
-                    this.titleBtn = 'Actualizar'
+                    this.title = 'Garantía #' + garantiaId
+                    this.titleBtn = 'ok'
                 }else{
                     this.title='Añadir Nueva Garantía'
                     this.titleBtn = 'Agregar'
