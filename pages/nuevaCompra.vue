@@ -2,6 +2,7 @@
     <div class="g-sidenav-show  bg-gray-100 vh-completa" id='mainDashboard'> 
         <Sidebar />
         <Navbar :Modulo='"Compras"' :Tabla='"Orden de Compra"'/>
+        <CheckToken/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -306,10 +307,11 @@
     import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
+    import CheckToken from '~/components/checkToken.vue';
     import { getAccessToken, getSubmodulos } from '~/utils/auth';
 
     export default{
-        components: { Sidebar, Navbar },
+        components: { Sidebar, Navbar, CheckToken },
         middleware: 'authenticated',
         data(){
             return{
@@ -686,7 +688,7 @@
                 this.detalle.pvd= ''
                 this.detalle.pvdState= null
                 this.detalle.numSerie= ''
-                this.detalle.desctItem= ''
+                this.detalle.desctItem= 0
                 this.detalle.producto.nombre=''
                 this.detalle.desctItemState= null
                 this.detalle.cantidad= 1
@@ -694,7 +696,7 @@
                 this.detalle.precioTotal= ''
                 this.detalle.precioUnit= ''
                 this.detalle.precioUnitState= null
-                this.detalle.desct= ''
+                this.detalle.desct= 0
                 this.detalle.desctState= null
                 this.numCant = 1
                 this.detalle.productoState = null

@@ -16,11 +16,11 @@
                     <b-form class="needs-validation" method="post" @submit.prevent="login" >
                         <label>Usuario</label>
                         <div class="mb-3">
-                            <b-form-input type="text" class="form-control" placeholder="Usuario" v-model="form.user" required></b-form-input>
+                            <b-form-input type="text" trim class="form-control" placeholder="Usuario" v-model="form.user" required></b-form-input>
                         </div>
                         <label>Contraseña</label>
                         <div class="input-group mb-3">
-                            <b-form-input type="password" class="form-control" placeholder="Contraseña" id='password' v-model="form.password" required></b-form-input>
+                            <b-form-input type="password" trim class="form-control" placeholder="Contraseña" id='password' v-model="form.password" required></b-form-input>
                             <div class="input-group-append ">
                                 <span class="input-group-text" v-on:click="password_show_hide() ">
                                     <b-icon v-show='!show' icon='eye' style="width: 0.9em; height: 0.9em;"></b-icon>

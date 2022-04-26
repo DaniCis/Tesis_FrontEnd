@@ -3,6 +3,7 @@ import jwt_decode from "jwt-decode";
 export function getAccessToken(){
     return localStorage.getItem('auth._token.local')     
 }
+
 export function getDecoded(){
     if(getAccessToken()){
         let token_decoded = jwt_decode(getAccessToken()) 
@@ -10,16 +11,19 @@ export function getDecoded(){
         return token_decoded
     }
 }
+
 export function getUser(){
     let decoded = getDecoded()
     let user = decoded.nombre_usuario
     return user
 }
+
 export function getMenuAuth(){
     let decoded = getDecoded()
     let menu = decoded.autorizaciones.modulos
     return menu
 }
+
 export function getModulo(modulo){
     let menu = getMenuAuth()
     let modulos
@@ -42,6 +46,7 @@ export function getModulo(modulo){
     }
     return modulos
 }
+
 export function getSubmodulos(modulo,submodulo){
     let mod = getModulo(modulo)
     let submodulos = mod

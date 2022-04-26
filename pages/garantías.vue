@@ -2,6 +2,7 @@
     <div class="g-sidenav-show bg-gray-100 vh-completa" id='mainDashboard'> 
         <Sidebar />
         <Navbar :Modulo='"Soporte Técnico"' :Tabla='"Garantías"'/>
+        <CheckToken />
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -196,13 +197,13 @@
                                                             </b-form-group>
                                                         </div>
                                                         <div class="col-12" v-else>
-                                                            <label class="col-6 col-lg-6">Fecha:</label>
+                                                            <label class="col-6 col-lg-4">Fecha:</label>
                                                             <span class="col-6 text-sm">{{this.form.fecha}}</span>
                                                         </div>
                                                     </div>
                                                     <div class="row mt-2">
                                                         <div class="col-12" v-if="titleBtn == 'ok'">
-                                                            <label class="col-6 col-lg-6">Número de Serie:</label>
+                                                            <label class="col-6 col-lg-4">Número de Serie:</label>
                                                             <span class="col-6 text-sm">{{this.form.num}}</span>
                                                         </div>
                                                     </div>
@@ -215,8 +216,8 @@
                                                             </b-form-group>
                                                         </div>
                                                         <div class="col-12" v-else>
-                                                            <label class="col-6 col-lg-6">Producto:</label>
-                                                            <span class="col-6 text-sm">{{this.form.num}}</span>
+                                                            <label class="col-6 col-lg-4">Producto:</label>
+                                                            <span class="col-6 text-sm">{{this.form.producto}}</span>
                                                         </div>
                                                     </div>
                                                     <div class="row mt-2" >
@@ -239,7 +240,7 @@
                                                             </b-form-group>
                                                         </div>
                                                         <div class="col-12" v-else>
-                                                            <label class="col-6 col-lg-6">Detalle:</label>
+                                                            <label class="col-6 col-lg-4">Detalle:</label>
                                                             <span class="col-6 text-sm">{{this.form.detalle}}</span>
                                                         </div>
                                                     </div>
@@ -261,10 +262,12 @@
     import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
+    import CheckToken from '~/components/checkToken.vue';
     import { getAccessToken, getSubmodulos } from '~/utils/auth';
 
+
     export default{
-        components: { Sidebar, Navbar },
+        components: { Sidebar, Navbar, CheckToken },
         middleware: 'authenticated',
         data(){
             return{
@@ -319,7 +322,6 @@
             async getGarantias(){
                 await axios.get('http://10.147.17.173:5004/garantias',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
-                    console.log(response.data)
                     if(response.data !=null)
                         this.garantias = response.data
                     else
@@ -330,7 +332,7 @@
             },
 
             async getGarantia(garantiaId){
-                await axios.get(`http://10.147.17.173:5004/garantia/${garantiaId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get(`http://10.147.17.173:5004/garantias/${garantiaId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.form.fecha = response.data.fechaEntrada_garantia
                     this.form.ident = response.data.identificacion_cliente
@@ -351,7 +353,7 @@
                         detalle_garantia:  this.form.detalle,
                         inventario_id_item: this.form.itemId
                     }
-                    await axios.post('http://10.147.17.173:5004/garantia', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.post('http://10.147.17.173:5004/garantias', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Garantía creada con éxito')
                         this.getGarantias()
@@ -365,7 +367,7 @@
 
             async eliminarGarantia(garantiaId){
                 if(this.eliminar){
-                    await axios.delete(`http://10.147.17.173:5004/garantia/${garantiaId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.delete(`http://10.147.17.173:5004/garantias/${garantiaId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Garantía eliminado con éxito')
                         this.getGarantias()
@@ -472,11 +474,13 @@
             },
 
             handleSubmit() {
-                if(!this.validarBusqueda())
+                if(this.titleBtn=='Agregar'){
+                    if(!this.validarBusqueda())
                     return
-                if (!this.validarForm())
-                    return
-                this.crearGarantia()
+                    if (!this.validarForm())
+                        return
+                    this.crearGarantia()
+                }
                 this.$nextTick(() => {
                     this.closeModal('garantia-modal')
                 })
@@ -485,6 +489,10 @@
             onReset(){
                 this.form.detalleState = null
                 this.form.numState = null
+                this.form.fecha=''
+                this.form.num =''
+                this.form.producto=''
+                this.form.detalle=''
             },
             
             onResetOptionBus(){
@@ -509,7 +517,7 @@
                 this.onReset()
                 this.onResetOptionBus()
                 if(action == 'ver'){
-                    //this.getGarantia(garantiaId)
+                    this.getGarantia(garantiaId)
                     this.editId = garantiaId
                     this.title = 'Garantía #' + garantiaId
                     this.titleBtn = 'ok'

@@ -2,6 +2,7 @@
     <div class="g-sidenav-show bg-gray-100 vh-completa" id='mainDashboard'>
         <Sidebar/>
         <Navbar :Modulo='"Inicio"' :Tabla='"Dashboard"'/>
+        <CheckToken/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left ps ps--active-y">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -55,7 +56,7 @@
                                 <div class="row">
                                     <div class="col-9">
                                         <div class="numbers">
-                                            <p class="mt-2 mb-1 text-capitalize font-weight-bold">New Clients</p>
+                                            <p class="mt-2 mb-1 text-capitalize font-weight-bold">Productos Vendidos</p>
                                             <h5 class="font-weight-bolder mb-3">
                                             +3,462
                                             <span class="text-danger text-sm font-weight-bolder">-2%</span>
@@ -76,7 +77,7 @@
                                 <div class="row">
                                     <div class="col-9">
                                         <div class="numbers">
-                                            <p class="mt-2 mb-1 text-capitalize font-weight-bold">Sales</p>
+                                            <p class="mt-2 mb-1 text-capitalize font-weight-bold">Productos en Garantía</p>
                                             <h5 class="font-weight-bolder mb-3">
                                             $103,430
                                             <span class="text-success text-sm font-weight-bolder">+5%</span>
@@ -101,11 +102,20 @@
 <script>
     import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
-    import Navbar from '~/components/Navbar.vue';
+    import Navbar from '~/components/Navbar.vue';   
+    import CheckToken from '~/components/checkToken.vue';
     axios.defaults.baseURL ='http://10.147.17.173:5001';
 
     export default {
-        components: { Sidebar, Navbar }, 
-        middleware: 'authenticated'
+        components: { Sidebar, Navbar, CheckToken }, 
+        middleware: 'authenticated',
+        data(){
+            return{
+
+            }
+        },
+        methods:{
+
+        },
     }
 </script>

@@ -2,6 +2,7 @@
     <div class="g-sidenav-show  bg-gray-100 vh-completa" id='mainDashboard'> 
         <Sidebar />
         <Navbar :Modulo='"Compras"' :Tabla='"Orden de Compra"'/>
+        <CheckToken/>
         <main class="main-content position-relative max-height-vh-100 mt-1 border-radius-lg media-left">
             <div class="container-fluid py-4">
                 <div class="row">
@@ -198,10 +199,11 @@
     import axios from 'axios';
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';
+    import CheckToken from '~/components/checkToken.vue';
     import { getAccessToken, getSubmodulos } from '~/utils/auth';
 
     export default{
-        components: { Sidebar, Navbar },
+        components: { Sidebar, Navbar, CheckToken },
         middleware: 'authenticated',
         data(){
             return{
