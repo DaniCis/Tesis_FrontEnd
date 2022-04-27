@@ -36,6 +36,16 @@
                                                     Registros por página
                                                 </label>
                                             </div>
+                                            <div>
+                                                <b-input-group class="mt-3 mt-lg-3 mb-1 mb-lg-0">
+                                                    <b-form-input style="width: 250px" placeholder='Buscar' v-model='buscar' trim></b-form-input>
+                                                    <b-input-group-append>
+                                                        <b-button class='btn-search' @click='buscarProductos(this.buscar)'>
+                                                            <b-icon icon='search'></b-icon>
+                                                        </b-button>
+                                                    </b-input-group-append>
+                                                </b-input-group>
+                                            </div>
                                         </div>
                                         <div class="dataTable-container">
                                             <table id='content-table' class="table table-flush dataTable-table">
@@ -128,6 +138,7 @@
                 error:false,
                 pagActual:1,
                 porPag:10,
+                buscar:''
             }
         },
         async mounted(){
@@ -150,6 +161,15 @@
                     else
                         this.error=true
                 }).catch (e=> {
+                    this.$toast.error(e.response.data.detail)
+                })
+            },
+            async buscarProductos(producto){
+                await axios.put(`http://10.147.17.173:5004/clientes/${producto}`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then((response) => {
+                    console.log(response.data)
+                    //this.productos = response.data
+                }).catch (e => {
                     this.$toast.error(e.response.data.detail)
                 })
             },

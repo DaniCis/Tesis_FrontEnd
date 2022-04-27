@@ -25098,6 +25098,18 @@ aside .card-body{
   content: "\f00d";
 }
 
+.btn-search{
+  height: 35px;
+  padding-top: 8px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.icon-dash{
+  color:#fff;
+  height:1.5em;
+  width:1.5em;
+  margin-top:12px
+}
 @media(max-width:576px){
   .carousel-item{
     height: 32vh!important;

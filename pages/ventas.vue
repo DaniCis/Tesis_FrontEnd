@@ -163,32 +163,6 @@
                 })
             },
             
-            async eliminarGarantia(garantiaId){
-
-            },
-
-            showModalDelete(garantiaId){
-                this.confirm = ''
-                this.$bvModal.msgBoxConfirm('¿Está seguro que desea eliminar este registro?', {
-                    title: 'Confirmar',
-                    size: 'sm',
-                    buttonSize: 'sm',
-                    okVariant: 'danger',
-                    okTitle: 'Si',
-                    cancelTitle: 'No',
-                    footerClass: 'p-2',
-                    hideHeaderClose: false,
-                    centered: true
-                }).then(value => {
-                    this.confirm = value
-                    if(this.confirm == true){
-                        this.eliminarGarantia(garantiaId)
-                    }
-                }).catch( e=>{
-                    this.$toast.error(e.response.data.detail)
-                })
-            },
-
             paginador(items) {
                 const inicio = (this.pagActual - 1) * this.porPag;
                 const final =

@@ -17,6 +17,7 @@ export default {
     ],
     script:[
       { src:'https://kit.fontawesome.com/42d5adcbca.js'},
+      
     ]
   },
   
@@ -78,7 +79,6 @@ export default {
           logout: false,
           user:false
         },
-        //autoLogout: true,
       }
     }
   },
