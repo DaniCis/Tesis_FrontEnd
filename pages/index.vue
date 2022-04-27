@@ -78,7 +78,6 @@
           }
         }).catch (e=> { 
           this.$toast.error(e.response.data.detail + '. Vuelva a ingresar')
-          //this.$toast.error(e.message)
         })
       },
       password_show_hide() {

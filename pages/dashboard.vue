@@ -13,10 +13,7 @@
                                     <div class="col-9">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text-capitalize font-weight-bold">Compras</p>
-                                            <h5 class="font-weight-bolder mb-0">
-                                            {{this.comprasMensual}}
-                                                <span class="text-success text-sm font-weight-bolder">+55%</span>
-                                            </h5>
+                                            <h5 class="font-weight-bolder mb-0">{{this.comprasMensual}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-3 text-end">
@@ -35,10 +32,7 @@
                                     <div class="col-9">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text-capitalize font-weight-bold">Ventas</p>
-                                            <h5 class="font-weight-bolder mb-0">
-                                            {{this.ventasMensual}}
-                                                <span class="text-success text-sm font-weight-bolder">+3%</span>
-                                            </h5>
+                                            <h5 class="font-weight-bolder mb-0">{{this.ventasMensual}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-3 text-end">
@@ -57,10 +51,7 @@
                                     <div class="col-9">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text-capitalize font-weight-bold">Inventario</p>
-                                            <h5 class="font-weight-bolder mb-0">
-                                            +3,462
-                                            <span class="text-danger text-sm font-weight-bolder">-2%</span>
-                                            </h5>
+                                            <h5 class="font-weight-bolder mb-0">{{this.inventarioMensual}} </h5>
                                         </div>
                                     </div>
                                     <div class="col-3 text-end">
@@ -79,10 +70,7 @@
                                     <div class="col-9">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text-capitalize font-weight-bold">Clientes registrados</p>
-                                            <h5 class="font-weight-bolder mb-0">
-                                            $103,430
-                                            <span class="text-success text-sm font-weight-bolder">+5%</span>
-                                            </h5>
+                                            <h5 class="font-weight-bolder mb-0">{{this.clientesRegistrados}} </h5>
                                         </div>
                                     </div>
                                     <div class="col-3 text-end">
@@ -172,8 +160,10 @@
         data(){
             return{
                 ventas:[],
-                comprasMensual:null,
-                ventasMensual:null,
+                comprasMensual:'',
+                ventasMensual:'',
+                inventarioMensual:'',
+                clientesRegistrados:'',
                 error:'',
                 fechaActual:''
             }
@@ -183,6 +173,7 @@
             this.getVentas()
             this.getComprasMensual()
             this.getVentasMensual()
+            this.getInventarioMensual()
         },
         methods:{
             getFecha(){
@@ -190,8 +181,9 @@
                 var date = new Date()
                 this.fechaActual = meses[date.getMonth()] + " " + date.getFullYear()
             },
+
             async getVentas(){
-                await axios.get('http://10.147.17.173:5004/ventas',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get('http://10.147.17.173:5004/ventas/reporte',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     if(response.data !=null)
                         this.ventas = response.data
@@ -202,6 +194,7 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+
             async getComprasMensual(){
                 await axios.get('http://10.147.17.173:5003/sumatoria_compra_mensual',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
@@ -210,10 +203,20 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
-             async getVentasMensual(){
+
+            async getVentasMensual(){
                 await axios.get('http://10.147.17.173:5004/sumatoria_venta_mensual',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.ventasMensual = response.data
+                }).catch (e=> {
+                    this.$toast.error(e.response.data.detail)
+                })
+            },
+
+            async getInventarioMensual(){
+                await axios.get('http://10.147.17.173:5002/items/dineroEnInventario',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then(response => {
+                    this.inventarioMensual = response.data
                 }).catch (e=> {
                     this.$toast.error(e.response.data.detail)
                 })

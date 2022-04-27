@@ -37,14 +37,17 @@
                                                 </label>
                                             </div>
                                             <div>
-                                                <b-input-group class="mt-3 mt-lg-3 mb-1 mb-lg-0">
-                                                    <b-form-input style="width: 250px" placeholder='Buscar' v-model='buscar' trim></b-form-input>
-                                                    <b-input-group-append>
-                                                        <b-button class='btn-search' @click='buscarProductos(this.buscar)'>
-                                                            <b-icon icon='search'></b-icon>
-                                                        </b-button>
-                                                    </b-input-group-append>
-                                                </b-input-group>
+                                                <div class="input-group mb-3">
+                                                    <b-form-input type="text" trim class="form-control" @onchange="buscar()" placeholder='Buscar' v-model="textoBuscar"></b-form-input>
+                                                    <div class="input-group-append">
+                                                        <span v-show="this.mostrar" style="border-top-right-radius: 8px; border-bottom-right-radius: 8px;" class="input-group-text" @click="buscar()">
+                                                           <b-icon icon='search'></b-icon>
+                                                        </span>
+                                                        <span v-show="!this.mostrar" style="border-top-right-radius: 8px; border-bottom-right-radius: 8px;"  class="input-group-text" @click="limpiarBuscar()">
+                                                           <b-icon icon='x'></b-icon>
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="dataTable-container">
@@ -138,7 +141,8 @@
                 error:false,
                 pagActual:1,
                 porPag:10,
-                buscar:''
+                textoBuscar:'',
+                mostrar:true,
             }
         },
         async mounted(){
@@ -164,15 +168,34 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
-            async buscarProductos(producto){
-                await axios.put(`http://10.147.17.173:5004/clientes/${producto}`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
-                }).then((response) => {
-                    console.log(response.data)
-                    //this.productos = response.data
-                }).catch (e => {
-                    this.$toast.error(e.response.data.detail)
-                })
+
+            buscar(){
+                if(this.textoBuscar !== '')
+                    this.mostrar = false
+                const texto = this.textoBuscar
+                this.buscarProductos(texto)
             },
+            
+            limpiarBuscar(){
+                this.textoBuscar = ''
+                this.mostrar = true
+                this.getProductos()
+            },
+
+            async buscarProductos(texto){
+                if(this.textoBuscar === '')
+                    this.getProductos()
+                else{
+                    await axios.get(`http://10.147.17.173:5002/productos/findByWord/${texto}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    }).then((response) => {
+                        console.log(response.data)
+                        this.productos = response.data
+                    }).catch (e => {
+                        this.$toast.error(e.response.data.detail)
+                    })
+                }
+            },
+
             paginador(items) {
                 const inicio = (this.pagActual - 1) * this.porPag;
                 const final =
