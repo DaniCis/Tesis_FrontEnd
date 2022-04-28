@@ -59,12 +59,10 @@
             password:'',
         },
         show:true,
-        error:null,
       };
     },
     methods:{
       async login() {
-        this.error=''
         const formData = new FormData();
         formData.append('username',this.form.user);
         formData.append('password',this.form.password);

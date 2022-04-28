@@ -24,7 +24,7 @@
                     size: 'sm',
                     buttonSize: 'sm',
                     okVariant: 'info',
-                    okTitle: 'Si',
+                    okTitle: 'Ok',
                     footerClass: 'p-2',
                     hideHeaderClose: false,
                     centered: true

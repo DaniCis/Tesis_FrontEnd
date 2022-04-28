@@ -179,6 +179,7 @@
             limpiarBuscar(){
                 this.textoBuscar = ''
                 this.mostrar = true
+                this.error=null
                 this.getProductos()
             },
 
@@ -189,7 +190,13 @@
                     await axios.get(`http://10.147.17.173:5002/productos/findByWord/${texto}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then((response) => {
                         console.log(response.data)
-                        this.productos = response.data
+                        if(response.data !=null)
+                            this.productos = response.data
+                        else{
+
+                            this.error=true
+                            this.productos=[]
+                        }
                     }).catch (e => {
                         this.$toast.error(e.response.data.detail)
                     })

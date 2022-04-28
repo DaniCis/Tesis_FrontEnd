@@ -49,7 +49,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-if="error">
+                                                    <tr v-if="error" >
                                                         <td colspan="5">
                                                             <h6 class="ms-3 mb-2 text-sm text-center">No existen registros</h6> 
                                                         </td>       
@@ -206,7 +206,7 @@
                 editar:null,
                 eliminar:null,
                 editId:null,
-                error:false,
+                error:null,
                 confirm: '',
                 title:'',
                 titleBtn:'',
