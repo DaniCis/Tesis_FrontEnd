@@ -54,7 +54,7 @@
                                                 :state="form.proveedorState">
                                                 <b-form-input id="proveedor-select" placeholder='Proveedor' list="list-prov" v-model="form.nombreProveedor" ref='proveedor_select' :state="form.proveedorState" trim required></b-form-input>
                                                     <datalist id="list-prov">
-                                                        <option v-for="proveedor in this.proveedores">
+                                                        <option v-for="(proveedor,i) in this.proveedores" :key="i">
                                                         {{proveedor.nombre_proveedor}}
                                                     </option>
                                                 </datalist>
@@ -89,7 +89,7 @@
                                                                 <h6 class="ms-3 mb-2 text-sm text-center mt-4">Sin Productos </h6> 
                                                             </td> 
                                                         </tr>
-                                                        <tr v-else v-for="(detalle,i) in this.detalles">
+                                                        <tr v-else v-for="(detalle,i) in this.detalles" :key='i'>
                                                          <td>
                                                                 <h6 class=" ms-3 mb-2 text-sm">{{i+1}}</h6>
                                                             </td>
@@ -174,7 +174,7 @@
                                                                 :state="detalle.productoState">
                                                                 <b-form-input :state="detalle.productoState" ref='producto_select' trim required id="producto-select" list="list-prod" v-model="detalle.producto.nombre"></b-form-input>
                                                                 <datalist id="list-prod">
-                                                                    <option v-for="producto in this.productos">
+                                                                    <option v-for="(producto,i) in this.productos" :key='i'>
                                                                         {{producto.nombre_producto}}
                                                                     </option>
                                                                 </datalist>
@@ -278,7 +278,7 @@
                                                             </div>
                                                             <div v-else>
                                                                 <label>Números de Series</label>
-                                                                <div v-for="i in parseInt(this.numCant)" style="display: flex">
+                                                                <div v-for="(i,index) in parseInt(this.numCant)" :key='index' style="display: flex">
                                                                     <span style="margin-right: 1rem; margin-top: 0.8rem;" class="text-sm">{{i}}</span>
                                                                     <b-form-group >
                                                                         <b-form-input  

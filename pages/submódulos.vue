@@ -51,7 +51,7 @@
                                                             <h6 class="ms-3 mb-2 text-sm text-center mt-4">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
-                                                    <tr v-for="submodulo in paginador(this.submodulos)">
+                                                    <tr v-for="(submodulo,i) in paginador(this.submodulos)" :key="i">
                                                         <td class="align-middle">
                                                             <h6 class=" ms-3 mb-2 text-sm">{{submodulo.id_submodulo}}</h6>
                                                         </td>
@@ -115,7 +115,7 @@
                                                         <select 
                                                             id="mod-select" class="form-select" v-model="form.modulo" ref='mod_select' :state="form.modState" required>
                                                             <option v-if="titleBtn =='Agregar'" disabled hidden value=''> Seleccione</option>
-                                                            <option v-for="modulo in this.modulos" :value="modulo.id_modulo">
+                                                            <option v-for="(modulo,i) in this.modulos" :key="i" :value="modulo.id_modulo">
                                                                 {{modulo.nombre_modulo}}
                                                             </option>
                                                         </select>

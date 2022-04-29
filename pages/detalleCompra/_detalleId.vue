@@ -53,7 +53,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr v-for="(detalle,i) in this.detalles">
+                                                        <tr v-for="(detalle,i) in this.detalles" :key="i">
                                                             <td>
                                                                 <h6 class=" ms-3 mb-2 text-sm">{{i+1}}</h6>
                                                             </td>

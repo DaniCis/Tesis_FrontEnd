@@ -57,7 +57,7 @@
                                                             <h6 class="ms-3 mb-2 text-sm text-center mt-4">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
-                                                    <tr v-for="permiso in paginador(this.permisos)">
+                                                    <tr v-for="(permiso,i) in paginador(this.permisos)" :key="i">
                                                         <td class="align-middle">
                                                             <h6 class="ms-3 mb-2 text-sm">{{permiso.id_permiso}}</h6>
                                                         </td>
@@ -142,7 +142,7 @@
                                                     <select 
                                                         id="submod-select" class="form-select" ref='submod_select' v-model='form.submodulo' :state="form.subState" required>
                                                         <option disabled hidden value=''> Seleccione</option>
-                                                        <option v-for="subm in this.submodulos" :value="subm.id_submodulo">
+                                                        <option v-for="(subm,i) in this.submodulos" :key='i' :value="subm.id_submodulo">
                                                             {{subm.nombre_submodulo}}
                                                         </option>
                                                     </select>

@@ -58,14 +58,14 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr v-for="(detalle,i) in this.detalles">
+                                                        <tr v-for="(detalle,i) in this.detalles" :key="i">
                                                             <td>
                                                                 <h6 class=" ms-3 mb-2 text-sm">{{i+1}}</h6>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">{{detalle.nombre_producto}}</p>
                                                             </td>
-                                                            <td class="align-middle text-center text-sm" v-for="num in detalle.numeros_serie">
+                                                            <td class="align-middle text-center text-sm" v-for="(num,i) in detalle.numeros_serie" :key="i">
                                                                 <p class="text-sm font-weight-bold mb-0">{{num.numeroSerie_item}}</p>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">

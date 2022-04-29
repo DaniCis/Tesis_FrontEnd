@@ -56,7 +56,7 @@
                                                             <h6 class="ms-3 mb-2 text-sm text-center mt-4">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
-                                                    <tr v-for="compra in paginador(this.compras)">
+                                                    <tr v-for="(compra,i) in paginador(this.compras)" :key="i">
                                                         <td class="align-middle">
                                                             <h6 class=" ms-3 mb-2 text-sm">{{compra.id_compra}}</h6>
                                                         </td>

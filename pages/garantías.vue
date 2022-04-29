@@ -54,7 +54,7 @@
                                                             <h6 class="ms-3 mb-2 text-sm text-center">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
-                                                    <tr v-for="garantia in paginador(this.garantias)">
+                                                    <tr v-for="(garantia,i) in paginador(this.garantias)" :key="i">
                                                         <td class="align-middle">
                                                             <h6 class="ms-3 mb-2 text-sm">{{garantia.id_garantia}}</h6>
                                                         </td>
@@ -130,7 +130,7 @@
                                                             :state="form.clienteBusState">
                                                             <b-form-input id="clienteBus-select" placeholder='Nombre' list="list-cli" v-model="form.clienteBus" ref='clienteBus_select' :state="form.clienteBusState" trim required @change="busquedaPor($event)"></b-form-input>
                                                                 <datalist id="list-cli">
-                                                                    <option v-for="cliente in this.clientes">
+                                                                    <option v-for="(cliente,i) in this.clientes" :key="i">
                                                                     {{cliente.nombre_cliente}}
                                                                 </option>
                                                                 </datalist>

@@ -48,7 +48,6 @@
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Ident. Cliente</th>
                                                         <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Total</th>
                                                         <th></th>
-                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -57,7 +56,7 @@
                                                             <h6 class="ms-3 mb-2 text-sm text-center mt-4">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
-                                                    <tr v-for="venta in paginador(this.ventas)">
+                                                    <tr v-for="(venta,i) in paginador(this.ventas)" :key="i">
                                                         <td class="align-middle">
                                                             <h6 class=" ms-3 mb-2 text-sm">{{venta.id_venta}}</h6>
                                                         </td>
@@ -81,15 +80,6 @@
                                                                 <nuxt-link :to="{name:'detalleVenta-detalleId',params:{detalleId: venta.id_venta}}">
                                                                     Ver detalles
                                                                 </nuxt-link>
-                                                            </div>
-                                                        </td>
-                                                        <td class="align-middle">
-                                                            <div class="contenedorAcciones">
-                                                                <div v-if="eliminar">
-                                                                    <a class="trash cursor-pointer"  @click='showModalDelete(venta.id_venta)'>
-                                                                        <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #ff0c0c;"></b-icon>
-                                                                    </a>
-                                                                </div>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -131,7 +121,6 @@
                 permisosCrud:[],
                 ventas:[],
                 crear:null,
-                eliminar:null,
                 error:null,
                 pagActual:1,
                 porPag:10, 
@@ -142,8 +131,6 @@
             this.permisosCrud = getSubmodulos('Ventas','OrdenVenta')
             if('crear' in this.permisosCrud)
                 this.crear = true
-            if('eliminar' in this.permisosCrud)
-                this.eliminar = true
             if('leer' in this.permisosCrud)
                 this.getVentas()
             else

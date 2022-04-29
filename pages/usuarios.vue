@@ -52,7 +52,7 @@
                                                             <h6 class="ms-3 mb-2 text-sm text-center mt-4">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
-                                                    <tr v-for="user in paginador(this.usuarios)">
+                                                    <tr v-for="(user,i) in paginador(this.usuarios)" :key="i">
                                                         <td class="align-middle">
                                                             <h6 class=" ms-3 mb-2 text-sm">{{user.id_usuario}}</h6>
                                                         </td>
@@ -146,7 +146,7 @@
                                                     <select 
                                                         id="rol-select" v-model="form.rol" class="form-select" ref='rol_select' :state="form.rolState" required>
                                                         <option v-if="titleBtn =='Agregar'" disabled :value='null'> Seleccione</option>
-                                                        <option v-for="rol in this.roles" :value="rol.id_rol">
+                                                        <option v-for="(rol,i) in this.roles" :value="rol.id_rol" :key="i">
                                                             {{rol.nombre_rol}}
                                                         </option>
                                                     </select>

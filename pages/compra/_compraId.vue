@@ -55,7 +55,7 @@
                                                 :state="form.proveedorState">
                                                 <b-form-input list="list-prov" v-model="form.nombreProveedor" ref='proveedor_select' required :state="form.proveedorState" ></b-form-input>
                                                     <datalist id="list-prov">
-                                                        <option v-for="proveedor in this.proveedores">
+                                                        <option v-for="(proveedor,i) in this.proveedores" :key="i">
                                                         {{proveedor.nombre_proveedor}}
                                                     </option>
                                                 </datalist>
@@ -78,7 +78,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr v-for="detalle in this.detalles">
+                                                        <tr v-for="(detalle,i) in this.detalles" :key="i">
                                                             <td>
                                                                 <h6 class=" ms-3 mb-2 text-sm">{{detalle.id_detalleCompra}}</h6>
                                                             </td>
@@ -153,7 +153,7 @@
                                                     :state="detalle.productoState">
                                                     <b-form-input list="list-prod" :state="detalle.productoState" ref='producto_select' required  v-model="detalle.producto.nombre"></b-form-input>
                                                     <datalist id="list-prod">
-                                                        <option v-for="producto in this.productos">
+                                                        <option v-for="(producto,i) in this.productos" :key="i">
                                                             {{producto.nombre_producto}}
                                                         </option>
                                                     </datalist>

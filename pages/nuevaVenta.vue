@@ -57,7 +57,7 @@
                                                     :state="form.clienteBusState">
                                                     <b-form-input id="clienteBus-select" placeholder='Nombre' list="list-cli" v-model="form.clienteBus" ref='clienteBus_select' :state="form.clienteBusState" trim required @change="busquedaPor($event)"></b-form-input>
                                                         <datalist id="list-cli">
-                                                            <option v-for="cliente in this.clientes">
+                                                            <option v-for="(cliente,i) in this.clientes" :key="i">
                                                             {{cliente.nombre_cliente}}
                                                         </option>
                                                         </datalist>
@@ -204,7 +204,7 @@
                                                                 <h6 class="ms-3 mb-2 text-sm text-center mt-4">Sin Productos </h6> 
                                                             </td> 
                                                         </tr>
-                                                        <tr  v-else v-for="(detalle,i) in this.detalles">
+                                                        <tr  v-else v-for="(detalle,i) in this.detalles" :key="i">
                                                             <td>
                                                                 <h6 class=" ms-3 mb-2 text-sm">{{i+1}}</h6>
                                                             </td>
@@ -286,7 +286,7 @@
                                                     :state="detalle.productoState">
                                                     <b-form-input :state="detalle.productoState" ref='producto_select' trim required id="producto-select" list="list-prod" v-model="detalle.producto.nombre" @change="busquedaProducto($event)"></b-form-input>
                                                     <datalist id="list-prod">
-                                                        <option v-for="producto in this.productos">
+                                                        <option v-for="(producto,i) in this.productos" :key="i">
                                                             {{producto.nombre_producto}}
                                                         </option>
                                                     </datalist>

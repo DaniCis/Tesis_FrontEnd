@@ -115,7 +115,7 @@
                                                             <h6 class="ms-3 mb-2 text-sm text-center mt-4">No existen registros</h6> 
                                                         </td>       
                                                     </tr>
-                                                    <tr v-for="(venta,index) in this.ventas">
+                                                    <tr v-for="(venta,index) in this.ventas" :key="index">
                                                         <td class="align-middle">
                                                             <h6 class=" ms-3 mb-2 text-sm">{{index+1}}</h6>
                                                         </td>
