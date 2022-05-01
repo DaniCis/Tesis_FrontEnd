@@ -87,7 +87,7 @@
                                 <nuxt-link to="/clientes">Clientes</nuxt-link>
                             </b-card-text>
                             <b-card-text v-if="'OrdenVenta' in this.modulos.Ventas">
-                                <nuxt-link to="/ventas">Orden de Ventas</nuxt-link>
+                                <nuxt-link to="/ventas">Orden de Venta</nuxt-link>
                             </b-card-text>
                         </b-card>
                     </b-collapse>

@@ -537,7 +537,7 @@
             },
             
             async getDetalleProducto(nombre){
-                 await axios.get(`http://10.147.17.173:5002/detalleProducto/venta/${nombre}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                 await axios.get(`http://10.147.17.173:5002/detalleProducto/venta/findByNombre/${nombre}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.stock = response.data.cantidad_producto
                     this.detalle.precioUnit = response.data.pvp_item.slice(1)
