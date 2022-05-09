@@ -189,7 +189,6 @@
                         this.ventas = response.data
                     else
                         this.error=true
-                console.log(this.ventas)
                 }).catch (e=> {
                     this.$toast.error(e.response.data.detail)
                 })
