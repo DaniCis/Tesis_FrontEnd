@@ -173,8 +173,19 @@
                     return true
             },
 
+            validarNombre(){
+                if(this.form.nombre.length > 0 && this.form.nombre.length < 61)
+                    return true
+                else{
+                    this.form.nombreState=false
+                    this.$toast.error('El nombre del producto debe ser máx 60 dígitos')
+                    return false
+                }                   
+            },
             handleSubmit() {
                 if (!this.validarForm())
+                    return
+                if(!this.validarNombre())
                     return
                 this.crearProducto()
             },

@@ -93,7 +93,7 @@
                                                 <vueper-slide 
                                                 v-for="imagen in this.imagenes" 
                                                 :key="imagen"
-                                                :image="`http://10.147.17.173:5002/productos/images/${form.id}/${imagen}`">
+                                                :image="`http://10.147.17.173:5002/productos/images_medium/${form.id}/${imagen}`">
                                                 <template #content>
                                                     <a class="trash cursor-pointer vueperslide__content-wrapper"  @click='showModalDelete(imagen)'>
                                                         <b-icon class="icon" icon='trash' style="width: 1.2em; height: 1.2em; color: #f81212;"></b-icon>
@@ -199,6 +199,8 @@
                 if(this.editar){
                     if (!this.validarForm())
                         return
+                    if(!this.validarNombre())
+                        return
                     if(this.imagenes.length == 0 && this.imagen == null){
                         this.$toast.error('Por favor añada una imagen antes de continuar.')
                     } 
@@ -239,6 +241,16 @@
                 this.form.nombreState = null,
                 this.form.detalleState = null,
                 this.form.marcaState = null
+            },
+
+            validarNombre(){
+                if(this.form.nombre.length > 0 && this.form.nombre.length < 61)
+                    return true
+                else{
+                    this.form.nombreState=false
+                    this.$toast.error('El nombre del producto debe ser máx 60 dígitos')
+                    return false
+                }                   
             },
 
             removeItemFromArr (arr, item ) {
