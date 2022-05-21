@@ -143,8 +143,8 @@
                     }
                     formData.append('nombre_producto',this.form.nombre)
                     formData.append('detalle_producto',this.form.detalle)
-                    formData.append('marca_producto',this.form.marca)
-                     
+                    formData.append('marca_producto',this.form.marca.toUpperCase())
+                    
                     await axios.post('http://10.147.17.173:5002/producto', formData, { headers:{ 
                         Authorization: 'Bearer ' + getAccessToken() ,
                         'Content-Type': 'multipart/form-data'}

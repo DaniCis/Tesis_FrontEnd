@@ -189,7 +189,6 @@
                 else{
                     await axios.get(`http://10.147.17.173:5002/productos/findByWord/${texto}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then((response) => {
-                        console.log(response.data)
                         if(response.data !=null)
                             this.productos = response.data
                         else{

@@ -174,6 +174,7 @@
             this.getComprasMensual()
             this.getVentasMensual()
             this.getInventarioMensual()
+            this.getClientesMensual()
         },
         methods:{
             getFecha(){
@@ -220,6 +221,16 @@
                     this.$toast.error(e.response.data.detail)
                 })
             },
+
+            async getClientesMensual(){
+                await axios.get('http://10.147.17.173:5005/numeroMensualUsuarios',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                }).then(response => {
+                    this.clientesRegistrados = response.data
+                }).catch (e=> {
+                    this.$toast.error(e.response.data.detail)
+                })
+            }
+
         },
     }
 </script>

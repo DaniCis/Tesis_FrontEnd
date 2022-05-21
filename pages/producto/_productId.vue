@@ -213,7 +213,7 @@
                         }
                         formData.append('nombre_producto',this.form.nombre)
                         formData.append('detalle_producto',this.form.detalle)
-                        formData.append('marca_producto',this.form.marca)
+                        formData.append('marca_producto',this.form.marca.toUpperCase())
                         if( this.imagenes.length != 0){
                             for (let i = 0; i < this.imagenes.length; i++){
                                 formData.append('imagen_producto',this.imagenes[i])
