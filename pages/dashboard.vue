@@ -69,7 +69,7 @@
                                 <div class="row">
                                     <div class="col-9">
                                         <div class="numbers">
-                                            <p class="text-sm mb-0 text-capitalize font-weight-bold">Nuevos Clientes</p>
+                                            <p class="text-sm mb-0 text-capitalize font-weight-bold">Nuevos Usuarios</p>
                                             <h5 class="font-weight-bolder mb-0">{{this.clientesRegistrados}} </h5>
                                         </div>
                                     </div>

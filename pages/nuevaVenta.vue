@@ -444,7 +444,6 @@
                             clientes_id_cliente: this.form.clienteId,
                             detalle_venta: this.detallesCopia,
                         }
-                        console.log(params)
                         await axios.post('http://10.147.17.173:5004/ventas', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                         }).then(() => {
                             this.$toast.success('Venta creada con éxito')

@@ -65,8 +65,10 @@
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">{{detalle.nombre_producto}}</p>
                                                             </td>
-                                                            <td class="align-middle text-center text-sm" v-for="(num,i) in detalle.numeros_serie" :key="i">
-                                                                <p class="text-sm font-weight-bold mb-0">{{num.numeroSerie_item}}</p>
+                                                            <td class="align-middle text-center text-sm" >
+                                                                <div v-for="(num,i) in detalle.numeros_serie" :key="i">
+                                                                    <p class="text-sm font-weight-bold mb-0">{{num.numeroSerie_item}}</p>
+                                                                </div>
                                                             </td>
                                                             <td class="align-middle text-center text-sm">
                                                                 <p class="text-sm font-weight-bold mb-0">%{{detalle.descuentoPorcentaje_detalleVenta}}</p>
