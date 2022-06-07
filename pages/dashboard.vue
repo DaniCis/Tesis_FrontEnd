@@ -89,10 +89,10 @@
                             <div class="card-header pb-0">
                                 <div class="row">
                                     <h6>Últimas Ventas Realizadas</h6>
-                                    <p class="text-sm mb-0">
+                                    <!--<p class="text-sm mb-0">
                                         <i class="fa fa-check text-info" aria-hidden="true"></i>
                                         <span class="font-weight-bold ms-1">{{this.fechaActual}}</span> 
-                                    </p>
+                                    </p>-->
                                 </div>
                             </div>
                             <div class="card-body px-0 pb-2">
@@ -169,7 +169,7 @@
             }
         },
         async mounted(){
-            this.getFecha()
+            //this.getFecha()
             this.getVentas()
             this.getComprasMensual()
             this.getVentasMensual()
@@ -184,7 +184,7 @@
             },
 
             async getVentas(){
-                await axios.get('http://10.147.17.173:5004/ventas/reporte',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get('http://10.147.17.173:5004/reporte/ultimasCinco',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     if(response.data !=null)
                         this.ventas = response.data
