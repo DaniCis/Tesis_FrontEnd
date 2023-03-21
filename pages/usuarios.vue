@@ -248,7 +248,7 @@
         },
         methods: {
             async getRoles(){
-                await axios.get('http://10.147.17.173:5000/roles',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get('http://10.147.17.3:5000/roles',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.roles = response.data;
                 }).catch(e => {
@@ -257,7 +257,7 @@
             },
 
             async getUsuarios(){
-                await axios.get('http://10.147.17.173:5000/usuarios',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get('http://10.147.17.3:5000/usuarios',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     if(response.data !=null){
                         this.usuarios = response.data
@@ -270,7 +270,7 @@
 
 
             async getUser(usuarioId){
-                await axios.get(`http://10.147.17.173:5000/usuario/${usuarioId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                await axios.get(`http://10.147.17.3:5000/usuario/${usuarioId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                 }) .then(response => {
                     this.form.nombre = response.data.nombre_usuario
                     this.form.rol = response.data.roles_id_rol
@@ -286,7 +286,7 @@
                         password_usuario: this.form.password,
                         roles_id_rol:this.form.rol
                     }
-                    await axios.post('http://10.147.17.173:5000/usuarios', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.post('http://10.147.17.3:5000/usuarios', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Usuario creado con éxito')
                         this.getUsuarios()
@@ -300,7 +300,7 @@
 
             async editarRol(usuarioId){
                 if(this.editar){
-                    await axios.put(`http://10.147.17.173:5000/usuario/${usuarioId}/editarRol`, {roles_id_rol: this.form.rol} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                    await axios.put(`http://10.147.17.3:5000/usuario/${usuarioId}/editarRol`, {roles_id_rol: this.form.rol} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                     }).then(() => {
                         this.$toast.success('Usuario editado con éxito')
                         this.getUsuarios()
@@ -314,7 +314,7 @@
 
             async editarPassword(usuarioId){
                 if(this.editar){
-                    await axios.put(`http://10.147.17.173:5000/usuario/${usuarioId}/editarPassword`, {password_usuario: this.form.password} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                    await axios.put(`http://10.147.17.3:5000/usuario/${usuarioId}/editarPassword`, {password_usuario: this.form.password} ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                     }).then(() => {
                         this.$toast.success('Contraseña editada con éxito')
                     }).catch (e => {
@@ -327,7 +327,7 @@
 
             async eliminarUsuario(usuarioId){
                 if(this.eliminar){
-                    await axios.delete(`http://10.147.17.173:5000/usuario/${usuarioId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.delete(`http://10.147.17.3:5000/usuario/${usuarioId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Estado del usuario editado con éxito')
                         this.getUsuarios()

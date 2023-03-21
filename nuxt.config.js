@@ -32,7 +32,7 @@ export default {
   ],
   server:{
     port: 3000,
-    host:'10.147.17.71',
+    host:'0.0.0.0',
     timing: false
   },
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -75,7 +75,7 @@ export default {
           type: ''
         },
         endpoints: {
-          login: { url: 'http://10.147.17.173:5001/login', method: 'post'},
+          login: { url: 'http://10.147.17.3:5000/login', method: 'post'},
           logout: false,
           user:false
         },
