@@ -151,7 +151,7 @@
     import Sidebar from '~/components/Sidebar.vue';
     import Navbar from '~/components/Navbar.vue';   
     import CheckToken from '~/components/checkToken.vue';
-    axios.defaults.baseURL ='http://10.147.17.173:5001';
+    axios.defaults.baseURL ='http://10.147.17.3:5001';
     import { getAccessToken } from '~/utils/auth';
 
     export default {

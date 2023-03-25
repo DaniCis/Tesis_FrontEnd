@@ -233,7 +233,7 @@
         },
         methods:{
             async getSubmodulos(){
-                await axios.get('http://10.147.17.173:5000/submodulos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get('http://10.147.17.3:5000/submodulos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.submodulos = response.data;
                 }).catch(e => {
@@ -242,7 +242,7 @@
             },
 
             async getPermiso(permisoId){
-                await axios.get(`http://10.147.17.173:5000/permiso/${permisoId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                await axios.get(`http://10.147.17.3:5000/permiso/${permisoId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                 }) .then(response => {
                     this.permiso = response.data
                     this.form.submodulo = this.permiso.nombre_submodulo
@@ -258,7 +258,7 @@
 
             async getPermisos(rolId){
                 this.error = false,
-                await axios.get(`http://10.147.17.173:5000/permisos/${rolId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get(`http://10.147.17.3:5000/permisos/${rolId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     if(response.data != null ){
                         this.rol = response.data.nombre_rol
@@ -281,7 +281,7 @@
                         eliminar_autorizacion: this.verificarCheck(this.form.eliminar),
                         leer_autorizacion: this.verificarCheck(this.form.leer),
                     }
-                    await axios.post('http://10.147.17.173:5000/permiso', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.post('http://10.147.17.3:5000/permiso', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Permiso creado con éxito')
                         this.getPermisos(this.rolId)
@@ -303,7 +303,7 @@
                         eliminar_autorizacion: this.verificarCheck2(this.form.eliminar),
                         leer_autorizacion: this.verificarCheck2(this.form.leer),
                     }
-                    await axios.put(`http://10.147.17.173:5000/permiso/${permisoId}`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.put(`http://10.147.17.3:5000/permiso/${permisoId}`, params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Permiso editado con éxito')
                         this.getPermisos(this.rolId)
@@ -317,7 +317,7 @@
 
             async eliminarPermiso(permisoId){
                 if(this.eliminar){
-                    await axios.delete(`http://10.147.17.173:5000/permiso/${permisoId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.delete(`http://10.147.17.3:5000/permiso/${permisoId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Permiso eliminado con éxito')
                         this.getPermisos(this.rolId)

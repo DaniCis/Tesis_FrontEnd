@@ -183,7 +183,7 @@
         },
         methods: {
             async getModulos(){
-                await axios.get('http://10.147.17.173:5000/modulos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get('http://10.147.17.3:5000/modulos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     this.modulos = response.data;
                 }).catch(e => {
@@ -192,7 +192,7 @@
             },
             
             async getSubmodulo(submoduloId){
-                 await axios.get(`http://10.147.17.173:5000/submodulos/${submoduloId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                 await axios.get(`http://10.147.17.3:5000/submodulos/${submoduloId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                 }) .then(response => {
                     this.submodulo = response.data
                     this.form.nombre = response.data.nombre_submodulo
@@ -203,7 +203,7 @@
             },
             
             async getSubmodulos(){
-                await axios.get('http://10.147.17.173:5000/submodulos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                await axios.get('http://10.147.17.3:5000/submodulos',{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                 }).then(response => {
                     if(response.data != null)
                         this.submodulos = response.data
@@ -220,7 +220,7 @@
                         nombre_submodulo: this.form.nombre,
                         modulos_id_modulo:this.form.modulo
                     }
-                    await axios.post('http://10.147.17.173:5000/submodulos', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.post('http://10.147.17.3:5000/submodulos', params,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Submódulo creado con éxito')
                         this.getSubmodulos()
@@ -238,7 +238,7 @@
                         nombre_submodulo: this.form.nombre,
                         modulos_id_modulo: this.form.modulo
                     }
-                    await axios.put(`http://10.147.17.173:5000/submodulos/${submoduloId}`, params ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
+                    await axios.put(`http://10.147.17.3:5000/submodulos/${submoduloId}`, params ,{ headers:{ Authorization: 'Bearer ' + getAccessToken()}
                     }).then(() => {
                         this.$toast.success('Submódulo editado con éxito')
                         this.getSubmodulos()
@@ -252,7 +252,7 @@
 
             async eliminarSubmodulo(submoduloId){
                 if(this.eliminar){
-                    await axios.delete(`http://10.147.17.173:5000/submodulos/${submoduloId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
+                    await axios.delete(`http://10.147.17.3:5000/submodulos/${submoduloId}`,{ headers:{ Authorization: 'Bearer ' + getAccessToken() }
                     }).then(() => {
                         this.$toast.success('Submódulo eliminado con éxito')
                         this.getSubmodulos()
